@@ -8,7 +8,7 @@ export const userRegisterService = ({
   email,
   userRole
 }) => {
-  return request.post('http://localhost:8080/register', {
+  return request.post('/register', {
     username,
     password,
     repassword,
@@ -18,7 +18,7 @@ export const userRegisterService = ({
 }
 //登录接口
 export const userLoginService = ({ username, password, userRole }) => {
-  return request.post('http://localhost:8080/login', {
+  return request.post('/login', {
     username,
     password,
     userRole

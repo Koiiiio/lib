@@ -28,7 +28,8 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (res) => {
     // TODO 4. 摘取核心响应数据
-    if (res.data.code === 0) {
+    if (res.data.code === 200) {
+      console.log(res)
       return res
     }
     // TODO 3. 处理业务失败

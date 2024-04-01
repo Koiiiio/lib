@@ -14,21 +14,21 @@ const formModel = ref({
 const rules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' }, //非空校验
-    { min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' } //长度校验
+    { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' } //长度校验
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' }, //非空校验
     {
-      pattern: /^\S{5,15}$/,
-      message: '密码必须是 5 到 15 位非空字符',
+      pattern: /^\S{3,15}$/,
+      message: '密码必须是 3 到 15 位非空字符',
       trigger: 'blur'
     } //长度校验
   ],
   repassword: [
     { required: true, message: '请再次输入密码', trigger: 'blur' }, //非空校验
     {
-      pattern: /^\S{5,15}$/,
-      message: '密码必须是 5 到 15 位非空字符',
+      pattern: /^\S{3,15}$/,
+      message: '密码必须是 3 到 15 位非空字符',
       trigger: 'blur'
     }, //长度校验
     {
@@ -47,6 +47,7 @@ const rules = {
 const register = async () => {
   //注册校验
   await form.value.validate()
+  console.log(formModel.value)
   await userRegisterService(formModel.value)
   ElMessage.success('注册成功')
   isRegister.value = false
@@ -59,15 +60,20 @@ const login = async () => {
   //登录校验
   await form.value.validate()
   const res = await userLoginService(formModel.value)
-  userStore.setToken(res.data.token)
+  userStore.setToken(res.data.data)
+
+  console.log(res.data.data)
+
   ElMessage.success('登录成功')
   router.push('/')
 }
 watch(isRegister, () => {
   formModel.value = {
     username: '',
+    email: '',
     password: '',
-    repassword: ''
+    repassword: '',
+    userRole: 'user'
   }
 })
 </script>
@@ -94,6 +100,13 @@ watch(isRegister, () => {
             v-model="formModel.username"
             :prefix-icon="User"
             placeholder="请输入用户名"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="email">
+          <el-input
+            v-model="formModel.email"
+            :prefix-icon="User"
+            placeholder="请输入邮箱"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password">

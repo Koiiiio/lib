@@ -16,10 +16,17 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()]
     })
   ],
-  base: '/Library',
+  base: './',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }
+  } //,
+  // // 配置跨域请求
+  // proxy: {
+  //   '/api': {
+  //     target: 'http://localhost:8080', //服务端的接口地址
+  //     changeOrigin: true //开启跨域
+  //   }
+  // }
 })

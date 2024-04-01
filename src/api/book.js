@@ -4,10 +4,11 @@ export const GetBookService = () => request.get('/user/books/info')
 
 export const AddBookService = (data) => request.post('/admin/books/info', data)
 
-export const EditBookService = (data) => request.put('/my/cate/info', data)
+export const EditBookService = (data) =>
+  request.put('/admin/books/info/{isbn}', data)
 
 export const DelBookService = (id) =>
-  request.delete('/my/cate/del', {
+  request.delete('/admin/books/info/{isbn}', {
     params: { id }
   })
 
