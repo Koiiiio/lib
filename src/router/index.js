@@ -23,16 +23,20 @@ const router = createRouter({
           component: () => import('@/views/book/BookChannel.vue')
         },
         {
-          path: '/manager/RequestHandle',
+          path: '/manager/request',
           component: () => import('@/views/manager/RequestHandle.vue')
         },
         {
-          path: '/manager/UserManage',
+          path: '/manager/usermanage',
           component: () => import('@/views/manager/UserManage.vue')
         },
         {
-          path: '/manager/BookManage',
+          path: '/manager/bookmanage',
           component: () => import('@/views/manager/BookManage.vue')
+        },
+        {
+          path: '/manager/latereturn',
+          component: () => import('@/views/manager/LateReturn.vue')
         },
         {
           path: '/user/profile',

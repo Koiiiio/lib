@@ -71,17 +71,21 @@ const handleCommand = async (key) => {
             <span>管理员功能</span>
           </template>
 
-          <el-menu-item index="/manager/UserManage">
+          <el-menu-item index="/manager/usermanage">
             <el-icon><Edit /></el-icon>
             <span>查看未归还读者</span>
           </el-menu-item>
-          <el-menu-item index="/manager/BookManage">
+          <el-menu-item index="/manager/bookmanage">
             <el-icon><MessageBox /></el-icon>
             <span>书籍管理</span>
           </el-menu-item>
-          <el-menu-item index="/manager/RequestHandle">
+          <el-menu-item index="/manager/request">
             <el-icon><Promotion /></el-icon>
             <span>查看借阅申请</span>
+          </el-menu-item>
+          <el-menu-item index="/manager/latereturn">
+            <el-icon><Promotion /></el-icon>
+            <span>查看迟还申请</span>
           </el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="/user">
