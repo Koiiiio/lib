@@ -27,13 +27,17 @@ export const userLoginService = ({ username, password, userRole }) => {
 
 export const userGetInfoService = () => request.get('/user/profile')
 
-export const userUpdateInfoService = ({ id, nickname, email }) =>
-  request.get('/user/profile', { id, nickname, email })
+export const userUpdateInfoService = ({ email }) =>
+  request.put('/user/profile', { email })
 
-export const userUpdateAvatarService = (avatar) =>
+export const userUpdateAvatarService = ({ avatar }) =>
   request.put('/user/profile', { avatar })
 
-export const userUpdatePasswordService = ({ old_pwd, new_pwd, re_pwd }) =>
-  request.put('/user/profile', { old_pwd, new_pwd, re_pwd })
+//export const userUpdatePasswordService = ({ old_pwd, new_pwd, re_pwd }) =>
+//request.put('/user/profile', { old_pwd, new_pwd, re_pwd })
 
-//export const userGetInfoService = () => request.get('/admin/user')
+export const userUpdatePasswordService = ({ password }) =>
+  request.put('/user/profile', { password })
+
+export const GetBorrowingService = () =>
+  request.get('/admin/borrowing/overdue-readers')

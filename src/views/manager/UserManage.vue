@@ -1,26 +1,18 @@
 <script setup>
 import { ref } from 'vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
-//import { GetUserListService } from '../../api/user.js'
-const userlist = ref([
-  {
-    username: 'test_user11',
-    userId: 12,
-    overdue: 0
-  },
-  {
-    username: 'test_user22',
-    userId: 3,
-    overdue: 1
-  }
-])
-/*const loadUserList = async () => {
+import { GetBorrowingService } from '../../api/user.js'
+const userList = ref([])
+const loading = ref(false)
+
+const loadUserList = async () => {
   loading.value = false //true
-  const res = await GetUserListService()
-  bookList.value = res.data.data
+  const res = await GetBorrowingService()
+  userList.value = res.data.data
   console.log(userlist.value)
   loading.value = false
-}*/
+}
+loadUserList()
 const search1 = ref('')
 const search2 = ref('')
 
@@ -58,11 +50,13 @@ const onReset = () => {
         <el-button @click="onReset">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-table v-loading="loading" :data="userlist" style="width: 100%">
+    <el-table v-loading="loading" :data="userList" style="width: 100%">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column prop="userId" label="用户ID"></el-table-column>
       <el-table-column prop="username" label="用户名"></el-table-column>
-      <el-table-column prop="overdue" label="是否逾期"></el-table-column>
+      <el-table-column prop="email" label="邮箱地址"></el-table-column>
+      <el-table-column prop="borrowDate" label="借阅日期"></el-table-column>
+      <el-table-column prop="dueDate" label="应归还日期"></el-table-column>
       <el-table-column label="操作" width="150">
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">

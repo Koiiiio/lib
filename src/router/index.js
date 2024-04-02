@@ -8,11 +8,15 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('@/views/layout/LayoutContainer.vue'),
-      redirect: '/book/manage',
+      redirect: '/login',
       children: [
         {
           path: '/book/manage',
           component: () => import('@/views/book/BookManage.vue')
+        },
+        {
+          path: '/book/reserve',
+          component: () => import('@/views/book/BookReserve.vue')
         },
         {
           path: '/book/channel',

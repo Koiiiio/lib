@@ -8,26 +8,16 @@ const formRef = ref()
 
 // 是在使用仓库中数据的初始值 (无需响应式) 解构无问题
 const {
-  user: { email, id, nickname, username },
+  user: { email, username },
   getUser
 } = useUserStore()
 
 const form = ref({
-  id,
   username,
-  nickname,
   email
 })
 
 const rules = ref({
-  nickname: [
-    { required: true, message: '请输入用户昵称', trigger: 'blur' },
-    {
-      pattern: /^\S{2,10}/,
-      message: '昵称长度在2-10个非空字符',
-      trigger: 'blur'
-    }
-  ],
   email: [
     { required: true, message: '请输入用户邮箱', trigger: 'blur' },
     {
@@ -55,9 +45,6 @@ const submitForm = async () => {
     <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="登录账号">
         <el-input v-model="form.username" disabled></el-input>
-      </el-form-item>
-      <el-form-item label="用户昵称" prop="nickname">
-        <el-input v-model="form.nickname"></el-input>
       </el-form-item>
       <el-form-item label="用户邮箱" prop="email">
         <el-input v-model="form.email"></el-input>

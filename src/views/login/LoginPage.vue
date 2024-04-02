@@ -65,7 +65,7 @@ const login = async () => {
   console.log(res.data.data)
 
   ElMessage.success('登录成功')
-  router.push('/')
+  router.push('/book/channel')
 }
 watch(isRegister, () => {
   formModel.value = {

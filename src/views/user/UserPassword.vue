@@ -10,7 +10,9 @@ const pwdForm = ref({
   new_pwd: '',
   re_pwd: ''
 })
-
+const pwd = ref({
+  password: ''
+})
 const checkDifferent = (rule, value, callback) => {
   // 校验新密码和原密码不能一样
   if (value === pwdForm.value.old_pwd) {
@@ -30,16 +32,16 @@ const checkSameAsNewPwd = (rule, value, callback) => {
 const rules = ref({
   old_pwd: [
     { required: true, message: '请输入原密码', trigger: 'blur' },
-    { min: 5, max: 15, message: '原密码长度在5-15位之间', trigger: 'blur' }
+    { min: 3, max: 15, message: '原密码长度在3-15位之间', trigger: 'blur' }
   ],
   new_pwd: [
     { required: true, message: '请输入新密码', trigger: 'blur' },
-    { min: 5, max: 15, message: '新密码长度在5-15位之间', trigger: 'blur' },
+    { min: 3, max: 15, message: '新密码长度在3-15位之间', trigger: 'blur' },
     { validator: checkDifferent, trigger: 'blur' }
   ],
   re_pwd: [
     { required: true, message: '请再次输入新密码', trigger: 'blur' },
-    { min: 5, max: 15, message: '确认密码长度在5-15位之间', trigger: 'blur' },
+    { min: 3, max: 15, message: '确认密码长度在3-15位之间', trigger: 'blur' },
     { validator: checkSameAsNewPwd, trigger: 'blur' }
   ]
 })
@@ -49,11 +51,13 @@ const router = useRouter()
 
 const submitForm = async () => {
   await formRef.value.validate()
-  await userUpdatePasswordService(pwdForm.value)
+  pwd.value.password = pwdForm.value.re_pwd
+  await userUpdatePasswordService(pwd.value)
+  //await userUpdatePasswordService(pwdForm.value)
   ElMessage.success('密码修改成功')
 
-  // 密码修改成功后，退出重新登录
-  // 清空本地存储的 token 和 个人信息
+  //密码修改成功后，退出重新登录
+  //清空本地存储的 token 和 个人信息
   userStore.setToken('')
   userStore.setUser({})
 

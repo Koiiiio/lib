@@ -17,10 +17,12 @@ import avatar from '@/assets/default.png'
 import { useUserStore } from '@/stores'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+//import { userGetInfoService } from '../../api/user.js'
 const userStore = useUserStore()
 const router = useRouter()
 const isRoot = ref(true)
-
+//const role = userGetInfoService()
+//if (role.data.data.userRole.value == 'admin') isRoot.value = true
 onMounted(() => {
   userStore.getUser()
 })
@@ -57,9 +59,12 @@ const handleCommand = async (key) => {
         </el-menu-item>
         <el-menu-item index="/book/manage">
           <el-icon><Finished /></el-icon>
-          <span>我的借阅</span>
+          <span>查看借阅</span>
         </el-menu-item>
-
+        <el-menu-item index="/book/reserve">
+          <el-icon><Finished /></el-icon>
+          <span>查看预约</span>
+        </el-menu-item>
         <el-sub-menu index="/manager" v-if="isRoot">
           <template #title>
             <el-icon><Service /></el-icon>
@@ -68,7 +73,7 @@ const handleCommand = async (key) => {
 
           <el-menu-item index="/manager/UserManage">
             <el-icon><Edit /></el-icon>
-            <span>用户管理</span>
+            <span>查看未归还读者</span>
           </el-menu-item>
           <el-menu-item index="/manager/BookManage">
             <el-icon><MessageBox /></el-icon>
@@ -76,7 +81,7 @@ const handleCommand = async (key) => {
           </el-menu-item>
           <el-menu-item index="/manager/RequestHandle">
             <el-icon><Promotion /></el-icon>
-            <span>借阅处理</span>
+            <span>查看借阅申请</span>
           </el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="/user">
