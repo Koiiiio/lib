@@ -1,7 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
-import { GetBookService, DelBookService } from '../../api/book.js'
+import {
+  GetBookService,
+  DelBookService
+  //AddInstanceService,
+  //DelInstanceService
+} from '../../api/book.js'
 import BookEdit from '../book/components/BookEdit.vue'
 
 const bookList = ref([])
@@ -21,6 +26,10 @@ getBookList()
 const onEditBook = (row) => {
   dialog.value.open(row)
 }
+const onAddBook = () => {
+  dialog.value.open({})
+}
+
 const onDelBook = async (row) => {
   await ElMessageBox.confirm('你确认要删除吗?', '温馨提示', {
     type: 'warning',
@@ -30,9 +39,6 @@ const onDelBook = async (row) => {
   await DelBookService(row.isbn)
   ElMessage.success('删除成功')
   getBookList()
-}
-const onAddBook = () => {
-  dialog.value.open({})
 }
 const onSuccess = () => {
   getBookList()
@@ -83,8 +89,8 @@ const onReset = () => {
   getBookList()
 }
 
-const onEditInstance = () => {
-  console.log('edit')
+const onAddInstance = () => {
+  console.log('add')
 }
 
 const onDelInstance = () => {
@@ -134,7 +140,7 @@ const onDelInstance = () => {
                 type="primary"
                 plain
                 size="small"
-                @click="onEditInstance()"
+                @click="onAddInstance()"
                 >添加图书</el-button
               >
               <el-button

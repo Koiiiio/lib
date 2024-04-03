@@ -4,6 +4,7 @@ import { EditBookService, AddBookService } from '@/api/book.js'
 import { ElMessage } from 'element-plus'
 const dialogVisible = ref(false)
 const formModel = ref({
+  id: '',
   title: '',
   isbn: '',
   author: '',
@@ -11,30 +12,30 @@ const formModel = ref({
 })
 const formRef = ref()
 const rules = {
-  title: [
-    { required: true, message: '请输入图书名称', trigger: 'blur' },
-    {
-      pattern: /^\S{1,10}$/,
-      message: '必须是1 到 10 位非空字符',
-      trigger: 'blur'
-    } //长度校验
-  ],
-  isbn: [
-    { required: true, message: '请输入ISBN号', trigger: 'blur' },
-    {
-      pattern: /^\S{1,30}$/,
-      message: '必须是1 到 30 位非空字符',
-      trigger: 'blur'
-    } //长度校验
-  ],
-  author: [
-    { required: true, message: '请输入图书作者', trigger: 'blur' },
-    {
-      pattern: /^\S{1,10}$/,
-      message: '必须是1 到 10 位非空字符',
-      trigger: 'blur'
-    } //长度校验
-  ]
+  // title: [
+  //   { required: true, message: '请输入图书名称', trigger: 'blur' },
+  //   {
+  //     pattern: /^\S{1,10}$/,
+  //     message: '必须是1 到 10 位非空字符',
+  //     trigger: 'blur'
+  //   } //长度校验
+  // ],
+  // isbn: [
+  //   { required: true, message: '请输入ISBN号', trigger: 'blur' },
+  //   {
+  //     pattern: /^\S{1,30}$/,
+  //     message: '必须是1 到 30 位非空字符',
+  //     trigger: 'blur'
+  //   } //长度校验
+  // ],
+  // author: [
+  //   { required: true, message: '请输入图书作者', trigger: 'blur' },
+  //   {
+  //     pattern: /^\S{1,10}$/,
+  //     message: '必须是1 到 10 位非空字符',
+  //     trigger: 'blur'
+  //   } //长度校验
+  // ]
 }
 
 //open 方法
@@ -44,11 +45,12 @@ const open = (row) => {
   console.log(row)
   dialogVisible.value = true
   formModel.value = { ...row } //添加 重置        编辑 回显
+  formModel.value.id = formModel.value.title
 }
 const emit = defineEmits(['success'])
 const onSubmit = async () => {
   await formRef.value.validate()
-  const isEdit = formModel.value.title
+  const isEdit = formModel.value.id
   if (isEdit) {
     await EditBookService(formModel.value)
     ElMessage.success('编辑成功')
@@ -66,7 +68,7 @@ defineExpose({
 
 <template>
   <el-dialog
-    :title="formModel.title ? '编辑图书' : '添加图书'"
+    :title="formModel.id ? '编辑图书' : '添加图书'"
     v-model="dialogVisible"
     width="30%"
   >
@@ -87,7 +89,7 @@ defineExpose({
         <el-input
           v-model="formModel.isbn"
           placeholder="请输入ISBN号"
-          :disabled="formModel.title"
+          :disabled="!!formModel.id"
         ></el-input>
       </el-form-item>
       <el-form-item prop="author" label="图书作者">
