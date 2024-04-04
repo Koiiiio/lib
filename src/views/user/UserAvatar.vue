@@ -22,8 +22,8 @@ const isUpload = () => {
 const onUpdateAvatar = async () => {
   // 发送请求更新头像
 
-  const avatar = imgUrl.value
-  await userUpdateAvatarService(avatar)
+  const base64Data = imgUrl.value.replace(/^data:image\/[a-zA-Z]+;base64,/, '')
+  await userUpdateAvatarService({ avatar: base64Data })
   // userStore 重新渲染
   await userStore.getUser()
   // 提示用户
@@ -40,7 +40,12 @@ const onUpdateAvatar = async () => {
       :show-file-list="false"
       :on-change="onSelectFile"
     >
-      <img v-if="imgUrl" :src="imgUrl" class="avatar" />
+      <!-- <img v-if="imgUrl" :src="imgUrl" class="avatar" /> -->
+      <img
+        v-if="imgUrl"
+        :src="'data:image/png;base64,' + imgUrl"
+        class="avatar"
+      />
       <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
     </el-upload>
 

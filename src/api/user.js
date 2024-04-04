@@ -30,8 +30,8 @@ export const userGetInfoService = () => request.get('/user/profile')
 export const userUpdateInfoService = ({ email }) =>
   request.put('/user/profile', { email })
 
-export const userUpdateAvatarService = (avatar) =>
-  request.put('/user/profile', avatar)
+export const userUpdateAvatarService = ({ avatar }) =>
+  request.put('/user/profile', { avatar })
 
 //export const userUpdatePasswordService = ({ old_pwd, new_pwd, re_pwd }) =>
 //request.put('/user/profile', { old_pwd, new_pwd, re_pwd })

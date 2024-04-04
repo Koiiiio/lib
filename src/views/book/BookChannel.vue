@@ -1,12 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { GetBookService } from '../../api/book.js'
-import BookEdit from './components/BookEdit.vue'
 import {} from '@element-plus/icons-vue'
-
+import BookBorrow from '../book/components/BookBorrow.vue'
 const bookList = ref([])
 const loading = ref(false)
-const dialog = ref()
 
 const getBookList = async () => {
   loading.value = false //true
@@ -17,11 +15,9 @@ const getBookList = async () => {
 }
 
 getBookList()
-
 const onSuccess = () => {
   getBookList()
 }
-
 const search1 = ref('')
 
 const onSearch = () => {
@@ -66,9 +62,12 @@ const setPlaceholder = (option) => {
     return '请输入ISBN号'
   }
 }
-const borrowBook = () => {
-  console.log('borrow')
+
+const dialog = ref()
+const borrowBook = async (row) => {
+  dialog.value.open(row)
 }
+
 const reserveBook = () => {
   console.log('reserve')
 }
@@ -113,7 +112,10 @@ const reserveBook = () => {
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">
           <div style="display: flex">
-            <el-button type="success" @click="borrowBook(row, $index)"
+            <el-button
+              type="success"
+              @click="borrowBook(row, $index)"
+              :disabled="row.available === 0"
               >借阅图书</el-button
             >
             <el-button type="primary" @click="reserveBook(row, $index)"
@@ -127,7 +129,7 @@ const reserveBook = () => {
       </template>
     </el-table>
 
-    <BookEdit ref="dialog" @success="onSuccess"></BookEdit>
+    <BookBorrow ref="dialog" @success="onSuccess"></BookBorrow>
   </page-container>
 </template>
 

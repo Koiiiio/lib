@@ -111,14 +111,17 @@ const handleCommand = async (key) => {
     <el-container>
       <el-header>
         <div>
-          用户：<strong>{{
-            userStore.user.nickname || userStore.user.username
-          }}</strong>
+          用户：<strong>{{ userStore.user.username }}</strong>
         </div>
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <!--默认展示-->
           <span class="el-dropdown__box">
-            <el-avatar :src="userStore.user.user_pic || avatar" />
+            <!-- <el-avatar :src="userStore.user.avatar || avatar" /> -->
+            <el-avatar
+              :src="
+                'data:image/jpeg;base64,' + (userStore.user.avatar || avatar)
+              "
+            />
             <el-icon><CaretBottom /></el-icon>
           </span>
           <!--下拉-->

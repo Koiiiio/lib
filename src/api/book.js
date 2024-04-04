@@ -32,20 +32,25 @@ export const DelBookService = (isbn) => {
 //   })
 // }
 
-//借阅申请
+//获取借阅申请
 export const GetBorrowService = (approved) =>
   request.get('/admin/borrowing/applications', approved)
 
-//预约
+//获取预约
 export const GetReserveList = () => request.get('/user/reservation')
 
-//借阅记录
+//获取借阅记录
 export const GetBorrowRecord = () => request.get('/user/borrowing/records')
 
-//迟还
+//获取迟还
 export const GetLateListService = () =>
   request.get('/admin/borrowing/late-returns')
 
-export const BorrowBookService = (data) => {
+//获取预约
+export const GetReserveService = (data) => {
   request.post('/user/reservation', data)
 }
+
+//借阅图书
+export const Borrow = ({ isbn, date }) =>
+  request.post('/user/borrowing', { isbn, date })
