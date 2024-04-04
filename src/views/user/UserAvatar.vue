@@ -4,7 +4,7 @@ import { Plus, Upload } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores'
 import { userUpdateAvatarService } from '@/api/user'
 const userStore = useUserStore()
-const imgUrl = ref(userStore.user.user_pic)
+const imgUrl = ref(userStore.user.avatar)
 const uploadRef = ref()
 const onSelectFile = (uploadFile) => {
   // 基于 FileReader 读取图片做预览
@@ -15,9 +15,15 @@ const onSelectFile = (uploadFile) => {
   }
 }
 
+const isUpload = () => {
+  if (imgUrl.value) return false
+  else return true
+}
 const onUpdateAvatar = async () => {
   // 发送请求更新头像
-  await userUpdateAvatarService(imgUrl.value)
+
+  const avatar = imgUrl.value
+  await userUpdateAvatarService(avatar)
   // userStore 重新渲染
   await userStore.getUser()
   // 提示用户
@@ -52,6 +58,7 @@ const onUpdateAvatar = async () => {
       type="success"
       :icon="Upload"
       size="large"
+      :disabled="isUpload()"
       >上传头像</el-button
     >
   </page-container>

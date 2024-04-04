@@ -56,7 +56,7 @@ const options = ref([
     label: 'ISBN号'
   }
 ])
-const option = ref('')
+const option = ref('title')
 const setPlaceholder = (option) => {
   if (option === 'title') {
     return '请输入图书标题'
