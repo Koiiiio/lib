@@ -3,16 +3,22 @@ import { ref } from 'vue'
 import { userUpdatePasswordService } from '@/api/user'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
-
+const userStore = useUserStore()
 const formRef = ref()
 const pwdForm = ref({
   old_pwd: '',
   new_pwd: '',
   re_pwd: ''
 })
-const pwd = ref({
-  password: ''
-})
+const pwd = ref(userStore.user.password)
+const checkIsPwd = (rule, value, callback) => {
+  // 校验原密码
+  if (value !== pwd.value) {
+    callback(new Error('原密码输入错误'))
+  } else {
+    callback()
+  }
+}
 const checkDifferent = (rule, value, callback) => {
   // 校验新密码和原密码不能一样
   if (value === pwdForm.value.old_pwd) {
@@ -32,7 +38,8 @@ const checkSameAsNewPwd = (rule, value, callback) => {
 const rules = ref({
   old_pwd: [
     { required: true, message: '请输入原密码', trigger: 'blur' },
-    { min: 3, max: 15, message: '原密码长度在3-15位之间', trigger: 'blur' }
+    { min: 3, max: 15, message: '原密码长度在3-15位之间', trigger: 'blur' },
+    { validator: checkIsPwd, trigger: 'blur' }
   ],
   new_pwd: [
     { required: true, message: '请输入新密码', trigger: 'blur' },
@@ -46,13 +53,12 @@ const rules = ref({
   ]
 })
 
-const userStore = useUserStore()
 const router = useRouter()
 
 const submitForm = async () => {
   await formRef.value.validate()
-  pwd.value.password = pwdForm.value.re_pwd
-  await userUpdatePasswordService(pwd.value)
+  pwd.value = pwdForm.value.re_pwd
+  await userUpdatePasswordService({ password: pwd.value })
   //await userUpdatePasswordService(pwdForm.value)
   ElMessage.success('密码修改成功')
 
