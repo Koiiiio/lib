@@ -64,6 +64,12 @@ export const Borrow = ({ isbn, date }) =>
 //处理借阅
 export const HandleRequest = (id, agree) => {
   const path = '/admin/borrowing/applications/{borrowingId}'
-  const requestPath = path.replace('{borrowingId}', id)
-  return request.put(requestPath, agree)
+  const requestPath = path.replace('{borrowingId}', id.toString())
+  return request.put(requestPath, { ageee: agree })
+}
+
+export const Return = (id) => {
+  const path = '/user/borrowing/return/{instanceId}'
+  const requestPath = path.replace('{instanceId}', id.toString())
+  return request.put(requestPath)
 }

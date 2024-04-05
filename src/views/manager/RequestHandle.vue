@@ -2,12 +2,8 @@
 import { ref } from 'vue'
 import { Plus, Edit } from '@element-plus/icons-vue'
 import { GetBorrowService, HandleRequest } from '../../api/book.js'
-const agreeLend = () => {
-  console.log()
-}
-const disagreeLend = () => {
-  console.log()
-}
+import { ElMessage } from 'element-plus'
+
 const borrowList = ref()
 const loading = ref(false)
 
@@ -19,12 +15,24 @@ const getBorrowList = async (approved) => {
   loading.value = false
 }
 getBorrowList(0)
+const agreeLend = async (row) => {
+  console.log(row.borrowingId)
+  await HandleRequest(row.borrowingId, 1)
+  ElMessage.success('审批成功')
+  getBorrowList(0)
+}
+const disagreeLend = async (row) => {
+  await HandleRequest(row.borrowingId, 0)
+  ElMessage.success('审批成功')
+  getBorrowList(0)
+}
 </script>
 <template>
   <page-container title="借阅处理">
     <el-table :data="borrowList">
-      <el-table-column type="index" label="序号" width="100"></el-table-column>
+      <el-table-column label="借阅记录ID" prop="borrowingId"> </el-table-column>
       <el-table-column label="用户ID" prop="userId"> </el-table-column>
+      <el-table-column label="用户名" prop="username"> </el-table-column>
       <el-table-column label="图书实体ID" prop="instanceId"> </el-table-column>
       <el-table-column label="ISBN号" prop="isbn"></el-table-column>
       <el-table-column label="借阅日期" prop="borrowDate"></el-table-column>
