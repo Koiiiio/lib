@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-//import { Borrow } from '@/api/book.js'
+import { Borrow } from '@/api/book.js'
 import { ElMessage } from 'element-plus'
 
 const formModel = ref({
@@ -58,8 +58,20 @@ const open = (row) => {
 
 const onSubmit = async () => {
   await formRef.value.validate()
-  //const res = await Borrow({ isbn: formModel.value.isbn, date: dueDate })
   BorrowDate(formModel.value.date)
+  console.log(formModel.value.isbn)
+  console.log(dueDate.value)
+  const res = await Borrow({ isbn: formModel.value.isbn, date: dueDate.value })
+  const instanceId = res.data.data.instanceId
+  const location = res.data.data.location
+
+  ElMessageBox.alert(
+    `借阅成功！\n书实体ID: ${instanceId}\n借阅图书位置: ${location}`,
+    'Title',
+    {
+      confirmButtonText: 'OK'
+    }
+  )
   ElMessage.success('借阅成功')
 
   dialogVisible.value = false

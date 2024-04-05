@@ -11,14 +11,14 @@ const disagreeLate = () => {
 const LateList = ref()
 const loading = ref(false)
 
-const getLateList = async () => {
+const getLateList = async (approved) => {
   loading.value = false //true
-  const res = await GetLateListService(0)
+  const res = await GetLateListService(approved)
   LateList.value = res.data.data
   //console.log(BorrowList.value)
   loading.value = false
 }
-getLateList()
+getLateList(0)
 </script>
 <template>
   <page-container title="借阅处理">

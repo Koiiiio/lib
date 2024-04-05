@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Delete, PieChart, Check } from '@element-plus/icons-vue'
-import { GetBorrowService } from '../../api/book.js'
+import { GetBorrowRecord } from '../../api/book.js'
 const ReturnBook = () => {
   console.log('1')
   //articleEditRef.value.open(row)
@@ -53,7 +53,7 @@ const borrowList = ref([])
 const loading = ref(false)
 const getBorrowList = async () => {
   loading.value = false //true
-  const res = await GetBorrowService()
+  const res = await GetBorrowRecord()
   borrowList.value = res.data.data
   //console.log(bookList.value)
   loading.value = false
@@ -76,30 +76,32 @@ getBorrowList()
 
       <el-table-column label="操作">
         <template #default="{ row }">
-          <el-button
-            plain
-            type="primary"
-            :icon="Check"
-            @click="ReturnBook(row)"
-            :style="{ display: row.state == '已归还' ? 'none' : '' }"
-            >归还</el-button
-          >
-          <el-button
-            plain
-            type="warning"
-            :icon="PieChart"
-            @click="LateReturnBook(row)"
-            :style="{ display: row.state == '已归还' ? 'none' : '' }"
-            >迟还</el-button
-          >
-          <el-button
-            plain
-            type="danger"
-            :icon="Delete"
-            @click="onDeleteBorrow(row)"
-            :style="{ display: row.state == '未归还' ? 'none' : '' }"
-            >删除记录</el-button
-          >
+          <div style="display: flex">
+            <el-button
+              plain
+              type="primary"
+              :icon="Check"
+              @click="ReturnBook(row)"
+              :style="{ display: row.state == '已归还' ? 'none' : '' }"
+              >归还</el-button
+            >
+            <el-button
+              plain
+              type="warning"
+              :icon="PieChart"
+              @click="LateReturnBook(row)"
+              :style="{ display: row.state == '已归还' ? 'none' : '' }"
+              >迟还</el-button
+            >
+            <el-button
+              plain
+              type="danger"
+              :icon="Delete"
+              @click="onDeleteBorrow(row)"
+              :style="{ display: row.state == '未归还' ? 'none' : '' }"
+              >删除记录</el-button
+            >
+          </div>
         </template>
       </el-table-column>
     </el-table>

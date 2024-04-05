@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
 import {
   GetBookService,
@@ -13,16 +13,30 @@ const bookList = ref([])
 const loading = ref(false)
 const dialog = ref()
 
+const total = ref(0)
+const currentPage = ref(1)
+const pageSize = ref(10)
+
 const getBookList = async () => {
   loading.value = true
   const res = await GetBookService()
+  // const res = await GetBookService({
+  //   page: currentPage.value,
+  //   pageSize: pageSize.value
+  // })
   bookList.value = res.data.data
-  //console.log(bookList.value)
+  // total.value = res.data.total
+  total.value = bookList.value.length
   loading.value = false
 }
 
 getBookList()
-
+//分页展示
+const displayedBooks = computed(() => {
+  const startIndex = (currentPage.value - 1) * pageSize.value
+  const endIndex = startIndex + pageSize.value
+  return bookList.value.slice(startIndex, endIndex)
+})
 const onEditBook = (row) => {
   dialog.value.open(row)
 }
@@ -96,6 +110,16 @@ const onAddInstance = () => {
 const onDelInstance = () => {
   console.log('del')
 }
+
+const handleSizeChange = (val) => {
+  pageSize.value = val
+  currentPage.value = 1
+  getBookList()
+}
+const handleCurrentChange = (val) => {
+  currentPage.value = val
+  getBookList()
+}
 </script>
 <template>
   <page-container title="图书目录">
@@ -128,7 +152,7 @@ const onDelInstance = () => {
       </div>
     </el-form>
 
-    <el-table v-loading="loading" :data="bookList" style="width: 100%">
+    <el-table v-loading="loading" :data="displayedBooks" style="width: 100%">
       <el-table-column type="expand">
         <template v-slot="props">
           <div class="expand-container">
@@ -186,6 +210,16 @@ const onDelInstance = () => {
     </el-table>
 
     <BookEdit ref="dialog" @success="onSuccess"></BookEdit>
+    <div class="pagination">
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        layout="total,prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </page-container>
 </template>
 <style lang="scss" scoped>
@@ -211,5 +245,10 @@ const onDelInstance = () => {
 
 .button-container {
   margin-left: 10px; /* 调整按钮之间的间距 */
+}
+
+.pagination {
+  float: right;
+  margin-top: 12px;
 }
 </style>

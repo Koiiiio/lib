@@ -118,9 +118,7 @@ const handleCommand = async (key) => {
           <span class="el-dropdown__box">
             <!-- <el-avatar :src="userStore.user.avatar || avatar" /> -->
             <el-avatar
-              :src="
-                'data:image/jpeg;base64,' + (userStore.user.avatar || avatar)
-              "
+              :src="'data:image/jpeg;base64,' + userStore.user.avatar || avatar"
             />
             <el-icon><CaretBottom /></el-icon>
           </span>

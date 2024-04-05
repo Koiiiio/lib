@@ -34,8 +34,11 @@ export const DelBookService = (isbn) => {
 
 //获取借阅申请
 export const GetBorrowService = (approved) =>
-  request.get('/admin/borrowing/applications', approved)
-
+  request.get('/admin/borrowing/applications', {
+    params: {
+      approved: approved
+    }
+  })
 //获取预约
 export const GetReserveList = () => request.get('/user/reservation')
 
@@ -43,9 +46,12 @@ export const GetReserveList = () => request.get('/user/reservation')
 export const GetBorrowRecord = () => request.get('/user/borrowing/records')
 
 //获取迟还
-export const GetLateListService = () =>
-  request.get('/admin/borrowing/late-returns')
-
+export const GetLateListService = (approved) =>
+  request.get('/admin/borrowing/late-returns', {
+    params: {
+      approved: approved
+    }
+  })
 //获取预约
 export const GetReserveService = (data) => {
   request.post('/user/reservation', data)
@@ -54,3 +60,10 @@ export const GetReserveService = (data) => {
 //借阅图书
 export const Borrow = ({ isbn, date }) =>
   request.post('/user/borrowing', { isbn, date })
+
+//处理借阅
+export const HandleRequest = (id, agree) => {
+  const path = '/admin/borrowing/applications/{borrowingId}'
+  const requestPath = path.replace('{borrowingId}', id)
+  return request.put(requestPath, agree)
+}
