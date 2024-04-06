@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { Delete, PieChart, Check } from '@element-plus/icons-vue'
+import { PieChart, Check } from '@element-plus/icons-vue'
 import { GetBorrowRecord, Return } from '../../api/book.js'
 const ReturnBook = async (row) => {
   console.log(row.instanceId)
@@ -72,10 +72,13 @@ getBorrowList()
       <el-table-column label="借阅日期" prop="borrowDate"></el-table-column>
       <el-table-column label="应归还日期" prop="dueDate"></el-table-column>
       <el-table-column label="归还日期" prop="returnDate"></el-table-column>
-      <el-table-column
-        label="审批状态"
-        prop="borrowAprvStatus"
-      ></el-table-column>
+      <el-table-column label="审批状态" prop="borrowAprvStatus">
+        <template v-slot="scope">
+          <span v-if="scope.row.borrowAprvStatus === 1">已批准</span>
+          <span v-else-if="scope.row.borrowAprvStatus === 2">已拒绝</span>
+          <span v-else>待审批</span>
+        </template></el-table-column
+      >
 
       <el-table-column label="操作" width="250">
         <template #default="{ row }">
@@ -85,7 +88,7 @@ getBorrowList()
               type="primary"
               :icon="Check"
               @click="ReturnBook(row)"
-              v-if="row.returnDate === null"
+              v-if="row.returnDate === null && row.borrowAprvStatus === 1"
               >归还</el-button
             >
             <el-button
@@ -93,16 +96,8 @@ getBorrowList()
               type="warning"
               :icon="PieChart"
               @click="LateReturnBook(row)"
-              v-if="row.returnDate === null"
+              v-if="row.returnDate === null && row.borrowAprvStatus === 1"
               >迟还</el-button
-            >
-            <el-button
-              plain
-              type="danger"
-              :icon="Delete"
-              click=""
-              v-if="row.returnDate !== null"
-              >删除记录</el-button
             >
           </div>
         </template>

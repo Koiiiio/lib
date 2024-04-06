@@ -1,34 +1,55 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Plus, Edit } from '@element-plus/icons-vue'
 import { GetBorrowService, HandleRequest } from '../../api/book.js'
 import { ElMessage } from 'element-plus'
 
 const borrowList = ref()
 const loading = ref(false)
+const switchValue = ref('0')
 
 const getBorrowList = async (approved) => {
-  loading.value = false //true
+  loading.value = true
   const res = await GetBorrowService(approved)
   borrowList.value = res.data.data
   //console.log(BorrowList.value)
   loading.value = false
 }
-getBorrowList(0)
+getBorrowList(switchValue.value)
+// const displayedList = computed(() => {
+//   const startIndex = (currentPage.value - 1) * pageSize.value
+//   const endIndex = startIndex + pageSize.value
+//   return borrowList.value.slice(startIndex, endIndex)
+// })
 const agreeLend = async (row) => {
   console.log(row.borrowingId)
   await HandleRequest(row.borrowingId, 1)
   ElMessage.success('审批成功')
-  getBorrowList(0)
+  getBorrowList(switchValue.value)
 }
 const disagreeLend = async (row) => {
   await HandleRequest(row.borrowingId, 0)
   ElMessage.success('审批成功')
-  getBorrowList(0)
+  getBorrowList(switchValue.value)
 }
+watch(switchValue, (newValue) => {
+  // 监听 switchValue 的变化，并在变化时重新获取列表
+  getBorrowList(newValue)
+})
 </script>
 <template>
   <page-container title="借阅处理">
+    <template #extra>
+      <el-tooltip :content="'借阅状态: ' + switchValue" placement="top">
+        <el-switch
+          v-model="switchValue"
+          style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+          active-value="1"
+          inactive-value="0"
+        />
+      </el-tooltip>
+    </template>
+
     <el-table :data="borrowList">
       <el-table-column label="借阅记录ID" prop="borrowingId"> </el-table-column>
       <el-table-column label="用户ID" prop="userId"> </el-table-column>
@@ -50,7 +71,7 @@ const disagreeLend = async (row) => {
               type="primary"
               :icon="Edit"
               @click="agreeLend(row)"
-              :style="{ display: row.borrowAprvStatus == 0 ? 1 : '' }"
+              v-if="row.borrowAprvStatus === 0"
               >同意</el-button
             >
             <el-button
@@ -58,7 +79,7 @@ const disagreeLend = async (row) => {
               type="warning"
               :icon="Plus"
               @click="disagreeLend(row)"
-              :style="{ display: row.borrowAprvStatus == 0 ? 1 : '' }"
+              v-if="row.borrowAprvStatus === 0"
               >不同意</el-button
             >
           </div>
@@ -67,3 +88,9 @@ const disagreeLend = async (row) => {
     </el-table>
   </page-container>
 </template>
+<style scoped>
+.pagination {
+  float: right;
+  margin-top: 12px;
+}
+</style>

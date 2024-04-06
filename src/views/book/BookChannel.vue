@@ -1,19 +1,29 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { GetBookService } from '../../api/book.js'
 import {} from '@element-plus/icons-vue'
 import BookBorrow from '../book/components/BookBorrow.vue'
 const bookList = ref([])
 const loading = ref(false)
 
+const total = ref(0)
+const currentPage = ref(1)
+const pageSize = ref(10)
+
 const getBookList = async () => {
-  loading.value = false //true
+  loading.value = true //true
   const res = await GetBookService()
   bookList.value = res.data.data
   //console.log(bookList.value)
+  total.value = bookList.value.length
   loading.value = false
 }
-
+//分页展示
+const displayedBooks = computed(() => {
+  const startIndex = (currentPage.value - 1) * pageSize.value
+  const endIndex = startIndex + pageSize.value
+  return bookList.value.slice(startIndex, endIndex)
+})
 getBookList()
 const onSuccess = () => {
   getBookList()
@@ -101,7 +111,7 @@ const reserveBook = () => {
       </div>
     </el-form>
 
-    <el-table v-loading="loading" :data="bookList" style="width: 100%">
+    <el-table v-loading="loading" :data="displayedBooks" style="width: 100%">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="isbn" label="ISBN号"></el-table-column>
@@ -130,6 +140,16 @@ const reserveBook = () => {
     </el-table>
 
     <BookBorrow ref="dialog" @success="onSuccess"></BookBorrow>
+    <div class="pagination">
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        layout="total,prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </page-container>
 </template>
 
@@ -142,5 +162,9 @@ const reserveBook = () => {
 .select-box {
   width: 100px; /* 调整选择框的宽度 */
   margin-top: -17px;
+}
+.pagination {
+  float: right;
+  margin-top: 12px;
 }
 </style>

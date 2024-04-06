@@ -1,18 +1,28 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
 import { GetBorrowingService } from '../../api/user.js'
 const userList = ref([])
 const loading = ref(false)
 
+const total = ref(0)
+const currentPage = ref(1)
+const pageSize = ref(10)
+
 const loadUserList = async () => {
   loading.value = false //true
   const res = await GetBorrowingService()
   userList.value = res.data.data
-  console.log(userlist.value)
+  //console.log(userlist.value)
+  total.value = userList.value.length
   loading.value = false
 }
 loadUserList()
+const displayedUsers = computed(() => {
+  const startIndex = (currentPage.value - 1) * pageSize.value
+  const endIndex = startIndex + pageSize.value
+  return userList.value.slice(startIndex, endIndex)
+})
 const search1 = ref('')
 const search2 = ref('')
 
@@ -50,7 +60,7 @@ const onReset = () => {
         <el-button @click="onReset">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-table v-loading="loading" :data="userList" style="width: 100%">
+    <el-table v-loading="loading" :data="displayedUsers" style="width: 100%">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column prop="userId" label="用户ID"></el-table-column>
       <el-table-column prop="username" label="用户名"></el-table-column>
@@ -80,5 +90,21 @@ const onReset = () => {
         <el-empty description="没有数据"></el-empty>
       </template>
     </el-table>
+    <div class="pagination">
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        layout="total,prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </page-container>
 </template>
+<style scoped>
+.pagination {
+  float: right;
+  margin-top: 12px;
+}
+</style>

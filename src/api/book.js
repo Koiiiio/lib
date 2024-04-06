@@ -58,14 +58,14 @@ export const GetReserveService = (data) => {
 }
 
 //借阅图书
-export const Borrow = ({ isbn, date }) =>
-  request.post('/user/borrowing', { isbn, date })
+export const Borrow = ({ isbn, dueDate }) =>
+  request.post('/user/borrowing', { isbn, dueDate })
 
 //处理借阅
 export const HandleRequest = (id, agree) => {
   const path = '/admin/borrowing/applications/{borrowingId}'
   const requestPath = path.replace('{borrowingId}', id.toString())
-  return request.put(requestPath, { ageee: agree })
+  return request.put(requestPath, { agree: agree })
 }
 
 export const Return = (id) => {
