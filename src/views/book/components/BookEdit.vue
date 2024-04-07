@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { EditBookService, AddBookService } from '@/api/book.js'
 import { ElMessage } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
 const dialogVisible = ref(false)
 const formModel = ref({
   id: '',
@@ -64,6 +65,19 @@ const onSubmit = async () => {
 defineExpose({
   open
 })
+const imgUrl = ref('')
+const onSelectFile = (uploadFile) => {
+  const reader = new FileReader()
+  reader.onload = () => {
+    const base64Data = reader.result
+    imgUrl.value = base64Data // 预览图片
+    const Data = reader.result.split(',')[1] // 去掉前缀
+    formModel.value.cover = Data // 存入formModel
+    console.log(formModel.value.cover)
+  }
+  //console.log(formModel.value.cover)
+  reader.readAsDataURL(uploadFile.raw)
+}
 </script>
 
 <template>
@@ -103,6 +117,17 @@ defineExpose({
           v-model="formModel.description"
           placeholder="请输入描述"
         ></el-input>
+      </el-form-item>
+      <el-form-item label="封面" prop="cover_img">
+        <el-upload
+          class="avatar-uploader"
+          :show-file-list="false"
+          :auto-upload="false"
+          :on-change="onSelectFile"
+        >
+          <img v-if="imgUrl" :src="imgUrl" class="avatar" />
+          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        </el-upload>
       </el-form-item>
     </el-form>
     <template #footer>

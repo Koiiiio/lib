@@ -27,19 +27,19 @@ const search1 = ref('')
 const search2 = ref('')
 
 const onSearch = () => {
-  const filteredList = userlist.value.filter((user) => {
+  const filteredList = userList.value.filter((user) => {
     return (
       user.userId.toString().includes(search1.value) &&
       user.username.includes(search2.value)
     )
   })
-  userlist.value.splice(0, userlist.value.length, ...filteredList)
+  userList.value.splice(0, userList.value.length, ...filteredList)
 }
 
 const onReset = () => {
   search1.value = ''
   search2.value = ''
-  //loadUserList()
+  loadUserList()
 }
 </script>
 <template>

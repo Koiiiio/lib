@@ -15,7 +15,7 @@ const dialog = ref()
 
 const total = ref(0)
 const currentPage = ref(1)
-const pageSize = ref(10)
+const pageSize = ref(5)
 
 const getBookList = async () => {
   loading.value = true
@@ -179,6 +179,16 @@ const handleCurrentChange = (val) => {
         </template>
       </el-table-column>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
+      <el-table-column prop="cover" label="图书封面">
+        <template #default="{ row }">
+          <div
+            class="thumbnail"
+            :style="{
+              'background-image': `url(data:image/jpeg;base64,${row.cover})`
+            }"
+          ></div>
+        </template>
+      </el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="isbn" label="ISBN号"></el-table-column>
       <el-table-column prop="author" label="作者"></el-table-column>
@@ -250,5 +260,11 @@ const handleCurrentChange = (val) => {
 .pagination {
   float: right;
   margin-top: 12px;
+}
+.thumbnail {
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  background-position: center;
 }
 </style>

@@ -40,14 +40,21 @@ watch(switchValue, (newValue) => {
 <template>
   <page-container title="借阅处理">
     <template #extra>
-      <el-tooltip :content="'借阅状态: ' + switchValue" placement="top">
-        <el-switch
-          v-model="switchValue"
-          style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
-          active-value="1"
-          inactive-value="0"
-        />
-      </el-tooltip>
+      <div class="extra-container">
+        <div style="margin-right: 10px">未审批</div>
+        <el-tooltip :content="'借阅状态: ' + switchValue" placement="top">
+          <el-switch
+            v-model="switchValue"
+            style="
+              --el-switch-on-color: #13ce66;
+              --el-switch-off-color: #ff4949;
+            "
+            active-value="1"
+            inactive-value="0"
+          />
+        </el-tooltip>
+        <div style="margin-left: 10px">已审批</div>
+      </div>
     </template>
 
     <el-table :data="borrowList">
@@ -92,5 +99,9 @@ watch(switchValue, (newValue) => {
 .pagination {
   float: right;
   margin-top: 12px;
+}
+.extra-container {
+  display: flex;
+  align-items: center;
 }
 </style>

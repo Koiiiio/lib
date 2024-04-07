@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Plus, Edit } from '@element-plus/icons-vue'
 import { GetLateListService } from '../../api/book.js'
+
 const agreeLate = () => {
   console.log('1')
 }
@@ -10,7 +11,7 @@ const disagreeLate = () => {
 }
 const LateList = ref()
 const loading = ref(false)
-
+const switchValue = ref('0')
 const getLateList = async (approved) => {
   loading.value = false //true
   const res = await GetLateListService(approved)
@@ -18,19 +19,47 @@ const getLateList = async (approved) => {
   //console.log(BorrowList.value)
   loading.value = false
 }
-getLateList(0)
+getLateList(switchValue.value)
+watch(switchValue, (newValue) => {
+  // 监听 switchValue 的变化，并在变化时重新获取列表
+  getLateList(newValue)
+})
 </script>
 <template>
-  <page-container title="借阅处理">
+  <page-container title="迟还处理">
+    <template #extra>
+      <div class="extra-container">
+        <div style="margin-right: 10px">未审批</div>
+        <el-tooltip :content="'审批状态: ' + switchValue" placement="top">
+          <el-switch
+            v-model="switchValue"
+            style="
+              --el-switch-on-color: #13ce66;
+              --el-switch-off-color: #ff4949;
+            "
+            active-value="1"
+            inactive-value="0"
+          />
+        </el-tooltip>
+        <div style="margin-left: 10px">已审批</div>
+      </div>
+    </template>
     <el-table :data="LateList">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column label="用户ID" prop="userId"> </el-table-column>
-      <el-table-column label="用户名" prop="username"> </el-table-column>
-      <el-table-column label="图书实体ID" prop="instanceId"> </el-table-column>
+      <el-table-column label="用户ID" prop="userId" width="100">
+      </el-table-column>
+      <el-table-column label="用户名" prop="username" width="100">
+      </el-table-column>
+      <el-table-column label="图书实体ID" prop="instanceId" width="100">
+      </el-table-column>
       <el-table-column label="ISBN号" prop="isbn"></el-table-column>
       <el-table-column label="借阅日期" prop="borrowDate"></el-table-column>
       <el-table-column label="应归还时间" prop="dueDate"></el-table-column>\
-      <el-table-column label="迟还日期" prop="lateRetDate"></el-table-column>
+      <el-table-column
+        label="迟还日期"
+        prop="lateRetDate"
+        width="100"
+      ></el-table-column>
       <el-table-column
         label="审批状态"
         prop="lateRetAprvStatus"
@@ -38,24 +67,32 @@ getLateList(0)
 
       <el-table-column label="操作">
         <template #default="{ row }">
-          <el-button
-            plain
-            type="primary"
-            :icon="Edit"
-            @click="agreeLate(row)"
-            :style="{ display: row.borrowAprvStatus == 0 ? 1 : '' }"
-            >同意</el-button
-          >
-          <el-button
-            plain
-            type="warning"
-            :icon="Plus"
-            @click="disagreeLate(row)"
-            :style="{ display: row.borrowAprvStatus == 0 ? 1 : '' }"
-            >不同意</el-button
-          >
+          <div style="display: flex">
+            <el-button
+              plain
+              type="primary"
+              :icon="Edit"
+              @click="agreeLate(row)"
+              :style="{ display: row.borrowAprvStatus == 0 ? 1 : '' }"
+              >同意</el-button
+            >
+            <el-button
+              plain
+              type="warning"
+              :icon="Plus"
+              @click="disagreeLate(row)"
+              :style="{ display: row.borrowAprvStatus == 0 ? 1 : '' }"
+              >不同意</el-button
+            >
+          </div>
         </template>
       </el-table-column>
     </el-table>
   </page-container>
 </template>
+<style scoped>
+.extra-container {
+  display: flex;
+  align-items: center;
+}
+</style>

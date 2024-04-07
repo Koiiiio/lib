@@ -69,10 +69,11 @@ const onSubmit = async () => {
   const location = res.data.data.location
 
   ElMessageBox.alert(
-    `已提交申请：\n书实体ID: ${instanceId} \n\n借阅图书位置: ${location}`,
+    '已提交申请：<br>书实体ID: ' + instanceId + '<br>借阅图书位置: ' + location,
     '借阅提示:',
     {
-      confirmButtonText: 'OK'
+      confirmButtonText: 'OK',
+      dangerouslyUseHTMLString: true // 允许使用 HTML 标签
     }
   )
 

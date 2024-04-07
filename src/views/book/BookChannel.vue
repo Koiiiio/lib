@@ -8,7 +8,7 @@ const loading = ref(false)
 
 const total = ref(0)
 const currentPage = ref(1)
-const pageSize = ref(10)
+const pageSize = ref(5)
 
 const getBookList = async () => {
   loading.value = true //true
@@ -113,10 +113,19 @@ const reserveBook = () => {
 
     <el-table v-loading="loading" :data="displayedBooks" style="width: 100%">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
+      <el-table-column prop="cover" label="图书封面">
+        <template #default="{ row }">
+          <div
+            class="thumbnail"
+            :style="{
+              'background-image': `url(data:image/jpeg;base64,${row.cover})`
+            }"
+          ></div>
+        </template>
+      </el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="isbn" label="ISBN号"></el-table-column>
       <el-table-column prop="author" label="作者"></el-table-column>
-      <el-table-column prop="description" label="描述"></el-table-column>
       <el-table-column prop="available" label="现存数量"></el-table-column>
       <el-table-column label="操作" width="300">
         <!--row 项 index 下标-->
@@ -166,5 +175,11 @@ const reserveBook = () => {
 .pagination {
   float: right;
   margin-top: 12px;
+}
+.thumbnail {
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  background-position: center;
 }
 </style>
