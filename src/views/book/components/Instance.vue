@@ -73,13 +73,13 @@ defineExpose({
       label-width="100px"
       style="padding-right: 30px"
     >
-      <el-form-item prop="isbn" label="ISBN号：">
+      <el-form-item prop="isbn" label="ISBN号:">
         <el-input
           v-model="formModel.isbn"
           :disabled="!!formModel.isbn"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="number" label="添加图书数量:" v-if="formModel.add">
+      <el-form-item prop="number" label="添加数量:" v-if="formModel.add">
         <el-input
           v-model="formModel.number"
           placeholder="请输入添加数量"

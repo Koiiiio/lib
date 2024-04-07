@@ -23,6 +23,10 @@ const router = createRouter({
           component: () => import('@/views/book/BookChannel.vue')
         },
         {
+          path: '/book/penalty',
+          component: () => import('@/views/book/Penalty.vue')
+        },
+        {
           path: '/manager/request',
           component: () => import('@/views/manager/RequestHandle.vue')
         },

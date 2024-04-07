@@ -4,13 +4,22 @@ import { PieChart, Check } from '@element-plus/icons-vue'
 import { GetBorrowRecord, Return } from '../../api/book.js'
 const ReturnBook = async (row) => {
   console.log(row.instanceId)
+  await ElMessageBox.confirm('你确认要归还吗?', '提示:', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    type: 'warning'
+  })
   await Return(row.instanceId)
   ElMessage.success('归还成功！')
   getBorrowList()
 }
-const LateReturnBook = (row) => {
+const LateReturnBook = async (row) => {
   console.log(row.returnDate)
-  //articleEditRef.value.open(row)
+  await ElMessageBox.confirm('你确认要申请迟还吗?', '提示:', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    type: 'warning'
+  })
 }
 // 删除逻辑
 // const onDeleteBorrow = async (row) => {

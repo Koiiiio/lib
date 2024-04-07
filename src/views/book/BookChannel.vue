@@ -1,8 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { GetBookService } from '../../api/book.js'
+import { GetBookService, Reserve } from '../../api/book.js'
 import {} from '@element-plus/icons-vue'
 import BookBorrow from '../book/components/BookBorrow.vue'
+import { ElMessage } from 'element-plus'
 const bookList = ref([])
 const loading = ref(false)
 
@@ -78,8 +79,15 @@ const borrowBook = async (row) => {
   dialog.value.open(row)
 }
 
-const reserveBook = () => {
-  console.log('reserve')
+const reserveBook = async (row) => {
+  await ElMessageBox.confirm('你确认要预约吗?', '提示:', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    type: 'Warning'
+  })
+  //console.log(row.isbn)
+  Reserve(row.isbn)
+  ElMessage.success('预约成功!')
 }
 </script>
 

@@ -1,7 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { Edit, Delete } from '@element-plus/icons-vue'
+import { CloseBold } from '@element-plus/icons-vue'
 import { GetBorrowingService } from '../../api/user.js'
+import UserPenalty from '../book/components/UserPenalty.vue'
 const userList = ref([])
 const loading = ref(false)
 
@@ -41,6 +42,14 @@ const onReset = () => {
   search2.value = ''
   loadUserList()
 }
+
+const onSuccess = () => {
+  loadUserList()
+}
+const dialog = ref()
+const penalty = (row) => {
+  dialog.value.open(row)
+}
 </script>
 <template>
   <page-container title="用户管理">
@@ -71,25 +80,19 @@ const onReset = () => {
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">
           <el-button
-            :icon="Edit"
-            circle
-            type="primary"
-            plain
-            @click="onEditUser(row, $index)"
-          ></el-button>
-          <el-button
-            :icon="Delete"
-            circle
+            :icon="CloseBold"
             type="danger"
             plain
-            @click="onDelUser(row, $index)"
-          ></el-button>
+            @click="penalty(row, $index)"
+            >Penalty</el-button
+          >
         </template>
       </el-table-column>
       <template #empty>
         <el-empty description="没有数据"></el-empty>
       </template>
     </el-table>
+    <UserPenalty ref="dialog" @success="onSuccess"></UserPenalty>
     <div class="pagination">
       <el-pagination
         v-model:current-page="currentPage"

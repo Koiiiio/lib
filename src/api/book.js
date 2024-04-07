@@ -57,6 +57,8 @@ export const GetLateListService = (approved) =>
 export const GetReserveService = (data) => {
   request.post('/user/reservation', data)
 }
+//获取处分
+export const GetPenaltyService = () => request.get('/user/penalty')
 
 //借阅图书
 export const Borrow = ({ isbn, dueDate }) =>
@@ -68,9 +70,26 @@ export const HandleRequest = (id, agree) => {
   const requestPath = path.replace('{borrowingId}', id.toString())
   return request.put(requestPath, { agree: agree })
 }
-
+//还书
 export const Return = (id) => {
   const path = '/user/borrowing/return/{instanceId}'
   const requestPath = path.replace('{instanceId}', id.toString())
   return request.put(requestPath)
+}
+//预约
+export const Reserve = (isbn) => {
+  const path = '/user/reservation/{isbn}'
+  const requestPath = path.replace('{isbn}', isbn.toString())
+  return request.put(requestPath)
+}
+//取消预约
+export const CancelReserve = (isbn) => {
+  const path = '/user/reservation/cancel/{isbn}'
+  const requestPath = path.replace('{isbn}', isbn.toString())
+  return request.put(requestPath)
+}
+export const Penalty = ({ reason, endDate, userId }) => {
+  const path = '/admin/penalty/{userId}'
+  const requestPath = path.replace('{userId}', userId.toString())
+  return request.put(requestPath, { reason, endDate })
 }

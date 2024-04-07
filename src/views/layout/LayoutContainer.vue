@@ -65,6 +65,10 @@ const handleCommand = async (key) => {
           <el-icon><Finished /></el-icon>
           <span>查看预约</span>
         </el-menu-item>
+        <el-menu-item index="/book/penalty">
+          <el-icon><Finished /></el-icon>
+          <span>查看处分</span>
+        </el-menu-item>
         <el-sub-menu index="/manager" v-if="isRoot">
           <template #title>
             <el-icon><Service /></el-icon>
