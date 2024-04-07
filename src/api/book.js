@@ -10,13 +10,14 @@ export const EditBookService = (data) => {
   return request.put(requestPath, data)
 }
 
-export const AddInstanceService = (data) =>
-  request.post('/admin/books/instances', data)
-
+export const AddInstanceService = ({ isbn, number }) => {
+  const parsedNumber = parseInt(number, 10) // 将number转换为整数
+  return request.post('/admin/books/instances', { isbn, number: parsedNumber })
+}
 export const DelInstanceService = (id) => {
   const path = '/admin/books/info/{instanceId}'
-  const requestPath = path.replace('{instanceId}', id)
-  return request.delete(requestPath, id)
+  const requestPath = path.replace('{instanceId}', id.toString())
+  return request.delete(requestPath)
 }
 
 //export const DelBookService = (isbn) =>

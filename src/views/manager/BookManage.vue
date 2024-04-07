@@ -8,11 +8,11 @@ import {
   //DelInstanceService
 } from '../../api/book.js'
 import BookEdit from '../book/components/BookEdit.vue'
-
+import Instance from '../book/components/Instance.vue'
 const bookList = ref([])
 const loading = ref(false)
-const dialog = ref()
-
+const dialog1 = ref()
+const dialog2 = ref()
 const total = ref(0)
 const currentPage = ref(1)
 const pageSize = ref(5)
@@ -37,11 +37,11 @@ const displayedBooks = computed(() => {
   const endIndex = startIndex + pageSize.value
   return bookList.value.slice(startIndex, endIndex)
 })
-const onEditBook = (row) => {
-  dialog.value.open(row)
+const onEditBook = (isbn) => {
+  dialog1.value.open(isbn)
 }
 const onAddBook = () => {
-  dialog.value.open({})
+  dialog1.value.open({})
 }
 
 const onDelBook = async (row) => {
@@ -103,12 +103,12 @@ const onReset = () => {
   getBookList()
 }
 
-const onAddInstance = () => {
-  console.log('add')
+const onAddInstance = (isbn) => {
+  dialog2.value.openIns(isbn, 1)
 }
 
-const onDelInstance = () => {
-  console.log('del')
+const onDelInstance = (isbn) => {
+  dialog2.value.openIns(isbn, 0)
 }
 
 const handleSizeChange = (val) => {
@@ -164,14 +164,14 @@ const handleCurrentChange = (val) => {
                 type="primary"
                 plain
                 size="small"
-                @click="onAddInstance()"
+                @click="onAddInstance(props.row.isbn)"
                 >添加图书</el-button
               >
               <el-button
                 type="danger"
                 size="small"
                 plain
-                @click="onDelInstance()"
+                @click="onDelInstance(props.row.isbn)"
                 >删除图书</el-button
               >
             </div>
@@ -219,7 +219,8 @@ const handleCurrentChange = (val) => {
       </template>
     </el-table>
 
-    <BookEdit ref="dialog" @success="onSuccess"></BookEdit>
+    <BookEdit ref="dialog1" @success="onSuccess"></BookEdit>
+    <Instance ref="dialog2" @success="onSuccess"></Instance>
     <div class="pagination">
       <el-pagination
         v-model:current-page="currentPage"

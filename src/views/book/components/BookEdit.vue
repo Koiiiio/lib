@@ -9,7 +9,8 @@ const formModel = ref({
   title: '',
   isbn: '',
   author: '',
-  description: ''
+  description: '',
+  cover: ''
 })
 const formRef = ref()
 const rules = {
@@ -60,6 +61,7 @@ const onSubmit = async () => {
     ElMessage.success('添加成功')
   }
   dialogVisible.value = false
+  imgUrl.value = ''
   emit('success')
 }
 defineExpose({
@@ -118,7 +120,7 @@ const onSelectFile = (uploadFile) => {
           placeholder="请输入描述"
         ></el-input>
       </el-form-item>
-      <el-form-item label="封面" prop="cover_img">
+      <el-form-item label="封面" prop="cover">
         <el-upload
           class="avatar-uploader"
           :show-file-list="false"
