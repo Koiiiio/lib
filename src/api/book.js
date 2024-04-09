@@ -44,8 +44,9 @@ export const GetBorrowService = (approved) =>
 export const GetReserveList = () => request.get('/user/reservation')
 
 //获取借阅记录
-export const GetBorrowRecord = () => request.get('/user/borrowing/records')
-
+//export const GetBorrowRecord = () => request.get('/user/borrowing/records')
+export const GetBorrowRecord = (status) =>
+  request.get(`/user/borrowing/records?status=${status}`)
 //获取迟还
 export const GetLateListService = (approved) =>
   request.get('/admin/borrowing/late-returns', {
@@ -88,8 +89,15 @@ export const CancelReserve = (isbn) => {
   const requestPath = path.replace('{isbn}', isbn.toString())
   return request.put(requestPath)
 }
+//处罚
 export const Penalty = ({ reason, endDate, userId }) => {
   const path = '/admin/penalty/{userId}'
   const requestPath = path.replace('{userId}', userId.toString())
   return request.put(requestPath, { reason, endDate })
 }
+//迟还
+export const LateReturn = ({ borrowId, lateRetDate }) =>
+  request.post('/user/borrowing/lateret-request', {
+    borrowId,
+    lateRetDate
+  })

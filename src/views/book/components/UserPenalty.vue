@@ -27,9 +27,8 @@ const onSubmit = async () => {
     userId: formModel.value.id
   })
 
-  ElMessage.success('处分成功!')
-
   dialogVisible.value = false
+  ElMessage.success('处分成功!')
   emit('success')
 }
 defineExpose({
