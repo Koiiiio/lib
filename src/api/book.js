@@ -27,11 +27,11 @@ export const DelBookService = (isbn) => {
   const requestPath = path.replace('{{isbn}}', isbn)
   return request.delete(requestPath, isbn)
 }
-// export const GetInstanceService = (params) => {
-//   request.get('/my/article/list', {
-//     params
-//   })
-// }
+export const GetInstanceService = (isbn) => {
+  const path = '/admin/books/instance-list/{isbn}'
+  const requestPath = path.replace('{isbn}', isbn)
+  return request.get(requestPath)
+}
 
 //获取借阅申请
 export const GetBorrowService = (approved) =>

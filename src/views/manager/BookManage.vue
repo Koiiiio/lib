@@ -3,9 +3,10 @@ import { ref, computed } from 'vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
 import {
   GetBookService,
-  DelBookService
+  DelBookService,
   //AddInstanceService,
   //DelInstanceService
+  GetInstanceService
 } from '../../api/book.js'
 import BookEdit from '../book/components/BookEdit.vue'
 import Instance from '../book/components/Instance.vue'
@@ -17,6 +18,12 @@ const total = ref(0)
 const currentPage = ref(1)
 const pageSize = ref(5)
 
+const getInstanceList = async (isbn) => {
+  const res = await GetInstanceService(isbn)
+  //InstanceList.value = res.data.data
+  return res.data.data
+}
+
 const getBookList = async () => {
   loading.value = true
   const res = await GetBookService()
@@ -24,13 +31,22 @@ const getBookList = async () => {
   //   page: currentPage.value,
   //   pageSize: pageSize.value
   // })
-  bookList.value = res.data.data
-  // total.value = res.data.total
+  //bookList.value = res.data.data
+  const tempBookList = res.data.data
+
+  for (let i = 0; i < tempBookList.length; i++) {
+    const book = tempBookList[i]
+    const family = await getInstanceList(book.isbn)
+    book.family = family
+  }
+
+  bookList.value = tempBookList
   total.value = bookList.value.length
   loading.value = false
 }
 
 getBookList()
+
 //分页展示
 const displayedBooks = computed(() => {
   const startIndex = (currentPage.value - 1) * pageSize.value
@@ -120,6 +136,25 @@ const handleCurrentChange = (val) => {
   currentPage.value = val
   getBookList()
 }
+
+/* <template v-slot="props">
+          <div class="expand-container">
+            <div class="isbn-container">
+              <span>ISBN号: {{ props.row.isbn }}</span>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column type="index" label="序号" width="100"></el-table-column>
+      <el-table-column prop="cover" label="图书封面">
+        <template #default="{ row }">
+          <div
+            class="thumbnail"
+            :style="{
+              'background-image': `url(data:image/jpeg;base64,${row.cover})`
+            }"
+          ></div>
+        </template> */
 </script>
 <template>
   <page-container title="图书目录">
@@ -154,41 +189,17 @@ const handleCurrentChange = (val) => {
 
     <el-table v-loading="loading" :data="displayedBooks" style="width: 100%">
       <el-table-column type="expand">
-        <template v-slot="props">
-          <div class="expand-container">
-            <div class="isbn-container">
-              <span>ISBN号: {{ props.row.isbn }}</span>
-            </div>
-            <div class="button-container">
-              <el-button
-                type="primary"
-                plain
-                size="small"
-                @click="onAddInstance(props.row.isbn)"
-                >添加图书</el-button
-              >
-              <el-button
-                type="danger"
-                size="small"
-                plain
-                @click="onDelInstance(props.row.isbn)"
-                >删除图书</el-button
-              >
-            </div>
-          </div>
+        <template #default="props">
+          <h3>Family</h3>
+          <el-table :data="props.row.family">
+            <el-table-column label="isbn" prop="isbn" />
+            <el-table-column label="instanceId" prop="instanceId" />
+            <el-table-column label="borrowStatus" prop="borrowStatus" />
+            <el-table-column label="addTime" prop="addTime" />
+          </el-table>
         </template>
       </el-table-column>
-      <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="cover" label="图书封面">
-        <template #default="{ row }">
-          <div
-            class="thumbnail"
-            :style="{
-              'background-image': `url(data:image/jpeg;base64,${row.cover})`
-            }"
-          ></div>
-        </template>
-      </el-table-column>
+
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="isbn" label="ISBN号"></el-table-column>
       <el-table-column prop="author" label="作者"></el-table-column>

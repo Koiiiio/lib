@@ -20,7 +20,7 @@ const LateReturnBook = async (row) => {
   getBorrowList(state.value)
 }
 const state = ref('1')
-const option = ref('4')
+const option = ref('1')
 const borrowList = ref([])
 const loading = ref(false)
 const getBorrowList = async (state) => {
@@ -28,6 +28,7 @@ const getBorrowList = async (state) => {
   console.log(state)
   console.log(option.value)
   const res = await GetBorrowRecord(state)
+  console.log(res.data)
   borrowList.value = res.data.data
   //console.log(bookList.value)
   loading.value = false
@@ -92,12 +93,18 @@ watch(option, (newValue) => {
       <el-table-column label="审批状态" prop="borrowAprvStatus">
         <template v-slot="scope">
           <span v-if="scope.row.borrowAprvStatus === 0">未审批</span>
-          <span v-else-if="scope.row.borrowAprvStatus === 1">未通过</span>
-          <span v-else-if="scope.row.borrowAprvStatus === 2">已经归还</span>
-          <span v-else-if="scope.row.borrowAprvStatus === 3"
+          <span v-else-if="scope.row.borrowAprvStatus === 2">未通过</span>
+          <span v-else-if="scope.row.returnDate !== null">已经归还</span>
+          <span
+            v-else-if="
+              scope.row.lateRetAprvStatus !== 1 && scope.row.returnDate === null
+            "
             >未归还（不可迟还）</span
           >
-          <span v-else-if="scope.row.borrowAprvStatus === 4"
+          <span
+            v-else-if="
+              scope.row.lateRetAprvStatus === 1 && scope.row.returnDate === null
+            "
             >未归还（可迟还）</span
           >
         </template></el-table-column
