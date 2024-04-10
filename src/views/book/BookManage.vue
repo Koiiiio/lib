@@ -19,14 +19,14 @@ const LateReturnBook = async (row) => {
   dialog.value.open(row)
   getBorrowList(state.value)
 }
-const state = ref('1')
-const option = ref('1')
+const state = ref('4')
+const option = ref('4')
 const borrowList = ref([])
 const loading = ref(false)
 const getBorrowList = async (state) => {
   loading.value = true //true
-  console.log(state)
-  console.log(option.value)
+  // console.log(state)
+  // console.log(option.value)
   const res = await GetBorrowRecord(state)
   console.log(res.data)
   borrowList.value = res.data.data
@@ -40,7 +40,7 @@ const onSuccess = () => {
 const options = ref([
   {
     value: '0',
-    label: '未批阅'
+    label: '未审批'
   },
   {
     value: '1',
@@ -52,17 +52,17 @@ const options = ref([
   },
   {
     value: '3',
-    label: '未归还(不可迟还)'
+    label: '不可申请迟还'
   },
   {
     value: '4',
-    label: '未归还（可迟还）'
+    label: '可申请迟还'
   }
 ])
 watch(option, (newValue) => {
   // 监听 option 的变化，并在变化时重新获取列表
   getBorrowList(newValue)
-  console.log(newValue)
+  //console.log(newValue)
 })
 </script>
 <template>
@@ -85,7 +85,6 @@ watch(option, (newValue) => {
     <el-table :data="borrowList">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column label="图书实体ID" prop="instanceId"> </el-table-column>
-      <el-table-column label="ISBN号" prop="isbn"></el-table-column>
       <el-table-column label="借阅ID" prop="userId"> </el-table-column>
       <el-table-column label="借阅日期" prop="borrowDate"></el-table-column>
       <el-table-column label="应归还日期" prop="dueDate"></el-table-column>
@@ -93,19 +92,28 @@ watch(option, (newValue) => {
       <el-table-column label="审批状态" prop="borrowAprvStatus">
         <template v-slot="scope">
           <span v-if="scope.row.borrowAprvStatus === 0">未审批</span>
-          <span v-else-if="scope.row.borrowAprvStatus === 2">未通过</span>
-          <span v-else-if="scope.row.returnDate !== null">已经归还</span>
+          <span v-if="scope.row.borrowAprvStatus === 2">未通过</span>
           <span
-            v-else-if="
-              scope.row.lateRetAprvStatus !== 1 && scope.row.returnDate === null
+            v-if="
+              scope.row.returnDate !== null && scope.row.borrowAprvStatus === 1
             "
-            >未归还（不可迟还）</span
+            >已经归还</span
+          >
+          <span
+            v-if="
+              scope.row.lateRetAprvStatus !== null &&
+              scope.row.returnDate === null &&
+              scope.row.borrowAprvStatus === 1
+            "
+            >未归还（不可申请迟还）</span
           >
           <span
             v-else-if="
-              scope.row.lateRetAprvStatus === 1 && scope.row.returnDate === null
+              scope.row.lateRetAprvStatus === null &&
+              scope.row.returnDate === null &&
+              scope.row.borrowAprvStatus === 1
             "
-            >未归还（可迟还）</span
+            >未归还（可申请迟还）</span
           >
         </template></el-table-column
       >
@@ -118,10 +126,7 @@ watch(option, (newValue) => {
               type="primary"
               :icon="Check"
               @click="ReturnBook(row)"
-              v-if="
-                row.returnDate === null &&
-                (row.borrowAprvStatus === 3 || row.borrowAprvStatus === 4)
-              "
+              v-if="row.returnDate === null && row.borrowAprvStatus === 1"
               >归还</el-button
             >
             <el-button
@@ -129,7 +134,11 @@ watch(option, (newValue) => {
               type="warning"
               :icon="PieChart"
               @click="LateReturnBook(row)"
-              v-if="row.returnDate === null && row.borrowAprvStatus === 4"
+              v-if="
+                row.lateRetAprvStatus == null &&
+                row.returnDate == null &&
+                row.borrowAprvStatus == 1
+              "
               >迟还</el-button
             >
           </div>

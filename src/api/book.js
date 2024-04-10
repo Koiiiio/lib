@@ -101,3 +101,9 @@ export const LateReturn = ({ borrowId, lateRetDate }) =>
     borrowId,
     lateRetDate
   })
+//处理迟还
+export const HandleLateReturn = ({ borrowingId, agree }) => {
+  const path = '/admin/borrowing/late-returns/{borrowingId}'
+  const requestPath = path.replace('{borrowingId}', borrowingId.toString())
+  return request.put(requestPath, { agree: agree })
+}

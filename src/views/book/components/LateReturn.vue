@@ -5,6 +5,7 @@ import { LateReturn } from '@/api/book.js'
 
 const formModel = ref({
   userId: '',
+  borrowingId: '',
   instanceId: '',
   isbn: '',
   date: ''
@@ -14,17 +15,19 @@ const rules = {}
 const dialogVisible = ref(false)
 
 const open = (row) => {
-  console.log(row)
+  //console.log(row)
   dialogVisible.value = true
   formModel.value = { ...row }
+  console.log(1)
+  console.log(formModel.value)
 }
 
 const onSubmit = async () => {
   await formRef.value.validate()
-  console.log(formModel.value.isbn)
-  console.log(formModel.value.date)
+  //console.log(formModel.value.isbn)
+  //console.log(formModel.value.date)
   await LateReturn({
-    borrowId: formModel.value.userId,
+    borrowId: formModel.value.borrowingId,
     lateRetDate: formModel.value.date
   })
   //   ElMessageBox.alert(
@@ -52,7 +55,7 @@ defineExpose({
       style="padding-right: 30px"
     >
       <el-form-item prop="" label="用户ID">
-        <el-input :placeholder="formModel.useId" :disabled="true"></el-input>
+        <el-input :placeholder="formModel.userId" :disabled="true"></el-input>
       </el-form-item>
       <el-form-item prop="" label="图书实体ID">
         <el-input
@@ -60,8 +63,11 @@ defineExpose({
           :disabled="true"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="" label="ISBN号">
-        <el-input :placeholder="formModel.isbn" :disabled="true"></el-input>
+      <el-form-item prop="" label="borrowDate">
+        <el-input
+          :placeholder="formModel.borrowDate"
+          :disabled="true"
+        ></el-input>
       </el-form-item>
       <el-form-item prop="date" label="预计迟还日期">
         <el-date-picker

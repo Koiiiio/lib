@@ -1,13 +1,17 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { Plus, Edit } from '@element-plus/icons-vue'
-import { GetLateListService } from '../../api/book.js'
+import { GetLateListService, HandleLateReturn } from '../../api/book.js'
 
-const agreeLate = () => {
-  console.log('1')
+const agreeLate = async (row) => {
+  await HandleLateReturn({ borrowingId: row.borrowingId, agree: 1 })
+  ElMessage.success('审批成功！')
+  getLateList(switchValue.value)
 }
-const disagreeLate = () => {
-  console.log('0')
+const disagreeLate = async (row) => {
+  await HandleLateReturn({ borrowingId: row.borrowingId, agree: 0 })
+  ElMessage.success('审批成功！')
+  getLateList(switchValue.value)
 }
 const LateList = ref()
 const loading = ref(false)
@@ -45,7 +49,11 @@ watch(switchValue, (newValue) => {
       </div>
     </template>
     <el-table :data="LateList">
-      <el-table-column type="index" label="序号" width="100"></el-table-column>
+      <el-table-column
+        label="借阅记录ID"
+        prop="borrowingId"
+        width="100"
+      ></el-table-column>
       <el-table-column label="用户ID" prop="userId" width="100">
       </el-table-column>
       <el-table-column label="用户名" prop="username" width="100">
@@ -60,10 +68,12 @@ watch(switchValue, (newValue) => {
         prop="lateRetDate"
         width="100"
       ></el-table-column>
-      <el-table-column
-        label="审批状态"
-        prop="lateRetAprvStatus"
-      ></el-table-column>
+      <el-table-column label="审批状态" prop="lateRetAprvStatus"
+        ><template v-slot="scope">
+          <span v-if="scope.row.lateRetAprvStatus === 0">未审批</span>
+          <span v-if="scope.row.lateRetAprvStatus === 1">已审批</span>
+        </template>
+      </el-table-column>
 
       <el-table-column label="操作">
         <template #default="{ row }">
@@ -73,7 +83,7 @@ watch(switchValue, (newValue) => {
               type="primary"
               :icon="Edit"
               @click="agreeLate(row)"
-              :style="{ display: row.borrowAprvStatus == 0 ? 1 : '' }"
+              v-if="row.lateRetAprvStatus === 0"
               >同意</el-button
             >
             <el-button
@@ -81,7 +91,7 @@ watch(switchValue, (newValue) => {
               type="warning"
               :icon="Plus"
               @click="disagreeLate(row)"
-              :style="{ display: row.borrowAprvStatus == 0 ? 1 : '' }"
+              v-if="row.lateRetAprvStatus === 0"
               >不同意</el-button
             >
           </div>

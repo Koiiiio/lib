@@ -120,11 +120,17 @@ const onReset = () => {
 }
 
 const onAddInstance = (isbn) => {
-  dialog2.value.openIns(isbn, 1)
+  dialog2.value.openIns(isbn, -1)
 }
 
-const onDelInstance = (isbn) => {
-  dialog2.value.openIns(isbn, 0)
+const onDelInstance = (isbn, instanceId, borrowStatus) => {
+  if (borrowStatus === 1) {
+    ElMessageBox.alert('此书正在被借阅中,不可删除!', '提示：', {
+      confirmButtonText: 'OK'
+    })
+  } else {
+    dialog2.value.openIns(isbn, instanceId)
+  }
 }
 
 const handleSizeChange = (val) => {
@@ -136,25 +142,6 @@ const handleCurrentChange = (val) => {
   currentPage.value = val
   getBookList()
 }
-
-/* <template v-slot="props">
-          <div class="expand-container">
-            <div class="isbn-container">
-              <span>ISBN号: {{ props.row.isbn }}</span>
-            </div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="cover" label="图书封面">
-        <template #default="{ row }">
-          <div
-            class="thumbnail"
-            :style="{
-              'background-image': `url(data:image/jpeg;base64,${row.cover})`
-            }"
-          ></div>
-        </template> */
 </script>
 <template>
   <page-container title="图书目录">
@@ -190,12 +177,38 @@ const handleCurrentChange = (val) => {
     <el-table v-loading="loading" :data="displayedBooks" style="width: 100%">
       <el-table-column type="expand">
         <template #default="props">
-          <h3>Family</h3>
+          <h3>Instance</h3>
           <el-table :data="props.row.family">
-            <el-table-column label="isbn" prop="isbn" />
-            <el-table-column label="instanceId" prop="instanceId" />
-            <el-table-column label="borrowStatus" prop="borrowStatus" />
-            <el-table-column label="addTime" prop="addTime" />
+            <el-table-column label="isbn" prop="isbn" width="300" />
+            <el-table-column label="instanceId" prop="instanceId" width="170" />
+            <el-table-column
+              label="borrowStatus"
+              prop="borrowStatus"
+              width="170"
+            />
+            <el-table-column label="addTime" prop="addTime" width="200" />
+            <el-table-column label="操作" width="200">
+              <template #default="{ row }">
+                <div class="button-container" style="display: flex">
+                  <el-button
+                    type="primary"
+                    plain
+                    size="small"
+                    @click="onAddInstance(props.row.isbn)"
+                    >图书入库</el-button
+                  >
+                  <el-button
+                    type="danger"
+                    size="small"
+                    plain
+                    @click="
+                      onDelInstance(row.isbn, row.instanceId, row.borrowStatus)
+                    "
+                    >图书出库</el-button
+                  >
+                </div>
+              </template>
+            </el-table-column>
           </el-table>
         </template>
       </el-table-column>

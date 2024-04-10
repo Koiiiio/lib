@@ -32,11 +32,12 @@ const rules = {
 //open 方法
 //open({}) 添加
 //open({id,name...}) 编辑
-const openIns = (isbn, add) => {
+const openIns = (isbn, id) => {
   dialogVisible.value = true
   formModel.value.isbn = isbn
-  formModel.value.add = add
-  console.log(formModel)
+  formModel.value.add = -id //id -1 添加   正id 删除
+  if (id) formModel.value.id = id
+  console.log(formModel.value)
 }
 const emit = defineEmits(['success'])
 const onSubmit = async () => {
@@ -62,7 +63,7 @@ defineExpose({
 
 <template>
   <el-dialog
-    :title="formModel.add ? '图书入库' : '图书出库'"
+    :title="formModel.add > 0 ? '图书入库' : '图书出库'"
     v-model="dialogVisible"
     width="30%"
   >
@@ -79,16 +80,16 @@ defineExpose({
           :disabled="!!formModel.isbn"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="number" label="添加数量:" v-if="formModel.add">
+      <el-form-item prop="number" label="添加数量:" v-if="formModel.add > 0">
         <el-input
           v-model="formModel.number"
           placeholder="请输入添加数量"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="id" label="删除图书ID:" v-if="!formModel.add">
+      <el-form-item prop="id" label="删除图书ID:" v-if="formModel.add < 0">
         <el-input
           v-model="formModel.id"
-          placeholder="请输入删除图书ID"
+          :disabled="!!formModel.isbn"
         ></el-input>
       </el-form-item>
     </el-form>
