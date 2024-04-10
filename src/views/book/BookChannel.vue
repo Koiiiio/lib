@@ -77,6 +77,7 @@ const setPlaceholder = (option) => {
 const dialog = ref()
 const borrowBook = async (row) => {
   dialog.value.open(row)
+  getBookList()
 }
 
 const reserveBook = async (row) => {

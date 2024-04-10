@@ -14,15 +14,15 @@ const rules = {
   number: [
     { required: true, message: '请输入数量', trigger: 'blur' },
     {
-      pattern: /^(?:[1-9]|[1-9]\d|10000)$/,
-      message: '必须是数字',
+      pattern: /^(?:[1-9]|[1-9]\d|100)$/,
+      message: '必须是整数且小于100',
       trigger: 'blur'
     }
   ],
   id: [
     { required: true, message: '请输入id', trigger: 'blur' },
     {
-      pattern: /^(?:[1-9]|[1-9]\d|100000)$/,
+      pattern: /^(?:[1-9]|[1-9]\d|1000000)$/,
       message: '必须是数字',
       trigger: 'blur'
     }

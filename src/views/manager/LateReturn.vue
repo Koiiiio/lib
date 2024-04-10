@@ -60,13 +60,18 @@ watch(switchValue, (newValue) => {
       </el-table-column>
       <el-table-column label="图书实体ID" prop="instanceId" width="100">
       </el-table-column>
-      <el-table-column label="ISBN号" prop="isbn"></el-table-column>
+      <el-table-column label="ISBN号" prop="isbn" width="200"></el-table-column>
       <el-table-column label="借阅日期" prop="borrowDate"></el-table-column>
-      <el-table-column label="应归还时间" prop="dueDate"></el-table-column>\
+      <el-table-column
+        label="应归还时间"
+        prop="dueDate"
+        width="150"
+      ></el-table-column
+      >\
       <el-table-column
         label="迟还日期"
         prop="lateRetDate"
-        width="100"
+        width="150"
       ></el-table-column>
       <el-table-column label="审批状态" prop="lateRetAprvStatus"
         ><template v-slot="scope">
@@ -75,9 +80,9 @@ watch(switchValue, (newValue) => {
         </template>
       </el-table-column>
 
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="250">
         <template #default="{ row }">
-          <div style="display: flex">
+          <div style="display: flex; margin-right: 100px">
             <el-button
               plain
               type="primary"

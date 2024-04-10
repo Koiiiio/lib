@@ -53,9 +53,6 @@ const penalty = (row) => {
 </script>
 <template>
   <page-container title="用户管理">
-    <template #extra>
-      <el-button @click="onAddUser">添加用户</el-button>
-    </template>
     <el-form inline>
       <el-form-item label="用户ID:">
         <el-input v-model="search1" placeholder="请输入用户ID" clearable>

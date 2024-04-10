@@ -70,9 +70,9 @@ watch(switchValue, (newValue) => {
         prop="borrowAprvStatus"
       ></el-table-column>
 
-      <el-table-column label="操作" width="200">
+      <el-table-column label="操作" width="250">
         <template #default="{ row }">
-          <div style="display: flex">
+          <div style="display: flex; margin-right: 100px">
             <el-button
               plain
               type="primary"
