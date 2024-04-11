@@ -177,26 +177,33 @@ const handleCurrentChange = (val) => {
     <el-table v-loading="loading" :data="displayedBooks" style="width: 100%">
       <el-table-column type="expand">
         <template #default="props">
-          <h3>Instance</h3>
+          <div>
+            Instance ISBN: {{ props.row.isbn }}
+            <el-button
+              type="primary"
+              plain
+              size="small"
+              @click="onAddInstance(props.row.isbn)"
+              style="margin-left: 30px"
+              >图书入库</el-button
+            >
+          </div>
+
           <el-table :data="props.row.family">
-            <el-table-column label="isbn" prop="isbn" width="300" />
             <el-table-column label="instanceId" prop="instanceId" width="170" />
             <el-table-column
               label="borrowStatus"
               prop="borrowStatus"
               width="170"
-            />
+              ><template v-slot="scope">
+                <span v-if="scope.row.borrowStatus === 0">未借阅</span>
+                <span v-if="scope.row.borrowStatus === 1">已借阅</span>
+              </template>
+            </el-table-column>
             <el-table-column label="addTime" prop="addTime" width="200" />
             <el-table-column label="操作" width="200">
               <template #default="{ row }">
                 <div class="button-container" style="display: flex">
-                  <el-button
-                    type="primary"
-                    plain
-                    size="small"
-                    @click="onAddInstance(props.row.isbn)"
-                    >图书入库</el-button
-                  >
                   <el-button
                     type="danger"
                     size="small"

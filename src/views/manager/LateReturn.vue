@@ -76,7 +76,8 @@ watch(switchValue, (newValue) => {
       <el-table-column label="审批状态" prop="lateRetAprvStatus"
         ><template v-slot="scope">
           <span v-if="scope.row.lateRetAprvStatus === 0">未审批</span>
-          <span v-if="scope.row.lateRetAprvStatus === 1">已审批</span>
+          <span v-if="scope.row.lateRetAprvStatus === 1">已同意</span>
+          <span v-if="scope.row.lateRetAprvStatus === 2">已拒绝</span>
         </template>
       </el-table-column>
 

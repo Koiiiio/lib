@@ -127,7 +127,11 @@ const onSelectFile = (uploadFile) => {
           :auto-upload="false"
           :on-change="onSelectFile"
         >
-          <img v-if="imgUrl" :src="imgUrl" class="avatar" />
+          <img
+            v-if="imgUrl"
+            :src="imgUrl"
+            style="max-width: 100%; max-height: 200px"
+          />
           <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
         </el-upload>
       </el-form-item>
