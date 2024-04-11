@@ -43,7 +43,7 @@ const emit = defineEmits(['success'])
 const onSubmit = async () => {
   await formRef.value.validate()
   const isAdd = formModel.value.add
-  if (isAdd) {
+  if (isAdd > 0) {
     await AddInstanceService({
       isbn: formModel.value.isbn,
       number: formModel.value.number

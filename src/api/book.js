@@ -15,7 +15,7 @@ export const AddInstanceService = ({ isbn, number }) => {
   return request.post('/admin/books/instances', { isbn, number: parsedNumber })
 }
 export const DelInstanceService = (id) => {
-  const path = '/admin/books/info/{instanceId}'
+  const path = '/admin/books/instances/{instanceId}'
   const requestPath = path.replace('{instanceId}', id.toString())
   return request.delete(requestPath)
 }
