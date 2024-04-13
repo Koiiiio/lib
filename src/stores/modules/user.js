@@ -21,13 +21,17 @@ export const useUserStore = defineStore(
     const setUser = (obj) => {
       user.value = obj
     }
+    const setUserAdmin = () => {
+      user.value.userRole = 'admin'
+    }
     return {
       token,
       setToken,
       removeToken,
       user,
       getUser,
-      setUser
+      setUser,
+      setUserAdmin
     }
   },
   {

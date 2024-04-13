@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { Plus, Edit } from '@element-plus/icons-vue'
+import { Check, Close } from '@element-plus/icons-vue'
 import { GetLateListService, HandleLateReturn } from '../../api/book.js'
 
 const agreeLate = async (row) => {
@@ -49,30 +49,14 @@ watch(switchValue, (newValue) => {
       </div>
     </template>
     <el-table :data="LateList">
-      <el-table-column
-        label="借阅记录ID"
-        prop="borrowingId"
-        width="100"
-      ></el-table-column>
-      <el-table-column label="用户ID" prop="userId" width="100">
-      </el-table-column>
-      <el-table-column label="用户名" prop="username" width="100">
-      </el-table-column>
-      <el-table-column label="图书实体ID" prop="instanceId" width="100">
-      </el-table-column>
-      <el-table-column label="ISBN号" prop="isbn" width="200"></el-table-column>
+      <el-table-column label="借阅记录ID" prop="borrowingId"></el-table-column>
+      <el-table-column label="用户ID" prop="userId"> </el-table-column>
+      <el-table-column label="用户名" prop="username"> </el-table-column>
+      <el-table-column label="图书实体ID" prop="instanceId"> </el-table-column>
+      <el-table-column label="ISBN号" prop="isbn"></el-table-column>
       <el-table-column label="借阅日期" prop="borrowDate"></el-table-column>
-      <el-table-column
-        label="应归还时间"
-        prop="dueDate"
-        width="150"
-      ></el-table-column
-      >\
-      <el-table-column
-        label="迟还日期"
-        prop="lateRetDate"
-        width="150"
-      ></el-table-column>
+      <el-table-column label="应归还时间" prop="dueDate"></el-table-column>\
+      <el-table-column label="迟还日期" prop="lateRetDate"></el-table-column>
       <el-table-column label="审批状态" prop="lateRetAprvStatus"
         ><template v-slot="scope">
           <span v-if="scope.row.lateRetAprvStatus === 0">未审批</span>
@@ -83,11 +67,11 @@ watch(switchValue, (newValue) => {
 
       <el-table-column label="操作" width="250">
         <template #default="{ row }">
-          <div style="display: flex; margin-right: 100px">
+          <div style="display: flex">
             <el-button
               plain
               type="primary"
-              :icon="Edit"
+              :icon="Check"
               @click="agreeLate(row)"
               v-if="row.lateRetAprvStatus === 0"
               >同意</el-button
@@ -95,7 +79,7 @@ watch(switchValue, (newValue) => {
             <el-button
               plain
               type="warning"
-              :icon="Plus"
+              :icon="Close"
               @click="disagreeLate(row)"
               v-if="row.lateRetAprvStatus === 0"
               >不同意</el-button

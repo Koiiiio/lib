@@ -11,21 +11,24 @@ import {
   Service,
   MessageBox,
   Finished,
-  Edit
+  Edit,
+  Timer,
+  Stamp,
+  ChatDotRound
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 import { useUserStore } from '@/stores'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 //import { userGetInfoService } from '../../api/user.js'
 const userStore = useUserStore()
+
 const router = useRouter()
-const isRoot = ref(true)
-//const role = userGetInfoService()
-//if (role.data.data.userRole.value == 'admin') isRoot.value = true
+
 onMounted(() => {
   userStore.getUser()
 })
+
 const handleCommand = async (key) => {
   if (key === 'logout') {
     await ElMessageBox.confirm('你确定要退出吗?', '提示', {
@@ -62,14 +65,17 @@ const handleCommand = async (key) => {
           <span>查看借阅</span>
         </el-menu-item>
         <el-menu-item index="/book/reserve">
-          <el-icon><Finished /></el-icon>
+          <el-icon><ChatDotRound /></el-icon>
           <span>查看预约</span>
         </el-menu-item>
         <el-menu-item index="/book/penalty">
-          <el-icon><Finished /></el-icon>
+          <el-icon><Stamp /></el-icon>
           <span>查看处分</span>
         </el-menu-item>
-        <el-sub-menu index="/manager" v-if="isRoot">
+        <el-sub-menu
+          index="/manager"
+          v-if="userStore.user.userRole === 'admin'"
+        >
           <template #title>
             <el-icon><Service /></el-icon>
             <span>管理员功能</span>
@@ -88,7 +94,7 @@ const handleCommand = async (key) => {
             <span>查看借阅申请</span>
           </el-menu-item>
           <el-menu-item index="/manager/latereturn">
-            <el-icon><Promotion /></el-icon>
+            <el-icon><Timer /></el-icon>
             <span>查看迟还申请</span>
           </el-menu-item>
         </el-sub-menu>
@@ -116,6 +122,9 @@ const handleCommand = async (key) => {
       <el-header>
         <div>
           用户：<strong>{{ userStore.user.username }}</strong>
+        </div>
+        <div>
+          用户身份：<strong>{{ userStore.user.userRole }}</strong>
         </div>
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <!--默认展示-->

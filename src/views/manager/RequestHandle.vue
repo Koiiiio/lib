@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { Plus, Edit } from '@element-plus/icons-vue'
+import { Check, Close } from '@element-plus/icons-vue'
 import { GetBorrowService, HandleRequest } from '../../api/book.js'
 import { ElMessage } from 'element-plus'
 
@@ -76,7 +76,7 @@ watch(switchValue, (newValue) => {
             <el-button
               plain
               type="primary"
-              :icon="Edit"
+              :icon="Check"
               @click="agreeLend(row)"
               v-if="row.borrowAprvStatus === 0"
               >同意</el-button
@@ -84,7 +84,7 @@ watch(switchValue, (newValue) => {
             <el-button
               plain
               type="warning"
-              :icon="Plus"
+              :icon="Close"
               @click="disagreeLend(row)"
               v-if="row.borrowAprvStatus === 0"
               >不同意</el-button
@@ -96,10 +96,6 @@ watch(switchValue, (newValue) => {
   </page-container>
 </template>
 <style scoped>
-.pagination {
-  float: right;
-  margin-top: 12px;
-}
 .extra-container {
   display: flex;
   align-items: center;

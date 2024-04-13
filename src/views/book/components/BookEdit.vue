@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { EditBookService, AddBookService } from '@/api/book.js'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
@@ -48,6 +48,11 @@ const open = (row) => {
   dialogVisible.value = true
   formModel.value = { ...row } //添加 重置        编辑 回显
   formModel.value.id = formModel.value.title
+  if (formModel.value.cover !== null) {
+    imgUrl.value = `data:image/jpeg;base64,${formModel.value.cover}`
+  } else {
+    imgUrl.value = defaultCover
+  }
 }
 const emit = defineEmits(['success'])
 const onSubmit = async () => {
@@ -80,6 +85,12 @@ const onSelectFile = (uploadFile) => {
   //console.log(formModel.value.cover)
   reader.readAsDataURL(uploadFile.raw)
 }
+import defaultCover from '@/assets/cover.jpg'
+
+// 在组件加载时设置默认图片的URL
+onMounted(() => {
+  imgUrl.value = defaultCover
+})
 </script>
 
 <template>
