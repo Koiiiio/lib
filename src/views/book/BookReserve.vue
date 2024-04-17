@@ -20,25 +20,55 @@ const Cancel = async (row) => {
   ElMessage.success('取消成功！')
   getreserveList()
 }
+import defaultCover from '@/assets/defaultcover.jpg'
+const getCoverImage = (cover) => {
+  return cover ? `url(data:image/jpeg;base64,${cover})` : `url(${defaultCover})`
+}
 </script>
 <template>
   <page-container title="我的预约">
     <el-table v-loading="loading" :data="reserveList" style="width: 100%">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column prop="title" label="图书标题"></el-table-column>
-      <el-table-column prop="isbn" label="ISBN号"></el-table-column>
+      <el-table-column prop="isbn" label="ISBN号"
+        ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.isbn"
+          >
+            <div class="ellipsis" :title="row.isbn">
+              {{ row.isbn }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
       <el-table-column prop="author" label="图书作者"></el-table-column>
       <el-table-column prop="cover" label="封面图片">
         <template #default="{ row }">
           <div
             class="thumbnail"
             :style="{
-              'background-image': `url(data:image/jpeg;base64,${row.cover})`
+              'background-image': getCoverImage(row.cover)
             }"
           ></div>
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="描述"></el-table-column>
+      <el-table-column prop="description" label="描述"
+        ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.description"
+          >
+            <div class="ellipsis">
+              {{ row.description }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
       <el-table-column prop="available" label="现存数量"></el-table-column>
       <el-table-column prop="borrowed" label="被借阅数量"></el-table-column>
       <el-table-column label="操作" width="300">

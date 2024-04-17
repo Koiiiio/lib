@@ -55,19 +55,19 @@ const open = (row) => {
   dialogVisible.value = true
   formModel.value = { ...row }
 }
-
+const emit = defineEmits(['refresh-list'])
 const onSubmit = async () => {
   await formRef.value.validate()
   BorrowDate(formModel.value.date)
-  console.log(formModel.value.isbn)
-  console.log(dueDate.value)
+  // console.log(formModel.value.isbn)
+  // console.log(dueDate.value)
   const res = await Borrow({
     isbn: formModel.value.isbn,
     dueDate: dueDate.value
   })
   const instanceId = res.data.data.instanceId
   const location = res.data.data.location
-
+  dialogVisible.value = false
   await ElMessageBox.alert(
     '已提交申请：<br>书实体ID: ' + instanceId + '<br>借阅图书位置: ' + location,
     '借阅提示:',
@@ -76,7 +76,7 @@ const onSubmit = async () => {
       dangerouslyUseHTMLString: true // 允许使用 HTML 标签
     }
   )
-  dialogVisible.value = false
+
   emit('refresh-list') // 发射事件
 }
 defineExpose({

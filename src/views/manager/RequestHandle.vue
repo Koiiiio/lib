@@ -62,7 +62,20 @@ watch(switchValue, (newValue) => {
       <el-table-column label="用户ID" prop="userId"> </el-table-column>
       <el-table-column label="用户名" prop="username"> </el-table-column>
       <el-table-column label="图书实体ID" prop="instanceId"> </el-table-column>
-      <el-table-column label="ISBN号" prop="isbn"></el-table-column>
+      <el-table-column label="ISBN号" prop="isbn"
+        ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.isbn"
+          >
+            <div class="ellipsis" :title="row.isbn">
+              {{ row.isbn }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
       <el-table-column label="借阅日期" prop="borrowDate"></el-table-column>
       <el-table-column label="应归还日期" prop="dueDate"></el-table-column>
       <el-table-column
@@ -99,5 +112,11 @@ watch(switchValue, (newValue) => {
 .extra-container {
   display: flex;
   align-items: center;
+}
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap; /* 不换行 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+  max-width: 150px; /* 设置最大宽度，根据需要调整 */
 }
 </style>

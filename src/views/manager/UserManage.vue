@@ -70,7 +70,20 @@ const penalty = (row) => {
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column prop="userId" label="用户ID"></el-table-column>
       <el-table-column prop="username" label="用户名"></el-table-column>
-      <el-table-column prop="email" label="邮箱地址"></el-table-column>
+      <el-table-column prop="email" label="邮箱地址"
+        ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.email"
+          >
+            <div class="ellipsis">
+              {{ row.email }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
       <el-table-column prop="borrowDate" label="借阅日期"></el-table-column>
       <el-table-column prop="dueDate" label="应归还日期"></el-table-column>
       <el-table-column label="操作" width="150">
@@ -106,5 +119,11 @@ const penalty = (row) => {
 .pagination {
   float: right;
   margin-top: 12px;
+}
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap; /* 不换行 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+  max-width: 150px; /* 设置最大宽度，根据需要调整 */
 }
 </style>

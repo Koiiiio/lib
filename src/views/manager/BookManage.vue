@@ -16,7 +16,7 @@ const dialog1 = ref()
 const dialog2 = ref()
 const total = ref(0)
 const currentPage = ref(1)
-const pageSize = ref(5)
+const pageSize = ref(10)
 
 const getInstanceList = async (isbn) => {
   const res = await GetInstanceService(isbn)
@@ -225,9 +225,35 @@ watch(option, (newValue) => {
       </el-table-column>
 
       <el-table-column prop="title" label="标题"></el-table-column>
-      <el-table-column prop="isbn" label="ISBN号"></el-table-column>
+      <el-table-column prop="isbn" label="ISBN号"
+        ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.isbn"
+          >
+            <div class="ellipsis" :title="row.isbn">
+              {{ row.isbn }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
       <el-table-column prop="author" label="作者"></el-table-column>
-      <el-table-column prop="description" label="描述"></el-table-column>
+      <el-table-column prop="description" label="描述"
+        ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.description"
+          >
+            <div class="ellipsis">
+              {{ row.description }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
       <el-table-column prop="available" label="现存数量"></el-table-column>
       <el-table-column prop="borrowed" label="被借阅数量"></el-table-column>
       <el-table-column label="操作" width="150">
@@ -302,5 +328,11 @@ watch(option, (newValue) => {
   height: 100px;
   background-size: cover;
   background-position: center;
+}
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap; /* 不换行 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+  max-width: 150px; /* 设置最大宽度，根据需要调整 */
 }
 </style>

@@ -18,7 +18,7 @@ import {
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 import { useUserStore } from '@/stores'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 //import { userGetInfoService } from '../../api/user.js'
 const userStore = useUserStore()
@@ -43,6 +43,11 @@ const handleCommand = async (key) => {
     router.push(`/user/${key}`)
   }
 }
+const mode = ref(false)
+const switchMode = () => {
+  mode.value = !mode.value
+  console.log(mode.value)
+}
 </script>
 
 <template>
@@ -55,6 +60,7 @@ const handleCommand = async (key) => {
         :default-active="$route.path"
         text-color="#fff"
         router
+        :key="mode"
       >
         <el-menu-item index="/book/channel">
           <el-icon><Management /></el-icon>
@@ -64,11 +70,11 @@ const handleCommand = async (key) => {
           <el-icon><Finished /></el-icon>
           <span>查看借阅</span>
         </el-menu-item>
-        <el-menu-item index="/book/reserve">
+        <el-menu-item index="/book/reserve" v-if="mode">
           <el-icon><ChatDotRound /></el-icon>
           <span>查看预约</span>
         </el-menu-item>
-        <el-menu-item index="/book/penalty">
+        <el-menu-item index="/book/penalty" v-if="mode">
           <el-icon><Stamp /></el-icon>
           <span>查看处分</span>
         </el-menu-item>
@@ -81,7 +87,7 @@ const handleCommand = async (key) => {
             <span>管理员功能</span>
           </template>
 
-          <el-menu-item index="/manager/usermanage">
+          <el-menu-item index="/manager/usermanage" v-if="mode">
             <el-icon><Edit /></el-icon>
             <span>查看未归还读者</span>
           </el-menu-item>
@@ -93,7 +99,7 @@ const handleCommand = async (key) => {
             <el-icon><Promotion /></el-icon>
             <span>查看借阅申请</span>
           </el-menu-item>
-          <el-menu-item index="/manager/latereturn">
+          <el-menu-item index="/manager/latereturn" v-if="mode">
             <el-icon><Timer /></el-icon>
             <span>查看迟还申请</span>
           </el-menu-item>

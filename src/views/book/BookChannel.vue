@@ -95,6 +95,11 @@ watch(option, (newValue) => {
   console.log(newValue)
   onReset()
 })
+import defaultCover from '@/assets/defaultcover.jpg'
+
+const getCoverImage = (cover) => {
+  return cover ? `url(data:image/jpeg;base64,${cover})` : `url(${defaultCover})`
+}
 </script>
 
 <template>
@@ -132,13 +137,40 @@ watch(option, (newValue) => {
           <div
             class="thumbnail"
             :style="{
-              'background-image': `url(data:image/jpeg;base64,${row.cover})`
+              'background-image': getCoverImage(row.cover)
             }"
           ></div>
         </template>
       </el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
-      <el-table-column prop="isbn" label="ISBN号"></el-table-column>
+      <el-table-column prop="isbn" label="ISBN号"
+        ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.isbn"
+          >
+            <div class="ellipsis" :title="row.isbn">
+              {{ row.isbn }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
+      <el-table-column prop="description" label="描述"
+        ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.description"
+          >
+            <div class="ellipsis">
+              {{ row.description }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
       <el-table-column prop="author" label="作者"></el-table-column>
       <el-table-column prop="available" label="现存数量"></el-table-column>
       <el-table-column label="操作" width="300">
@@ -199,5 +231,11 @@ watch(option, (newValue) => {
   height: 100px;
   background-size: cover;
   background-position: center;
+}
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap; /* 不换行 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+  max-width: 150px; /* 设置最大宽度，根据需要调整 */
 }
 </style>

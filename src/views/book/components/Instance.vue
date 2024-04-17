@@ -54,6 +54,12 @@ const onSubmit = async () => {
     ElMessage.success('图书出库成功')
   }
   dialogVisible.value = false
+  formModel.value = {
+    id: '',
+    number: '',
+    isbn: '',
+    add: ''
+  }
   emit('success')
 }
 defineExpose({
