@@ -39,26 +39,38 @@ const rules = {
   //   } //长度校验
   // ]
 }
-
+const isEdit = ref(true)
 //open 方法
 //open({}) 添加
 //open({id,name...}) 编辑
 const open = (row) => {
-  console.log(row)
   dialogVisible.value = true
-  formModel.value = { ...row } //添加 重置        编辑 回显
-  formModel.value.id = formModel.value.title
-  if (formModel.value.cover !== null) {
-    imgUrl.value = `data:image/jpeg;base64,${formModel.value.cover}`
+  formModel.value = { ...row } // Spread existing row data or start fresh for add
+  if (row && row.isbn) {
+    // Edit mode
+    isEdit.value = true
+    formModel.value.id = formModel.value.title // Use title as id for editing
+    imgUrl.value = formModel.value.cover
+      ? `data:image/jpeg;base64,${formModel.value.cover}`
+      : defaultCover
   } else {
-    imgUrl.value = defaultCover
+    // Add mode
+    isEdit.value = false
+    formModel.value = {
+      id: '',
+      title: '',
+      isbn: '',
+      author: '',
+      description: '',
+      cover: ''
+    } // Reset the form model
+    imgUrl.value = defaultCover // Use default cover image for new entries
   }
 }
 const emit = defineEmits(['success'])
 const onSubmit = async () => {
   await formRef.value.validate()
-  const isEdit = formModel.value.id
-  if (isEdit) {
+  if (isEdit.value) {
     await EditBookService(formModel.value)
     ElMessage.success('编辑成功')
   } else {
@@ -85,7 +97,7 @@ const onSelectFile = (uploadFile) => {
   //console.log(formModel.value.cover)
   reader.readAsDataURL(uploadFile.raw)
 }
-import defaultCover from '@/assets/cover.jpg'
+import defaultCover from '@/assets/defaultcover.jpg'
 
 // 在组件加载时设置默认图片的URL
 onMounted(() => {

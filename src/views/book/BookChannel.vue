@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { GetBookService, Reserve } from '../../api/book.js'
 import {} from '@element-plus/icons-vue'
 import BookBorrow from '../book/components/BookBorrow.vue'
@@ -77,9 +77,10 @@ const setPlaceholder = (option) => {
 const dialog = ref()
 const borrowBook = (row) => {
   dialog.value.open(row)
-  getBookList()
 }
-
+const handleRefresh = () => {
+  getBookList() // 这里调用获取图书列表的方法，进行刷新
+}
 const reserveBook = async (row) => {
   await ElMessageBox.confirm('你确认要预约吗?', '提示:', {
     confirmButtonText: 'OK',
@@ -90,6 +91,10 @@ const reserveBook = async (row) => {
   Reserve(row.isbn)
   ElMessage.success('预约成功!')
 }
+watch(option, (newValue) => {
+  console.log(newValue)
+  onReset()
+})
 </script>
 
 <template>
@@ -157,7 +162,11 @@ const reserveBook = async (row) => {
       </template>
     </el-table>
 
-    <BookBorrow ref="dialog" @success="onSuccess"></BookBorrow>
+    <BookBorrow
+      ref="dialog"
+      @success="onSuccess"
+      @refresh-list="handleRefresh"
+    ></BookBorrow>
     <div class="pagination">
       <el-pagination
         v-model:current-page="currentPage"

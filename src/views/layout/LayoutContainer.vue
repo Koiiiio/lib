@@ -126,6 +126,7 @@ const handleCommand = async (key) => {
         <div>
           用户身份：<strong>{{ userStore.user.userRole }}</strong>
         </div>
+        <el-button plain @click="switchMode">一键阉割</el-button>
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <!--默认展示-->
           <span class="el-dropdown__box">

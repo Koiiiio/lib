@@ -68,7 +68,7 @@ const onSubmit = async () => {
   const instanceId = res.data.data.instanceId
   const location = res.data.data.location
 
-  ElMessageBox.alert(
+  await ElMessageBox.alert(
     '已提交申请：<br>书实体ID: ' + instanceId + '<br>借阅图书位置: ' + location,
     '借阅提示:',
     {
@@ -76,8 +76,8 @@ const onSubmit = async () => {
       dangerouslyUseHTMLString: true // 允许使用 HTML 标签
     }
   )
-
   dialogVisible.value = false
+  emit('refresh-list') // 发射事件
 }
 defineExpose({
   open

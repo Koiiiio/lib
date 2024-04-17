@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
 import {
   GetBookService,
@@ -142,6 +142,10 @@ const handleCurrentChange = (val) => {
   currentPage.value = val
   getBookList()
 }
+watch(option, (newValue) => {
+  console.log(newValue)
+  onReset()
+})
 </script>
 <template>
   <page-container title="图书目录">

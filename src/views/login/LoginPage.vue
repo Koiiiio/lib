@@ -4,12 +4,15 @@ import { User, Lock } from '@element-plus/icons-vue'
 import { ref, watch } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
+
 const isRegister = ref(false)
 const form = ref()
 const formModel = ref({
   username: '',
   password: '',
-  repassword: ''
+  repassword: '',
+  email: '',
+  userRole: 'user'
 })
 const rules = {
   username: [
@@ -59,6 +62,7 @@ const router = useRouter()
 const login = async () => {
   //登录校验
   await form.value.validate()
+  console.log(formModel.value)
   const res = await userLoginService(formModel.value)
   userStore.setToken(res.data.data)
 
@@ -67,14 +71,21 @@ const login = async () => {
   ElMessage.success('登录成功')
   router.push('/book/channel')
 }
-watch(isRegister, () => {
-  formModel.value = {
-    username: '',
-    email: '',
-    password: '',
-    repassword: '',
-    userRole: 'user'
+
+const role = ref('用户')
+const oprole = ref('管理员')
+const changeRole = () => {
+  if (role.value === '用户') {
+    role.value = '管理员'
+    oprole.value === '用户'
+  } else {
+    role.value = '用户'
+    oprole.value === '管理员'
   }
+}
+watch(role, () => {
+  if (role.value == '管理员') formModel.value.userRole = 'admin'
+  else formModel.value.userRole = 'user'
 })
 </script>
 
@@ -93,7 +104,7 @@ watch(isRegister, () => {
         v-if="isRegister"
       >
         <el-form-item>
-          <h1>-注册</h1>
+          <h1>-{{ role }}注册</h1>
         </el-form-item>
         <el-form-item prop="username">
           <el-input
@@ -135,6 +146,9 @@ watch(isRegister, () => {
             注册
           </el-button>
         </el-form-item>
+        <el-button plain size="small" @click="changeRole"
+          >切换为{{ oprole }}注册</el-button
+        >
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = false">
             ← 返回
@@ -152,7 +166,7 @@ watch(isRegister, () => {
         v-else
       >
         <el-form-item>
-          <h1>-登录</h1>
+          <h1>-{{ role }}登录</h1>
         </el-form-item>
         <el-form-item prop="username">
           <el-input
@@ -182,6 +196,9 @@ watch(isRegister, () => {
             >登录</el-button
           >
         </el-form-item>
+        <el-button plain size="small" @click="changeRole"
+          >切换为{{ oprole }}登录</el-button
+        >
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = true">
             注册 →
