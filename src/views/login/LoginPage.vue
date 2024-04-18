@@ -82,6 +82,12 @@ const changeRole = () => {
     role.value = '用户'
     oprole.value === '管理员'
   }
+  formModel.value = {
+    username: '',
+    password: '',
+    repassword: '',
+    email: ''
+  }
 }
 watch(role, () => {
   if (role.value == '管理员') formModel.value.userRole = 'admin'
