@@ -18,12 +18,6 @@ const total = ref(0)
 const currentPage = ref(1)
 const pageSize = ref(10)
 
-const getInstanceList = async (isbn) => {
-  const res = await GetInstanceService(isbn)
-  //InstanceList.value = res.data.data
-  return res.data.data
-}
-
 const getBookList = async () => {
   loading.value = true
   const res = await GetBookService()
@@ -34,11 +28,11 @@ const getBookList = async () => {
   //bookList.value = res.data.data
   const tempBookList = res.data.data
 
-  for (let i = 0; i < tempBookList.length; i++) {
-    const book = tempBookList[i]
-    const family = await getInstanceList(book.isbn)
-    book.family = family
-  }
+  // for (let i = 0; i < tempBookList.length; i++) {
+  //   const book = tempBookList[i]
+  //   const family = await getInstanceList(book.isbn)
+  //   book.family = family
+  // }
 
   bookList.value = tempBookList
   total.value = bookList.value.length
@@ -70,8 +64,9 @@ const onDelBook = async (row) => {
   ElMessage.success('删除成功')
   getBookList()
 }
-const onSuccess = () => {
+const onSuccess = (Isbn) => {
   getBookList()
+  getInstanceList(Isbn)
 }
 
 const options = ref([
@@ -146,6 +141,22 @@ watch(option, (newValue) => {
   console.log(newValue)
   onReset()
 })
+const table = ref(false)
+const Isbn = ref()
+const openDrawer = (isbn) => {
+  table.value = true
+  Isbn.value = isbn
+  getInstanceList(Isbn.value)
+  console.log(InstanceList.value)
+}
+// const closeDrawer = () => {
+//   table.value = false
+// }
+const InstanceList = ref([])
+const getInstanceList = async (isbn) => {
+  const res = await GetInstanceService(isbn)
+  InstanceList.value = res.data.data
+}
 </script>
 <template>
   <page-container title="图书目录">
@@ -179,51 +190,6 @@ watch(option, (newValue) => {
     </el-form>
 
     <el-table v-loading="loading" :data="displayedBooks" style="width: 100%">
-      <el-table-column type="expand">
-        <template #default="props">
-          <div>
-            Instance ISBN: {{ props.row.isbn }}
-            <el-button
-              type="primary"
-              plain
-              size="small"
-              @click="onAddInstance(props.row.isbn)"
-              style="margin-left: 30px"
-              >图书入库</el-button
-            >
-          </div>
-
-          <el-table :data="props.row.family">
-            <el-table-column label="instanceId" prop="instanceId" width="170" />
-            <el-table-column
-              label="borrowStatus"
-              prop="borrowStatus"
-              width="170"
-              ><template v-slot="scope">
-                <span v-if="scope.row.borrowStatus === 0">未借阅</span>
-                <span v-if="scope.row.borrowStatus === 1">已借阅</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="addTime" prop="addTime" width="200" />
-            <el-table-column label="操作" width="200">
-              <template #default="{ row }">
-                <div class="button-container" style="display: flex">
-                  <el-button
-                    type="danger"
-                    size="small"
-                    plain
-                    @click="
-                      onDelInstance(row.isbn, row.instanceId, row.borrowStatus)
-                    "
-                    >图书出库</el-button
-                  >
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-        </template>
-      </el-table-column>
-
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="isbn" label="ISBN号"
         ><template #default="{ row }">
@@ -256,32 +222,81 @@ watch(option, (newValue) => {
       >
       <el-table-column prop="available" label="现存数量"></el-table-column>
       <el-table-column prop="borrowed" label="被借阅数量"></el-table-column>
-      <el-table-column label="操作" width="150">
+      <el-table-column label="操作" width="250px">
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">
-          <el-button
-            :icon="Edit"
-            circle
-            type="primary"
-            plain
-            @click="onEditBook(row, $index)"
-          ></el-button>
-          <el-button
-            :icon="Delete"
-            circle
-            type="danger"
-            plain
-            @click="onDelBook(row, $index)"
-          ></el-button>
+          <div style="display: flex">
+            <el-button
+              :icon="Edit"
+              circle
+              type="primary"
+              plain
+              @click="onEditBook(row, $index)"
+            ></el-button>
+            <el-button
+              :icon="Delete"
+              circle
+              type="danger"
+              plain
+              @click="onDelBook(row, $index)"
+            ></el-button>
+            <el-button @click="openDrawer(row.isbn)" type="primary" size="small"
+              >Instance</el-button
+            >
+          </div>
         </template>
       </el-table-column>
       <template #empty>
         <el-empty description="没有数据"></el-empty>
       </template>
     </el-table>
-
+    <el-drawer
+      v-model="table"
+      title="Instance table"
+      direction="rtl"
+      size="50%"
+    >
+      <div style="margin-bottom: 20px">
+        Instance ISBN: {{ Isbn }}
+        <el-button
+          type="primary"
+          plain
+          size="small"
+          @click="onAddInstance(Isbn)"
+          style="margin-left: 30px"
+          >图书入库</el-button
+        >
+      </div>
+      <div>
+        <el-table :data="InstanceList">
+          <el-table-column label="instanceId" prop="instanceId" />
+          <el-table-column label="borrowStatus" prop="borrowStatus"
+            ><template v-slot="scope">
+              <span v-if="scope.row.borrowStatus === 0">未借阅</span>
+              <span v-if="scope.row.borrowStatus === 1">已借阅</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="addTime" prop="addTime" />
+          <el-table-column label="操作">
+            <template #default="{ row }">
+              <div class="button-container" style="display: flex">
+                <el-button
+                  type="danger"
+                  size="small"
+                  plain
+                  @click="
+                    onDelInstance(row.isbn, row.instanceId, row.borrowStatus)
+                  "
+                  >图书出库</el-button
+                >
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-drawer>
     <BookEdit ref="dialog1" @success="onSuccess"></BookEdit>
-    <Instance ref="dialog2" @success="onSuccess"></Instance>
+    <Instance ref="dialog2" @success="onSuccess(Isbn)"></Instance>
     <div class="pagination">
       <el-pagination
         v-model:current-page="currentPage"
