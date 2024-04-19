@@ -12,18 +12,18 @@ const formModel = ref({
 const formRef = ref()
 const rules = {
   number: [
-    { required: true, message: '请输入数量', trigger: 'blur' },
+    { required: true, message: 'Please enter the quantity', trigger: 'blur' },
     {
       pattern: /^(?:[1-9]|[1-9]\d|100)$/,
-      message: '必须是整数且小于100',
+      message: 'Must be an integer and less than 100',
       trigger: 'blur'
     }
   ],
   id: [
-    { required: true, message: '请输入id', trigger: 'blur' },
+    { required: true, message: 'Please enter id', trigger: 'blur' },
     {
       pattern: /^(?:[1-9]|[1-9]\d|1000000)$/,
-      message: '必须是数字',
+      message: 'Must be a number',
       trigger: 'blur'
     }
   ]
@@ -48,10 +48,10 @@ const onSubmit = async () => {
       isbn: formModel.value.isbn,
       number: formModel.value.number
     })
-    ElMessage.success('图书入库成功')
+    ElMessage.success('Successful Book Acquisition')
   } else {
     await DelInstanceService(formModel.value.id)
-    ElMessage.success('图书出库成功')
+    ElMessage.success('Successful Book Withdrawal')
   }
   dialogVisible.value = false
   formModel.value = {
@@ -69,7 +69,7 @@ defineExpose({
 
 <template>
   <el-dialog
-    :title="formModel.add > 0 ? '图书入库' : '图书出库'"
+    :title="formModel.add > 0 ? 'Book Acquisition' : 'Book Withdrawal'"
     v-model="dialogVisible"
     width="30%"
   >
@@ -80,19 +80,23 @@ defineExpose({
       label-width="100px"
       style="padding-right: 30px"
     >
-      <el-form-item prop="isbn" label="ISBN号:">
+      <el-form-item prop="isbn" label="ISBN:">
         <el-input
           v-model="formModel.isbn"
           :disabled="!!formModel.isbn"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="number" label="添加数量:" v-if="formModel.add > 0">
+      <el-form-item
+        prop="number"
+        label="Add Quantity:"
+        v-if="formModel.add > 0"
+      >
         <el-input
           v-model="formModel.number"
-          placeholder="请输入添加数量"
+          placeholder="Please enter the quantity to be added"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="id" label="删除图书ID:" v-if="formModel.add < 0">
+      <el-form-item prop="id" label="Book ID:" v-if="formModel.add < 0">
         <el-input
           v-model="formModel.id"
           :disabled="!!formModel.isbn"
@@ -101,8 +105,8 @@ defineExpose({
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmit">确 定</el-button>
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="onSubmit">OK</el-button>
       </span>
     </template>
   </el-dialog>

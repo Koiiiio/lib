@@ -16,14 +16,23 @@ const formModel = ref({
 })
 const rules = {
   username: [
-    { required: true, message: '请输入用户名或邮箱', trigger: 'blur' }, //非空校验
-    { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' } //长度校验
+    {
+      required: true,
+      message: 'Please enter your username or email address',
+      trigger: 'blur'
+    }, //非空校验
+    {
+      min: 3,
+      max: 20,
+      message: '3 to 20 characters long',
+      trigger: 'blur'
+    } //长度校验
   ],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' }, //非空校验
+    { required: true, message: 'Please enter your password', trigger: 'blur' }, //非空校验
     {
       pattern: /^\S{3,15}$/,
-      message: '密码必须是 3 到 15 位非空字符',
+      message: '3 to 15 characters long',
       trigger: 'blur'
     } //长度校验
   ],
@@ -31,13 +40,13 @@ const rules = {
     { required: true, message: '请再次输入密码', trigger: 'blur' }, //非空校验
     {
       pattern: /^\S{3,15}$/,
-      message: '密码必须是 3 到 15 位非空字符',
+      message: '3 to 15 characters long',
       trigger: 'blur'
     }, //长度校验
     {
       validator: (rule, value, callback) => {
         if (value !== formModel.value.password) {
-          callback(new Error('两次输入密码不一致'))
+          callback(new Error('Passwords mismatch'))
         } else {
           callback()
         }
@@ -52,7 +61,7 @@ const register = async () => {
   await form.value.validate()
   console.log(formModel.value)
   await userRegisterService(formModel.value)
-  ElMessage.success('注册成功')
+  ElMessage.success('Successful registration')
   isRegister.value = false
 }
 
@@ -68,19 +77,19 @@ const login = async () => {
 
   console.log(res.data.data)
 
-  ElMessage.success('登录成功')
+  ElMessage.success('Successful login')
   router.push('/book/channel')
 }
 
-const role = ref('用户')
-const oprole = ref('管理员')
+const role = ref('Reader')
+const oprole = ref('Librarian')
 const changeRole = () => {
-  if (role.value === '用户') {
-    role.value = '管理员'
-    oprole.value === '用户'
+  if (role.value === 'Reader') {
+    role.value = 'Librarian'
+    oprole.value === 'Reader'
   } else {
-    role.value = '用户'
-    oprole.value === '管理员'
+    role.value = 'Reader'
+    oprole.value === 'Librarian'
   }
   formModel.value = {
     username: '',
@@ -90,7 +99,7 @@ const changeRole = () => {
   }
 }
 watch(role, () => {
-  if (role.value == '管理员') formModel.value.userRole = 'admin'
+  if (role.value == 'Librarian') formModel.value.userRole = 'admin'
   else formModel.value.userRole = 'user'
 })
 </script>
@@ -99,7 +108,7 @@ watch(role, () => {
   <el-row class="login-page">
     <el-col :span="12" class="bg"></el-col>
     <el-col :span="6" :offset="3" class="form">
-      <h1>图书管理系统</h1>
+      <h1>LMS</h1>
       <!--注册表单-->
       <el-form
         :model="formModel"
@@ -110,20 +119,20 @@ watch(role, () => {
         v-if="isRegister"
       >
         <el-form-item>
-          <h1>-{{ role }}注册</h1>
+          <h1>-{{ role }}Register</h1>
         </el-form-item>
         <el-form-item prop="username">
           <el-input
             v-model="formModel.username"
             :prefix-icon="User"
-            placeholder="请输入用户名"
+            placeholder="Please enter your username"
           ></el-input>
         </el-form-item>
         <el-form-item prop="email">
           <el-input
             v-model="formModel.email"
             :prefix-icon="User"
-            placeholder="请输入邮箱"
+            placeholder="Please enter your email"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password">
@@ -131,7 +140,7 @@ watch(role, () => {
             v-model="formModel.password"
             :prefix-icon="Lock"
             type="password"
-            placeholder="请输入密码"
+            placeholder="Please enter your password"
           ></el-input>
         </el-form-item>
         <el-form-item prop="repassword">
@@ -139,7 +148,7 @@ watch(role, () => {
             v-model="formModel.repassword"
             :prefix-icon="Lock"
             type="password"
-            placeholder="请再次输入密码"
+            placeholder="Please enter your password again"
           ></el-input>
         </el-form-item>
         <el-form-item>
@@ -149,15 +158,15 @@ watch(role, () => {
             type="primary"
             auto-insert-space
           >
-            注册
+            Register
           </el-button>
         </el-form-item>
         <el-button plain size="small" @click="changeRole"
-          >切换为{{ oprole }}注册</el-button
+          >Switch to{{ oprole }}Registration</el-button
         >
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = false">
-            ← 返回
+            ← Back
           </el-link>
         </el-form-item>
       </el-form>
@@ -172,13 +181,14 @@ watch(role, () => {
         v-else
       >
         <el-form-item>
-          <h1>-{{ role }}登录</h1>
+          <!-- <h1>-{{ role }}Login</h1> -->
+          <h1>-Login</h1>
         </el-form-item>
         <el-form-item prop="username">
           <el-input
             v-model="formModel.username"
             :prefix-icon="User"
-            placeholder="请输入用户名"
+            placeholder="Please enter your username"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password">
@@ -187,7 +197,7 @@ watch(role, () => {
             name="password"
             :prefix-icon="Lock"
             type="password"
-            placeholder="请输入密码"
+            placeholder="Please enter your password"
           ></el-input>
         </el-form-item>
 
@@ -199,7 +209,7 @@ watch(role, () => {
             class="button"
             type="primary"
             auto-insert-space
-            >登录</el-button
+            >Login</el-button
           >
         </el-form-item>
         <!-- <el-button plain size="small" @click="changeRole"
@@ -207,7 +217,7 @@ watch(role, () => {
         > -->
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = true">
-            注册 →
+            Register →
           </el-link>
         </el-form-item>
       </el-form>

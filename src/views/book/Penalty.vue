@@ -16,24 +16,39 @@ getPenaltyList()
 </script>
 
 <template>
-  <page-container title="处分记录">
+  <page-container title="Penalty Record">
     <el-table v-loading="loading" :data="PenaltyList" style="width: 100%">
       <el-table-column
         prop="penaltyId"
-        label="处分记录ID"
+        label="Penalty Record ID"
         width="100"
       ></el-table-column>
-      <el-table-column prop="adminId" label="管理员ID"></el-table-column>
-      <el-table-column prop="adminName" label="管理员用户名"></el-table-column>
-      <el-table-column prop="adminEmail" label="管理员邮箱"></el-table-column>
-      <el-table-column prop="userId" label="用户Id"> </el-table-column>
-      <el-table-column prop="username" label="被处分人用户名"></el-table-column>
-      <el-table-column prop="reason" label="处分原因"></el-table-column>
-      <el-table-column prop="penaltyDate" label="处分日期"></el-table-column>
-      <el-table-column prop="endDate" label="处分结束日期"></el-table-column>
+      <el-table-column prop="adminId" label="Librarian ID"></el-table-column>
+      <el-table-column
+        prop="adminName"
+        label="Librarian Username"
+      ></el-table-column>
+      <el-table-column
+        prop="adminEmail"
+        label="Librarian Email"
+      ></el-table-column>
+      <el-table-column prop="userId" label="Reader Id"> </el-table-column>
+      <el-table-column
+        prop="username"
+        label="Reader Username"
+      ></el-table-column>
+      <el-table-column prop="reason" label="Penalty Reason"></el-table-column>
+      <el-table-column
+        prop="penaltyDate"
+        label="Penalty Date"
+      ></el-table-column>
+      <el-table-column
+        prop="endDate"
+        label="Penalty End Date"
+      ></el-table-column>
 
       <template #empty>
-        <el-empty description="没有数据"></el-empty>
+        <el-empty description="No data"></el-empty>
       </template>
     </el-table>
   </page-container>

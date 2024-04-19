@@ -39,14 +39,18 @@ const onSubmit = async () => {
   //     }
   //   )
   dialogVisible.value = false
-  ElMessage.success('申请迟还成功！')
+  ElMessage.success('Successful Late Return Request!')
 }
 defineExpose({
   open
 })
 </script>
 <template>
-  <el-dialog title="请确定迟还:" v-model="dialogVisible" width="30%">
+  <el-dialog
+    title="Please confirm late return:"
+    v-model="dialogVisible"
+    width="30%"
+  >
     <el-form
       ref="formRef"
       :model="formModel"
@@ -54,10 +58,10 @@ defineExpose({
       label-width="100px"
       style="padding-right: 30px"
     >
-      <el-form-item prop="" label="用户ID">
+      <el-form-item prop="" label="User ID">
         <el-input :placeholder="formModel.userId" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item prop="" label="图书实体ID">
+      <el-form-item prop="" label="Book ID">
         <el-input
           :placeholder="formModel.instanceId"
           :disabled="true"
@@ -69,7 +73,7 @@ defineExpose({
           :disabled="true"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="date" label="预计迟还日期">
+      <el-form-item prop="date" label="Deferred Return to">
         <el-date-picker
           v-model="formModel.date"
           type="date"
@@ -81,8 +85,8 @@ defineExpose({
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmit">确 定</el-button>
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="onSubmit">OK</el-button>
       </span>
     </template>
   </el-dialog>

@@ -19,10 +19,10 @@ const form = ref({
 
 const rules = ref({
   email: [
-    { required: true, message: '请输入用户邮箱', trigger: 'blur' },
+    { required: true, message: 'Please enter email', trigger: 'blur' },
     {
       type: 'email',
-      message: '请输入正确的邮箱格式',
+      message: 'Please enter the correct email format',
       trigger: ['blur', 'change']
     }
   ]
@@ -37,21 +37,21 @@ const submitForm = async () => {
   // 通知 user 模块，进行数据的更新
   getUser()
   // 提示用户
-  ElMessage.success('修改成功')
+  ElMessage.success('Modify successfully')
 }
 </script>
 <template>
-  <page-container title="基本资料">
+  <page-container title="Basic Info">
     <!-- 表单部分 -->
     <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
-      <el-form-item label="登录账号">
+      <el-form-item label="Account">
         <el-input v-model="form.username" disabled></el-input>
       </el-form-item>
-      <el-form-item label="用户邮箱" prop="email">
+      <el-form-item label="Email" prop="email">
         <el-input v-model="form.email"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm">提交修改</el-button>
+        <el-button type="primary" @click="submitForm">Submit</el-button>
       </el-form-item>
     </el-form>
   </page-container>

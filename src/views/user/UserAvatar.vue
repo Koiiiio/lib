@@ -20,7 +20,7 @@ const onSelectFile = (uploadFile) => {
   // 检查文件类型为 JPEG
   if (uploadFile.raw.type !== 'image/jpeg') {
     // 提示用户请选择 JPEG 格式的图片
-    ElMessage.warning('请选择 JPEG 格式的图片')
+    ElMessage.warning('Please select a JPEG format image')
     return
   }
 
@@ -45,12 +45,12 @@ const onUpdateAvatar = async () => {
   // userStore 重新渲染
   await userStore.getUser()
   // 提示用户
-  ElMessage.success('头像更新成功')
+  ElMessage.success('Successful avatar update')
 }
 </script>
 
 <template>
-  <page-container title="更换头像">
+  <page-container title="Change Avatar">
     <el-upload
       ref="uploadRef"
       :auto-upload="false"
@@ -70,7 +70,7 @@ const onUpdateAvatar = async () => {
       type="primary"
       :icon="Plus"
       size="large"
-      >选择图片</el-button
+      >Select Image</el-button
     >
     <el-button
       @click="onUpdateAvatar"
@@ -78,7 +78,7 @@ const onUpdateAvatar = async () => {
       :icon="Upload"
       size="large"
       :disabled="isUpload()"
-      >上传头像</el-button
+      >Upload avatar</el-button
     >
   </page-container>
 </template>

@@ -14,10 +14,10 @@ const formModel = ref({
 const formRef = ref()
 const rules = {
   date: [
-    { required: true, message: '请输入日期', trigger: 'blur' },
+    { required: true, message: 'Please enter the date', trigger: 'blur' },
     {
       pattern: /^(?:[1-9]|[1-9]\d|100)$/,
-      message: '必须是1到100之间的数字',
+      message: 'Must be a number between 1 and 100',
       trigger: 'blur'
     }
   ]
@@ -69,8 +69,11 @@ const onSubmit = async () => {
   const location = res.data.data.location
   dialogVisible.value = false
   await ElMessageBox.alert(
-    '已提交申请：<br>书实体ID: ' + instanceId + '<br>借阅图书位置: ' + location,
-    '借阅提示:',
+    'Application submitted<br>Book ID: ' +
+      instanceId +
+      '<br>Book Location:' +
+      location,
+    'Borrowing tips:',
     {
       confirmButtonText: 'OK',
       dangerouslyUseHTMLString: true // 允许使用 HTML 标签
@@ -84,7 +87,11 @@ defineExpose({
 })
 </script>
 <template>
-  <el-dialog title="请确定借阅图书:" v-model="dialogVisible" width="30%">
+  <el-dialog
+    title="Please identify the books to be borrowed.:"
+    v-model="dialogVisible"
+    width="30%"
+  >
     <el-form
       ref="formRef"
       :model="formModel"
@@ -92,26 +99,26 @@ defineExpose({
       label-width="100px"
       style="padding-right: 30px"
     >
-      <el-form-item prop="" label="图书名称">
+      <el-form-item prop="" label="Title">
         <el-input :placeholder="formModel.title" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item prop="" label="ISBN号">
+      <el-form-item prop="" label="ISBN">
         <el-input :placeholder="formModel.isbn" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item prop="" label="图书作者">
+      <el-form-item prop="" label="Author">
         <el-input :placeholder="formModel.author" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item prop="date" label="借阅时间">
+      <el-form-item prop="date" label="Duration">
         <el-input
           v-model="formModel.date"
-          placeholder="请输入借阅天数"
+          placeholder="Please enter the number of days of borrowing"
         ></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmit">确 定</el-button>
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="onSubmit">OK</el-button>
       </span>
     </template>
   </el-dialog>

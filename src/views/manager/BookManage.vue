@@ -55,13 +55,13 @@ const onAddBook = () => {
 }
 
 const onDelBook = async (row) => {
-  await ElMessageBox.confirm('你确认要删除吗?', '温馨提示', {
+  await ElMessageBox.confirm('Are you sure you want to delete it?', 'Tip', {
     type: 'warning',
-    confirmButtonText: '确认',
-    cancelButtonText: '取消'
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel'
   })
   await DelBookService(row.isbn)
-  ElMessage.success('删除成功')
+  ElMessage.success('Successful Deletion')
   getBookList()
 }
 const onSuccess = (Isbn) => {
@@ -72,25 +72,25 @@ const onSuccess = (Isbn) => {
 const options = ref([
   {
     value: 'title',
-    label: '图书标题'
+    label: 'Title'
   },
   {
     value: 'author',
-    label: '图书作者'
+    label: 'Author'
   },
   {
     value: 'isbn',
-    label: 'ISBN号'
+    label: 'ISBN'
   }
 ])
 const option = ref('title')
 const setPlaceholder = (option) => {
   if (option === 'title') {
-    return '请输入图书标题'
+    return 'Please enter the title'
   } else if (option === 'author') {
-    return '请输入图书作者'
+    return 'Please enter the author'
   } else if (option === 'isbn') {
-    return '请输入ISBN号'
+    return 'Please enter the ISBN'
   }
 }
 
@@ -120,9 +120,13 @@ const onAddInstance = (isbn) => {
 
 const onDelInstance = (isbn, instanceId, borrowStatus) => {
   if (borrowStatus === 1) {
-    ElMessageBox.alert('此书正在被借阅中,不可删除!', '提示：', {
-      confirmButtonText: 'OK'
-    })
+    ElMessageBox.alert(
+      'This book is currently on loan and cannot be deleted!',
+      'Tip: ',
+      {
+        confirmButtonText: 'OK'
+      }
+    )
   } else {
     dialog2.value.openIns(isbn, instanceId)
   }
@@ -159,13 +163,17 @@ const getInstanceList = async (isbn) => {
 }
 </script>
 <template>
-  <page-container title="图书目录">
+  <page-container title="Book Catalog">
     <template #extra>
-      <el-button @click="onAddBook">添加新图书</el-button>
+      <el-button @click="onAddBook">Add New Book</el-button>
     </template>
     <el-form inline>
       <div class="form-row">
-        <el-select v-model="option" placeholder="请选择" class="select-box">
+        <el-select
+          v-model="option"
+          placeholder="Please Select"
+          class="select-box"
+        >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -183,15 +191,15 @@ const getInstanceList = async (isbn) => {
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSearch">搜索</el-button>
-          <el-button @click="onReset">重置</el-button>
+          <el-button type="primary" @click="onSearch">Search</el-button>
+          <el-button @click="onReset">Reset</el-button>
         </el-form-item>
       </div>
     </el-form>
 
     <el-table v-loading="loading" :data="displayedBooks" style="width: 100%">
-      <el-table-column prop="title" label="标题"></el-table-column>
-      <el-table-column prop="isbn" label="ISBN号"
+      <el-table-column prop="title" label="Title"></el-table-column>
+      <el-table-column prop="isbn" label="ISBN"
         ><template #default="{ row }">
           <el-tooltip
             class="item"
@@ -205,8 +213,8 @@ const getInstanceList = async (isbn) => {
           </el-tooltip>
         </template></el-table-column
       >
-      <el-table-column prop="author" label="作者"></el-table-column>
-      <el-table-column prop="description" label="描述"
+      <el-table-column prop="author" label="Author"></el-table-column>
+      <el-table-column prop="description" label="Description "
         ><template #default="{ row }">
           <el-tooltip
             class="item"
@@ -220,9 +228,15 @@ const getInstanceList = async (isbn) => {
           </el-tooltip>
         </template></el-table-column
       >
-      <el-table-column prop="available" label="现存数量"></el-table-column>
-      <el-table-column prop="borrowed" label="被借阅数量"></el-table-column>
-      <el-table-column label="操作" width="250px">
+      <el-table-column
+        prop="available"
+        label="Number of existing"
+      ></el-table-column>
+      <el-table-column
+        prop="borrowed"
+        label="Number of borrowed"
+      ></el-table-column>
+      <el-table-column label="operation" width="250px">
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">
           <div style="display: flex">
@@ -247,7 +261,7 @@ const getInstanceList = async (isbn) => {
         </template>
       </el-table-column>
       <template #empty>
-        <el-empty description="没有数据"></el-empty>
+        <el-empty description="No data"></el-empty>
       </template>
     </el-table>
     <el-drawer
@@ -264,7 +278,7 @@ const getInstanceList = async (isbn) => {
           size="small"
           @click="onAddInstance(Isbn)"
           style="margin-left: 30px"
-          >图书入库</el-button
+          >Book Acquisition</el-button
         >
       </div>
       <div>
@@ -272,8 +286,8 @@ const getInstanceList = async (isbn) => {
           <el-table-column label="instanceId" prop="instanceId" />
           <el-table-column label="borrowStatus" prop="borrowStatus"
             ><template v-slot="scope">
-              <span v-if="scope.row.borrowStatus === 0">未借阅</span>
-              <span v-if="scope.row.borrowStatus === 1">已借阅</span>
+              <span v-if="scope.row.borrowStatus === 0">Not borrowed</span>
+              <span v-if="scope.row.borrowStatus === 1">Borrowed</span>
             </template>
           </el-table-column>
           <el-table-column label="addTime" prop="addTime" />
@@ -287,7 +301,7 @@ const getInstanceList = async (isbn) => {
                   @click="
                     onDelInstance(row.isbn, row.instanceId, row.borrowStatus)
                   "
-                  >图书出库</el-button
+                  >Book Withdrawal</el-button
                 >
               </div>
             </template>

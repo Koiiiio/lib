@@ -52,25 +52,25 @@ const onReset = () => {
 const options = ref([
   {
     value: 'title',
-    label: '图书标题'
+    label: 'Title'
   },
   {
     value: 'author',
-    label: '图书作者'
+    label: 'Author'
   },
   {
     value: 'isbn',
-    label: 'ISBN号'
+    label: 'ISBN'
   }
 ])
 const option = ref('title')
 const setPlaceholder = (option) => {
   if (option === 'title') {
-    return '请输入图书标题'
+    return 'Please enter the book title'
   } else if (option === 'author') {
-    return '请输入图书作者'
+    return 'Please enter the book author'
   } else if (option === 'isbn') {
-    return '请输入ISBN号'
+    return 'Please enter the ISBN'
   }
 }
 
@@ -82,14 +82,14 @@ const handleRefresh = () => {
   getBookList() // 这里调用获取图书列表的方法，进行刷新
 }
 const reserveBook = async (row) => {
-  await ElMessageBox.confirm('你确认要预约吗?', '提示:', {
+  await ElMessageBox.confirm('Are you sure?', 'Tip:', {
     confirmButtonText: 'OK',
     cancelButtonText: 'Cancel',
     type: 'Warning'
   })
   //console.log(row.isbn)
   Reserve(row.isbn)
-  ElMessage.success('预约成功!')
+  ElMessage.success('Successful Reservation!')
 }
 watch(option, (newValue) => {
   console.log(newValue)
@@ -103,10 +103,14 @@ const getCoverImage = (cover) => {
 </script>
 
 <template>
-  <page-container title="图书目录">
+  <page-container title="Book Catalog">
     <el-form inline>
       <div class="form-row">
-        <el-select v-model="option" placeholder="请选择" class="select-box">
+        <el-select
+          v-model="option"
+          placeholder="Please select"
+          class="select-box"
+        >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -124,15 +128,15 @@ const getCoverImage = (cover) => {
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSearch">搜索</el-button>
-          <el-button @click="onReset">重置</el-button>
+          <el-button type="primary" @click="onSearch">Search</el-button>
+          <el-button @click="onReset">Reset</el-button>
         </el-form-item>
       </div>
     </el-form>
 
     <el-table v-loading="loading" :data="displayedBooks" style="width: 100%">
-      <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="cover" label="图书封面">
+      <el-table-column type="index" label="No" width="100"></el-table-column>
+      <el-table-column prop="cover" label="Cover">
         <template #default="{ row }">
           <div
             class="thumbnail"
@@ -142,8 +146,8 @@ const getCoverImage = (cover) => {
           ></div>
         </template>
       </el-table-column>
-      <el-table-column prop="title" label="标题"></el-table-column>
-      <el-table-column prop="isbn" label="ISBN号"
+      <el-table-column prop="title" label="Title"></el-table-column>
+      <el-table-column prop="isbn" label="ISBN"
         ><template #default="{ row }">
           <el-tooltip
             class="item"
@@ -157,7 +161,7 @@ const getCoverImage = (cover) => {
           </el-tooltip>
         </template></el-table-column
       >
-      <el-table-column prop="description" label="描述"
+      <el-table-column prop="description" label="Description "
         ><template #default="{ row }">
           <el-tooltip
             class="item"
@@ -171,9 +175,12 @@ const getCoverImage = (cover) => {
           </el-tooltip>
         </template></el-table-column
       >
-      <el-table-column prop="author" label="作者"></el-table-column>
-      <el-table-column prop="available" label="现存数量"></el-table-column>
-      <el-table-column label="操作" width="300">
+      <el-table-column prop="author" label="Author"></el-table-column>
+      <el-table-column
+        prop="available"
+        label="Number of existing"
+      ></el-table-column>
+      <el-table-column label="Operation" width="300">
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">
           <div style="display: flex">
@@ -181,16 +188,16 @@ const getCoverImage = (cover) => {
               type="success"
               @click="borrowBook(row, $index)"
               :disabled="row.available === 0"
-              >借阅图书</el-button
+              >Borrow</el-button
             >
             <el-button type="primary" @click="reserveBook(row, $index)"
-              >预约图书</el-button
+              >Reserve</el-button
             >
           </div>
         </template>
       </el-table-column>
       <template #empty>
-        <el-empty description="没有数据"></el-empty>
+        <el-empty description="No data"></el-empty>
       </template>
     </el-table>
 

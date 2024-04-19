@@ -24,12 +24,12 @@ getBorrowList(switchValue.value)
 const agreeLend = async (row) => {
   console.log(row.borrowingId)
   await HandleRequest(row.borrowingId, 1)
-  ElMessage.success('审批成功')
+  ElMessage.success('Request processed successfully!')
   getBorrowList(switchValue.value)
 }
 const disagreeLend = async (row) => {
   await HandleRequest(row.borrowingId, 0)
-  ElMessage.success('审批成功')
+  ElMessage.success('Request processed successfully!')
   getBorrowList(switchValue.value)
 }
 watch(switchValue, (newValue) => {
@@ -38,11 +38,11 @@ watch(switchValue, (newValue) => {
 })
 </script>
 <template>
-  <page-container title="借阅处理">
+  <page-container title="Borrowing Processing">
     <template #extra>
       <div class="extra-container">
-        <div style="margin-right: 10px">未审批</div>
-        <el-tooltip :content="'借阅状态: ' + switchValue" placement="top">
+        <div style="margin-right: 10px">Pending</div>
+        <el-tooltip :content="'Status: ' + switchValue" placement="top">
           <el-switch
             v-model="switchValue"
             style="
@@ -53,16 +53,18 @@ watch(switchValue, (newValue) => {
             inactive-value="0"
           />
         </el-tooltip>
-        <div style="margin-left: 10px">已审批</div>
+        <div style="margin-left: 10px">Resolved</div>
       </div>
     </template>
 
     <el-table :data="borrowList">
-      <el-table-column label="借阅记录ID" prop="borrowingId"> </el-table-column>
-      <el-table-column label="用户ID" prop="userId"> </el-table-column>
-      <el-table-column label="用户名" prop="username"> </el-table-column>
-      <el-table-column label="图书实体ID" prop="instanceId"> </el-table-column>
-      <el-table-column label="ISBN号" prop="isbn"
+      <el-table-column label="Borrowing ID" prop="borrowingId">
+      </el-table-column>
+      <el-table-column label="Reader ID" prop="userId"> </el-table-column>
+      <el-table-column label="Reader Username" prop="username">
+      </el-table-column>
+      <el-table-column label="Book ID" prop="instanceId"> </el-table-column>
+      <el-table-column label="ISBN" prop="isbn"
         ><template #default="{ row }">
           <el-tooltip
             class="item"
@@ -76,14 +78,14 @@ watch(switchValue, (newValue) => {
           </el-tooltip>
         </template></el-table-column
       >
-      <el-table-column label="借阅日期" prop="borrowDate"></el-table-column>
-      <el-table-column label="应归还日期" prop="dueDate"></el-table-column>
+      <el-table-column label="Borrow Date" prop="borrowDate"></el-table-column>
+      <el-table-column label="Due Date" prop="dueDate"></el-table-column>
       <el-table-column
-        label="借阅状态"
+        label="Request Status"
         prop="borrowAprvStatus"
       ></el-table-column>
 
-      <el-table-column label="操作" width="250">
+      <el-table-column label="Operations" width="250">
         <template #default="{ row }">
           <div style="display: flex; margin-right: 100px">
             <el-button
@@ -92,7 +94,7 @@ watch(switchValue, (newValue) => {
               :icon="Check"
               @click="agreeLend(row)"
               v-if="row.borrowAprvStatus === 0"
-              >同意</el-button
+              >Accepted</el-button
             >
             <el-button
               plain
@@ -100,7 +102,7 @@ watch(switchValue, (newValue) => {
               :icon="Close"
               @click="disagreeLend(row)"
               v-if="row.borrowAprvStatus === 0"
-              >不同意</el-button
+              >Rejected</el-button
             >
           </div>
         </template>

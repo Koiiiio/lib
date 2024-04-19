@@ -72,10 +72,10 @@ const onSubmit = async () => {
   await formRef.value.validate()
   if (isEdit.value) {
     await EditBookService(formModel.value)
-    ElMessage.success('编辑成功')
+    ElMessage.success('Successful Addition')
   } else {
     await AddBookService(formModel.value)
-    ElMessage.success('添加成功')
+    ElMessage.success('Successful Deletion')
   }
   dialogVisible.value = false
   imgUrl.value = ''
@@ -107,7 +107,7 @@ onMounted(() => {
 
 <template>
   <el-dialog
-    :title="formModel.id ? '编辑图书' : '添加图书'"
+    :title="formModel.id ? 'Editing books' : 'Add books'"
     v-model="dialogVisible"
     width="30%"
   >
@@ -118,32 +118,32 @@ onMounted(() => {
       label-width="100px"
       style="padding-right: 30px"
     >
-      <el-form-item prop="title" label="图书名称">
+      <el-form-item prop="title" label="Title">
         <el-input
           v-model="formModel.title"
-          placeholder="请输入图书名称"
+          placeholder="Please enter the book title"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="isbn" label="ISBN号">
+      <el-form-item prop="isbn" label="ISBN">
         <el-input
           v-model="formModel.isbn"
-          placeholder="请输入ISBN号"
+          placeholder="Please enter the ISBN"
           :disabled="!!formModel.id"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="author" label="图书作者">
+      <el-form-item prop="author" label="Book Author">
         <el-input
           v-model="formModel.author"
-          placeholder="请输入图书作者"
+          placeholder="Please enter the book author"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="description" label="图书描述">
+      <el-form-item prop="description" label="Book Description">
         <el-input
           v-model="formModel.description"
-          placeholder="请输入描述"
+          placeholder="Please enter description"
         ></el-input>
       </el-form-item>
-      <el-form-item label="封面" prop="cover">
+      <el-form-item label="cover" prop="cover">
         <el-upload
           class="avatar-uploader"
           :show-file-list="false"
@@ -161,8 +161,8 @@ onMounted(() => {
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmit">确 定</el-button>
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="onSubmit">OK</el-button>
       </span>
     </template>
   </el-dialog>

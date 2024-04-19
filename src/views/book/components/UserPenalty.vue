@@ -15,7 +15,7 @@ const formRef = ref()
 const open = (row) => {
   console.log(row)
   dialogVisible.value = true
-  formModel.value = { ...row } //添加 重置        编辑 回显
+  formModel.value = { ...row } //添加 Reset        编辑 回显
   formModel.value.id = formModel.value.userId
   formModel.value.name = formModel.value.username
 }
@@ -28,7 +28,7 @@ const onSubmit = async () => {
   })
 
   dialogVisible.value = false
-  ElMessage.success('处分成功!')
+  ElMessage.success('Successful Penalty!')
   emit('success')
 }
 defineExpose({
@@ -37,32 +37,32 @@ defineExpose({
 </script>
 
 <template>
-  <el-dialog title="处分读者" v-model="dialogVisible" width="30%">
+  <el-dialog title="Penalize Readers" v-model="dialogVisible" width="30%">
     <el-form
       ref="formRef"
       :model="formModel"
       label-width="100px"
       style="padding-right: 30px"
     >
-      <el-form-item prop="id" label="用户名称">
+      <el-form-item prop="id" label="User ID">
         <el-input
           v-model="formModel.id"
           :disabled="!!formModel.name"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="name" label="用户名">
+      <el-form-item prop="name" label="Username">
         <el-input
           v-model="formModel.name"
           :disabled="!!formModel.name"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="reason" label="处分理由">
+      <el-form-item prop="reason" label="Reason">
         <el-input
           v-model="formModel.reason"
-          placeholder="请输入处分理由"
+          placeholder="Please enter the reason"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="endDate" label="处分结束日期">
+      <el-form-item prop="endDate" label="Penalty End Date">
         <el-date-picker
           v-model="formModel.endDate"
           type="date"
@@ -74,8 +74,8 @@ defineExpose({
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmit">确 定</el-button>
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="onSubmit">OK</el-button>
       </span>
     </template>
   </el-dialog>

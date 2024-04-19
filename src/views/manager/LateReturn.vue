@@ -5,12 +5,12 @@ import { GetLateListService, HandleLateReturn } from '../../api/book.js'
 
 const agreeLate = async (row) => {
   await HandleLateReturn({ borrowingId: row.borrowingId, agree: 1 })
-  ElMessage.success('审批成功！')
+  ElMessage.success('Request processed successfully!')
   getLateList(switchValue.value)
 }
 const disagreeLate = async (row) => {
   await HandleLateReturn({ borrowingId: row.borrowingId, agree: 0 })
-  ElMessage.success('审批成功！')
+  ElMessage.success('Request processed successfully!')
   getLateList(switchValue.value)
 }
 const LateList = ref()
@@ -30,11 +30,11 @@ watch(switchValue, (newValue) => {
 })
 </script>
 <template>
-  <page-container title="迟还处理">
+  <page-container title="Late return processing">
     <template #extra>
       <div class="extra-container">
-        <div style="margin-right: 10px">未审批</div>
-        <el-tooltip :content="'审批状态: ' + switchValue" placement="top">
+        <div style="margin-right: 10px">Pending</div>
+        <el-tooltip :content="'Status: ' + switchValue" placement="top">
           <el-switch
             v-model="switchValue"
             style="
@@ -45,15 +45,19 @@ watch(switchValue, (newValue) => {
             inactive-value="0"
           />
         </el-tooltip>
-        <div style="margin-left: 10px">已审批</div>
+        <div style="margin-left: 10px">Resolved</div>
       </div>
     </template>
     <el-table :data="LateList">
-      <el-table-column label="借阅记录ID" prop="borrowingId"></el-table-column>
-      <el-table-column label="用户ID" prop="userId"> </el-table-column>
-      <el-table-column label="用户名" prop="username"> </el-table-column>
-      <el-table-column label="图书实体ID" prop="instanceId"> </el-table-column>
-      <el-table-column label="ISBN号" prop="isbn"
+      <el-table-column
+        label="Borrowing ID"
+        prop="borrowingId"
+      ></el-table-column>
+      <el-table-column label="Reader ID" prop="userId"> </el-table-column>
+      <el-table-column label="Reader Username" prop="username">
+      </el-table-column>
+      <el-table-column label="Book ID" prop="instanceId"> </el-table-column>
+      <el-table-column label="ISBN" prop="isbn"
         ><template #default="{ row }">
           <el-tooltip
             class="item"
@@ -67,14 +71,17 @@ watch(switchValue, (newValue) => {
           </el-tooltip>
         </template></el-table-column
       >
-      <el-table-column label="借阅日期" prop="borrowDate"></el-table-column>
-      <el-table-column label="应归还时间" prop="dueDate"></el-table-column>
-      <el-table-column label="迟还日期" prop="lateRetDate"></el-table-column>
-      <el-table-column label="审批状态" prop="lateRetAprvStatus"
+      <el-table-column label="Borrow Date" prop="borrowDate"></el-table-column>
+      <el-table-column label="Due Date" prop="dueDate"></el-table-column>
+      <el-table-column
+        label="Late Return Date"
+        prop="lateRetDate"
+      ></el-table-column>
+      <el-table-column label="Request Status" prop="lateRetAprvStatus"
         ><template v-slot="scope">
-          <span v-if="scope.row.lateRetAprvStatus === 0">未审批</span>
-          <span v-if="scope.row.lateRetAprvStatus === 1">已同意</span>
-          <span v-if="scope.row.lateRetAprvStatus === 2">已拒绝</span>
+          <span v-if="scope.row.lateRetAprvStatus === 0">Pending</span>
+          <span v-if="scope.row.lateRetAprvStatus === 1">Accepted</span>
+          <span v-if="scope.row.lateRetAprvStatus === 2">Rejected</span>
         </template>
       </el-table-column>
 
@@ -87,7 +94,7 @@ watch(switchValue, (newValue) => {
               :icon="Check"
               @click="agreeLate(row)"
               v-if="row.lateRetAprvStatus === 0"
-              >同意</el-button
+              >Accept</el-button
             >
             <el-button
               plain
@@ -95,7 +102,7 @@ watch(switchValue, (newValue) => {
               :icon="Close"
               @click="disagreeLate(row)"
               v-if="row.lateRetAprvStatus === 0"
-              >不同意</el-button
+              >Reject</el-button
             >
           </div>
         </template>

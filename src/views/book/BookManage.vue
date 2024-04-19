@@ -5,13 +5,13 @@ import { GetBorrowRecord, Return } from '../../api/book.js'
 import LateReturn from '../book/components/LateReturn.vue'
 const ReturnBook = async (row) => {
   console.log(row.instanceId)
-  await ElMessageBox.confirm('你确认要归还吗?', '提示:', {
+  await ElMessageBox.confirm('Are you sure you want to return it?', 'Tip:', {
     confirmButtonText: 'OK',
     cancelButtonText: 'Cancel',
     type: 'warning'
   })
   await Return(row.instanceId)
-  ElMessage.success('归还成功！')
+  ElMessage.success('Successful return！')
   getBorrowList(state.value)
 }
 const dialog = ref()
@@ -40,23 +40,23 @@ const onSuccess = () => {
 const options = ref([
   {
     value: '0',
-    label: '未审批'
+    label: 'Pending'
   },
   {
     value: '1',
-    label: '未通过'
+    label: 'Rejected'
   },
   {
     value: '2',
-    label: '已归还'
+    label: 'Returned'
   },
   {
     value: '3',
-    label: '不可申请迟还'
+    label: 'No Late Returns'
   },
   {
     value: '4',
-    label: '可申请迟还'
+    label: 'Late Returns Allowed'
   }
 ])
 watch(option, (newValue) => {
@@ -66,11 +66,15 @@ watch(option, (newValue) => {
 })
 </script>
 <template>
-  <page-container title="我的借阅">
+  <page-container title="My Borrowing">
     <template #extra>
       <div class="form-row">
-        借阅状态
-        <el-select v-model="option" placeholder="请选择" class="select-box">
+        Borrowing Status
+        <el-select
+          v-model="option"
+          placeholder="Please Select"
+          class="select-box"
+        >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -84,20 +88,20 @@ watch(option, (newValue) => {
 
     <el-table :data="borrowList">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column label="图书实体ID" prop="instanceId"> </el-table-column>
-      <el-table-column label="借阅ID" prop="userId"> </el-table-column>
-      <el-table-column label="借阅日期" prop="borrowDate"></el-table-column>
-      <el-table-column label="应归还日期" prop="dueDate"></el-table-column>
-      <el-table-column label="归还日期" prop="returnDate"></el-table-column>
-      <el-table-column label="审批状态" prop="borrowAprvStatus">
+      <el-table-column label="Book ID" prop="instanceId"> </el-table-column>
+      <el-table-column label="Borrowing ID" prop="userId"> </el-table-column>
+      <el-table-column label="Borrow Date" prop="borrowDate"></el-table-column>
+      <el-table-column label="Due Date" prop="dueDate"></el-table-column>
+      <el-table-column label="Return Date" prop="returnDate"></el-table-column>
+      <el-table-column label="Request Status" prop="borrowAprvStatus">
         <template v-slot="scope">
-          <span v-if="scope.row.borrowAprvStatus === 0">未审批</span>
-          <span v-if="scope.row.borrowAprvStatus === 2">未通过</span>
+          <span v-if="scope.row.borrowAprvStatus === 0">Pending</span>
+          <span v-if="scope.row.borrowAprvStatus === 2">Rejected</span>
           <span
             v-if="
               scope.row.returnDate !== null && scope.row.borrowAprvStatus === 1
             "
-            >已经归还</span
+            >Returned</span
           >
           <span
             v-if="
@@ -105,7 +109,7 @@ watch(option, (newValue) => {
               scope.row.returnDate === null &&
               scope.row.borrowAprvStatus === 1
             "
-            >未归还（不可申请迟还）</span
+            >No Late Returns</span
           >
           <span
             v-else-if="
@@ -113,7 +117,7 @@ watch(option, (newValue) => {
               scope.row.returnDate === null &&
               scope.row.borrowAprvStatus === 1
             "
-            >未归还（可申请迟还）</span
+            >Late Returns Allowed</span
           >
         </template></el-table-column
       >
@@ -127,7 +131,7 @@ watch(option, (newValue) => {
               :icon="Check"
               @click="ReturnBook(row)"
               v-if="row.returnDate === null && row.borrowAprvStatus === 1"
-              >归还</el-button
+              >Return</el-button
             >
             <el-button
               plain
@@ -139,7 +143,7 @@ watch(option, (newValue) => {
                 row.returnDate == null &&
                 row.borrowAprvStatus == 1
               "
-              >迟还</el-button
+              >Late Return</el-button
             >
           </div>
         </template>
