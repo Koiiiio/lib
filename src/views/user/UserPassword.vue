@@ -124,9 +124,7 @@ const resetForm = () => {
             <el-input v-model="pwdForm.re_pwd" show-password></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm"
-              >Change</el-button
-            >
+            <el-button type="primary" @click="submitForm">Change</el-button>
             <el-button @click="resetForm">Reset</el-button>
           </el-form-item>
         </el-form></el-col
