@@ -37,7 +37,11 @@ const rules = {
     } //长度校验
   ],
   repassword: [
-    { required: true, message: '请再次输入密码', trigger: 'blur' }, //非空校验
+    {
+      required: true,
+      message: 'Please enter your password again',
+      trigger: 'blur'
+    }, //非空校验
     {
       pattern: /^\S{3,15}$/,
       message: '3 to 15 characters long',

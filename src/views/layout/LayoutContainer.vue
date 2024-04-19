@@ -130,7 +130,9 @@ const switchMode = () => {
           User: <strong>{{ userStore.user.username }}</strong>
         </div>
         <div>
-          User Role: <strong>{{ userStore.user.userRole }}</strong>
+          User Role:
+          <strong v-if="userStore.user.userRole === 'admin'">Librarian</strong>
+          <strong v-if="userStore.user.userRole === 'user'">Reader</strong>
         </div>
         <el-button plain @click="switchMode">DAMN</el-button>
         <el-dropdown placement="bottom-end" @command="handleCommand">

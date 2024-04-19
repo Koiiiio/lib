@@ -101,4 +101,10 @@ const getCoverImage = (cover) => {
   background-size: cover;
   background-position: center;
 }
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap; /* 不换行 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+  max-width: 150px; /* 设置最大宽度，根据需要调整 */
+}
 </style>
