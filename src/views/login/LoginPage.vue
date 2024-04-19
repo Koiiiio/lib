@@ -16,8 +16,8 @@ const formModel = ref({
 })
 const rules = {
   username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' }, //非空校验
-    { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' } //长度校验
+    { required: true, message: '请输入用户名或邮箱', trigger: 'blur' }, //非空校验
+    { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' } //长度校验
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' }, //非空校验
@@ -202,9 +202,9 @@ watch(role, () => {
             >登录</el-button
           >
         </el-form-item>
-        <el-button plain size="small" @click="changeRole"
+        <!-- <el-button plain size="small" @click="changeRole"
           >切换为{{ oprole }}登录</el-button
-        >
+        > -->
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = true">
             注册 →
