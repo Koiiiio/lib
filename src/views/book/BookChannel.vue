@@ -100,6 +100,20 @@ import defaultCover from '@/assets/defaultcover.jpg'
 const getCoverImage = (cover) => {
   return cover ? `url(data:image/jpeg;base64,${cover})` : `url(${defaultCover})`
 }
+const isOpen = ref(false) // Default collapsed state
+
+const toggleOpen = () => {
+  isOpen.value = !isOpen.value
+}
+const word = computed(() => {
+  if (isOpen.value === false) {
+    return '展开'
+  } else if (isOpen.value === true) {
+    return '收起'
+  } else {
+    return null
+  }
+})
 </script>
 
 <template>
@@ -163,18 +177,14 @@ const getCoverImage = (cover) => {
       >
       <el-table-column prop="description" label="Description "
         ><template #default="{ row }">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            placement="bottom"
-            :content="row.description"
-          >
-            <div class="ellipsis">
-              {{ row.description }}
-            </div>
-          </el-tooltip>
-        </template></el-table-column
-      >
+          <div :class="isOpen ? 'new_detail' : 'default'">
+            <span class="font999">{{ row.description }}</span>
+          </div>
+          <el-button type="text" class="popper-btn" @click="toggleOpen"
+            >{{ word
+            }}<i :class="isOpen ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i
+          ></el-button> </template
+      ></el-table-column>
       <el-table-column prop="author" label="Author"></el-table-column>
       <el-table-column
         prop="available"
@@ -244,5 +254,22 @@ const getCoverImage = (cover) => {
   white-space: nowrap; /* 不换行 */
   text-overflow: ellipsis; /* 超出部分显示省略号 */
   max-width: 150px; /* 设置最大宽度，根据需要调整 */
+}
+.new_detail {
+  padding: 5px 50px 5px 0;
+  font-size: 14px;
+}
+.default {
+  padding: 5px 50px 5px 0;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+.popper-btn {
+  position: absolute;
+  right: 15px;
+  bottom: 40px;
 }
 </style>

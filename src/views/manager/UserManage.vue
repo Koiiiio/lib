@@ -86,6 +86,21 @@ const penalty = (row) => {
       >
       <el-table-column prop="borrowDate" label="Borrow Date"></el-table-column>
       <el-table-column prop="dueDate" label="Due Date"></el-table-column>
+      <el-table-column prop="isbn" label="ISBN"
+        ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.isbn"
+          >
+            <div class="ellipsis">
+              {{ row.isbn }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
+      <el-table-column prop="instanceId" label="instanceId"></el-table-column>
       <el-table-column label="Operations" width="150">
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">
