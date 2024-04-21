@@ -2,19 +2,19 @@
 import {
   Management,
   Promotion,
-  UserFilled,
-  User,
-  Crop,
-  EditPen,
+  // UserFilled,
+  // User,
+  // Crop,
+  // EditPen,
   SwitchButton,
   CaretBottom,
   Service,
   MessageBox,
-  Finished,
-  Edit,
-  Timer,
-  Stamp,
-  ChatDotRound
+  Finished
+  // Edit,
+  // Timer,
+  // Stamp,
+  // ChatDotRound
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 import { useUserStore } from '@/stores'
@@ -71,15 +71,15 @@ const handleCommand = async (key) => {
           <span>Borrowings</span>
         </el-menu-item>
         <!-- <el-menu-item index="/book/reserve" v-if="mode"> -->
-        <el-menu-item index="/book/reserve">
+        <!-- <el-menu-item index="/book/reserve">
           <el-icon><ChatDotRound /></el-icon>
           <span>Reservations</span>
-        </el-menu-item>
+        </el-menu-item> -->
         <!-- <el-menu-item index="/book/penalty" v-if="mode"> -->
-        <el-menu-item index="/book/penalty">
+        <!-- <el-menu-item index="/book/penalty">
           <el-icon><Stamp /></el-icon>
           <span>Penalties</span>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-sub-menu
           index="/manager"
           v-if="userStore.user.userRole === 'admin'"
@@ -90,10 +90,10 @@ const handleCommand = async (key) => {
           </template>
 
           <!-- <el-menu-item index="/manager/usermanage" v-if="mode"> -->
-          <el-menu-item index="/manager/usermanage">
+          <!-- <el-menu-item index="/manager/usermanage">
             <el-icon><Edit /></el-icon>
             <span>Unreturned Readers</span>
-          </el-menu-item>
+          </el-menu-item> -->
           <el-menu-item index="/manager/bookmanage">
             <el-icon><MessageBox /></el-icon>
             <span>Book Management</span>
@@ -103,12 +103,12 @@ const handleCommand = async (key) => {
             <span>Borrowing Requests</span>
           </el-menu-item>
           <!-- <el-menu-item index="/manager/latereturn" v-if="mode"> -->
-          <el-menu-item index="/manager/latereturn">
+          <!-- <el-menu-item index="/manager/latereturn">
             <el-icon><Timer /></el-icon>
             <span>Late Return Requests</span>
-          </el-menu-item>
+          </el-menu-item> -->
         </el-sub-menu>
-        <el-sub-menu index="/user">
+        <!-- <el-sub-menu index="/user">
           <template #title>
             <el-icon><UserFilled /></el-icon>
             <span>Profile</span>
@@ -125,7 +125,7 @@ const handleCommand = async (key) => {
             <el-icon><EditPen /></el-icon>
             <span>Personal Info</span>
           </el-menu-item>
-        </el-sub-menu>
+        </el-sub-menu> -->
       </el-menu>
     </el-aside>
     <el-container>
@@ -151,7 +151,7 @@ const handleCommand = async (key) => {
           <!--下拉-->
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="profile" :icon="User"
+              <!-- <el-dropdown-item command="profile" :icon="User"
                 >Basic Info</el-dropdown-item
               >
               <el-dropdown-item command="avatar" :icon="Crop"
@@ -159,7 +159,7 @@ const handleCommand = async (key) => {
               >
               <el-dropdown-item command="password" :icon="EditPen"
                 >Reset Password</el-dropdown-item
-              >
+              > -->
               <el-dropdown-item command="logout" :icon="SwitchButton"
                 >Logout</el-dropdown-item
               >

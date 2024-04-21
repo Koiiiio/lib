@@ -131,19 +131,19 @@ onMounted(() => {
           :disabled="!!formModel.id"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="author" label="Book Author">
+      <el-form-item prop="author" label="Author">
         <el-input
           v-model="formModel.author"
           placeholder="Please enter the book author"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="description" label="Book Description">
+      <el-form-item prop="description" label="Description">
         <el-input
           v-model="formModel.description"
           placeholder="Please enter description"
         ></el-input>
       </el-form-item>
-      <el-form-item label="cover" prop="cover">
+      <el-form-item label="Cover" prop="cover">
         <el-upload
           class="avatar-uploader"
           :show-file-list="false"

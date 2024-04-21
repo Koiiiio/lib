@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { GetBookService, Reserve } from '../../api/book.js'
+import { GetBookService } from '../../api/book.js'
 import {} from '@element-plus/icons-vue'
 import BookBorrow from '../book/components/BookBorrow.vue'
-import { ElMessage } from 'element-plus'
+// import { ElMessage } from 'element-plus'
 const bookList = ref([])
 const loading = ref(false)
 
@@ -81,16 +81,16 @@ const borrowBook = (row) => {
 const handleRefresh = () => {
   getBookList() // 这里调用获取图书列表的方法，进行刷新
 }
-const reserveBook = async (row) => {
-  await ElMessageBox.confirm('Are you sure?', 'Tip', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    type: 'Warning'
-  })
-  //console.log(row.isbn)
-  Reserve(row.isbn)
-  ElMessage.success('Successful Reservation!')
-}
+// const reserveBook = async (row) => {
+//   await ElMessageBox.confirm('Are you sure?', 'Tip', {
+//     confirmButtonText: 'OK',
+//     cancelButtonText: 'Cancel',
+//     type: 'Warning'
+//   })
+//   //console.log(row.isbn)
+//   Reserve(row.isbn)
+//   ElMessage.success('Successful Reservation!')
+// }
 watch(option, (newValue) => {
   console.log(newValue)
   onReset()
@@ -214,9 +214,9 @@ const getCoverImage = (cover) => {
               :disabled="row.available === 0"
               >Borrow</el-button
             >
-            <el-button type="primary" @click="reserveBook(row, $index)"
+            <!-- <el-button type="primary" @click="reserveBook(row, $index)"
               >Reserve</el-button
-            >
+            > -->
           </div>
         </template>
       </el-table-column>
