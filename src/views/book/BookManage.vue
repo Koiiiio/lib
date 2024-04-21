@@ -11,7 +11,7 @@ const ReturnBook = async (row) => {
     type: 'warning'
   })
   await Return(row.instanceId)
-  ElMessage.success('Successful return！')
+  ElMessage.success('Successful return!')
   getBorrowList(state.value)
 }
 const dialog = ref()
