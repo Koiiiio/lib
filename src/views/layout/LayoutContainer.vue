@@ -18,7 +18,7 @@ import {
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 import { useUserStore } from '@/stores'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 //import { userGetInfoService } from '../../api/user.js'
 const userStore = useUserStore()
@@ -43,11 +43,11 @@ const handleCommand = async (key) => {
     router.push(`/user/${key}`)
   }
 }
-const mode = ref(false)
-const switchMode = () => {
-  mode.value = !mode.value
-  console.log(mode.value)
-}
+// const mode = ref(false)
+// const switchMode = () => {
+//   mode.value = !mode.value
+//   console.log(mode.value)
+// }
 </script>
 
 <template>
@@ -70,11 +70,13 @@ const switchMode = () => {
           <el-icon><Finished /></el-icon>
           <span>Borrowings</span>
         </el-menu-item>
-        <el-menu-item index="/book/reserve" v-if="mode">
+        <!-- <el-menu-item index="/book/reserve" v-if="mode"> -->
+        <el-menu-item index="/book/reserve">
           <el-icon><ChatDotRound /></el-icon>
           <span>Reservations</span>
         </el-menu-item>
-        <el-menu-item index="/book/penalty" v-if="mode">
+        <!-- <el-menu-item index="/book/penalty" v-if="mode"> -->
+        <el-menu-item index="/book/penalty">
           <el-icon><Stamp /></el-icon>
           <span>Penalties</span>
         </el-menu-item>
@@ -87,7 +89,8 @@ const switchMode = () => {
             <span>Librarian Operations</span>
           </template>
 
-          <el-menu-item index="/manager/usermanage" v-if="mode">
+          <!-- <el-menu-item index="/manager/usermanage" v-if="mode"> -->
+          <el-menu-item index="/manager/usermanage">
             <el-icon><Edit /></el-icon>
             <span>Unreturned Readers</span>
           </el-menu-item>
@@ -99,7 +102,8 @@ const switchMode = () => {
             <el-icon><Promotion /></el-icon>
             <span>Borrowing Requests</span>
           </el-menu-item>
-          <el-menu-item index="/manager/latereturn" v-if="mode">
+          <!-- <el-menu-item index="/manager/latereturn" v-if="mode"> -->
+          <el-menu-item index="/manager/latereturn">
             <el-icon><Timer /></el-icon>
             <span>Late Return Requests</span>
           </el-menu-item>
@@ -134,7 +138,7 @@ const switchMode = () => {
           <strong v-if="userStore.user.userRole === 'admin'">Librarian</strong>
           <strong v-if="userStore.user.userRole === 'user'">Reader</strong>
         </div>
-        <el-button plain @click="switchMode">DAMN</el-button>
+        <!-- <el-button plain @click="switchMode">DAMN</el-button> -->
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <!--默认展示-->
           <span class="el-dropdown__box">

@@ -161,20 +161,20 @@ const getInstanceList = async (isbn) => {
   const res = await GetInstanceService(isbn)
   InstanceList.value = res.data.data
 }
-const isOpen = ref(false) // Default collapsed state
+// const isOpen = ref(false) // Default collapsed state
 
-const toggleOpen = () => {
-  isOpen.value = !isOpen.value
-}
-const word = computed(() => {
-  if (isOpen.value === false) {
-    return '展开'
-  } else if (isOpen.value === true) {
-    return '收起'
-  } else {
-    return null
-  }
-})
+// const toggleOpen = () => {
+//   isOpen.value = !isOpen.value
+// }
+// const word = computed(() => {
+//   if (isOpen.value === false) {
+//     return '展开'
+//   } else if (isOpen.value === true) {
+//     return '收起'
+//   } else {
+//     return null
+//   }
+// })
 </script>
 <template>
   <page-container title="Book Catalog">
@@ -228,7 +228,7 @@ const word = computed(() => {
         </template></el-table-column
       >
       <el-table-column prop="author" label="Author"></el-table-column>
-      <el-table-column prop="description" label="Description "
+      <!-- <el-table-column prop="description" label="Description "
         ><template #default="{ row }">
           <div :class="isOpen ? 'new_detail' : 'default'">
             <span class="font999">{{ row.description }}</span>
@@ -237,7 +237,21 @@ const word = computed(() => {
             >{{ word
             }}<i :class="isOpen ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i
           ></el-button> </template
-      ></el-table-column>
+      ></el-table-column> -->
+      <el-table-column prop="description" label="Description "
+        ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.description"
+          >
+            <div class="ellipsis">
+              {{ row.description }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
       <el-table-column
         prop="available"
         label="Number of existing"
@@ -265,7 +279,7 @@ const word = computed(() => {
               @click="onDelBook(row, $index)"
             ></el-button>
             <el-button @click="openDrawer(row.isbn)" type="primary" size="small"
-              >Instance</el-button
+              >List</el-button
             >
           </div>
         </template>
@@ -374,6 +388,7 @@ const word = computed(() => {
   text-overflow: ellipsis; /* 超出部分显示省略号 */
   max-width: 150px; /* 设置最大宽度，根据需要调整 */
 }
+/*
 .new_detail {
   padding: 5px 50px 5px 0;
   font-size: 14px;
@@ -391,4 +406,5 @@ const word = computed(() => {
   right: 20px;
   bottom: 10px;
 }
+*/
 </style>

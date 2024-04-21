@@ -11,7 +11,7 @@ const getreserveList = async () => {
 }
 getreserveList()
 const Cancel = async (row) => {
-  await ElMessageBox.confirm('Are you sure?', 'Tip:', {
+  await ElMessageBox.confirm('Are you sure?', 'Tip', {
     confirmButtonText: 'OK',
     cancelButtonText: 'Cancel',
     type: 'warning'

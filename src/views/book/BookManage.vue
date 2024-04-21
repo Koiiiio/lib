@@ -5,7 +5,7 @@ import { GetBorrowRecord, Return } from '../../api/book.js'
 import LateReturn from '../book/components/LateReturn.vue'
 const ReturnBook = async (row) => {
   console.log(row.instanceId)
-  await ElMessageBox.confirm('Are you sure you want to return it?', 'Tip:', {
+  await ElMessageBox.confirm('Are you sure you want to return it?', 'Tip', {
     confirmButtonText: 'OK',
     cancelButtonText: 'Cancel',
     type: 'warning'

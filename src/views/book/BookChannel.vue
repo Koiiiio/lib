@@ -82,7 +82,7 @@ const handleRefresh = () => {
   getBookList() // 这里调用获取图书列表的方法，进行刷新
 }
 const reserveBook = async (row) => {
-  await ElMessageBox.confirm('Are you sure?', 'Tip:', {
+  await ElMessageBox.confirm('Are you sure?', 'Tip', {
     confirmButtonText: 'OK',
     cancelButtonText: 'Cancel',
     type: 'Warning'
@@ -100,20 +100,20 @@ import defaultCover from '@/assets/defaultcover.jpg'
 const getCoverImage = (cover) => {
   return cover ? `url(data:image/jpeg;base64,${cover})` : `url(${defaultCover})`
 }
-const isOpen = ref(false) // Default collapsed state
+// const isOpen = ref(false) // Default collapsed state
 
-const toggleOpen = () => {
-  isOpen.value = !isOpen.value
-}
-const word = computed(() => {
-  if (isOpen.value === false) {
-    return '展开'
-  } else if (isOpen.value === true) {
-    return '收起'
-  } else {
-    return null
-  }
-})
+// const toggleOpen = () => {
+//   isOpen.value = !isOpen.value
+// }
+// const word = computed(() => {
+//   if (isOpen.value === false) {
+//     return '展开'
+//   } else if (isOpen.value === true) {
+//     return '收起'
+//   } else {
+//     return null
+//   }
+// })
 </script>
 
 <template>
@@ -177,6 +177,20 @@ const word = computed(() => {
       >
       <el-table-column prop="description" label="Description "
         ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.description"
+          >
+            <div class="ellipsis">
+              {{ row.description }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
+      <!-- <el-table-column prop="description" label="Description "
+        ><template #default="{ row }">
           <div :class="isOpen ? 'new_detail' : 'default'">
             <span class="font999">{{ row.description }}</span>
           </div>
@@ -184,7 +198,7 @@ const word = computed(() => {
             >{{ word
             }}<i :class="isOpen ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i
           ></el-button> </template
-      ></el-table-column>
+      ></el-table-column> -->
       <el-table-column prop="author" label="Author"></el-table-column>
       <el-table-column
         prop="available"
@@ -255,6 +269,7 @@ const word = computed(() => {
   text-overflow: ellipsis; /* 超出部分显示省略号 */
   max-width: 150px; /* 设置最大宽度，根据需要调整 */
 }
+/*
 .new_detail {
   padding: 5px 50px 5px 0;
   font-size: 14px;
@@ -272,4 +287,5 @@ const word = computed(() => {
   right: 15px;
   bottom: 40px;
 }
+*/
 </style>
