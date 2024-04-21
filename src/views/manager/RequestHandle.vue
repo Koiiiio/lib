@@ -108,7 +108,7 @@ const formatStatus = (row, column, cellValue) => {
               :icon="Check"
               @click="agreeLend(row)"
               v-if="row.borrowAprvStatus === 0"
-              >Accepted</el-button
+              >Accept</el-button
             >
             <el-button
               plain
@@ -116,7 +116,7 @@ const formatStatus = (row, column, cellValue) => {
               :icon="Close"
               @click="disagreeLend(row)"
               v-if="row.borrowAprvStatus === 0"
-              >Rejected</el-button
+              >Reject</el-button
             >
           </div>
         </template>
