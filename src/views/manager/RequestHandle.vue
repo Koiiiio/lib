@@ -36,6 +36,18 @@ watch(switchValue, (newValue) => {
   // 监听 switchValue 的变化，并在变化时重新获取列表
   getBorrowList(newValue)
 })
+const formatStatus = (row, column, cellValue) => {
+  switch (cellValue) {
+    case 0:
+      return 'Pending'
+    case 1:
+      return 'Accepted'
+    case 2:
+      return 'Rejected'
+    default:
+      return ''
+  }
+}
 </script>
 <template>
   <page-container title="Borrowing Processing">
@@ -80,9 +92,11 @@ watch(switchValue, (newValue) => {
       >
       <el-table-column label="Borrow Date" prop="borrowDate"></el-table-column>
       <el-table-column label="Due Date" prop="dueDate"></el-table-column>
+      <!-- <el-table-column label="Request Status" prop="borrowAprvStatus"></el-table-column> -->
       <el-table-column
         label="Request Status"
         prop="borrowAprvStatus"
+        :formatter="formatStatus"
       ></el-table-column>
 
       <el-table-column label="Operations" width="250">
@@ -115,10 +129,14 @@ watch(switchValue, (newValue) => {
   display: flex;
   align-items: center;
 }
+
 .ellipsis {
   overflow: hidden;
-  white-space: nowrap; /* 不换行 */
-  text-overflow: ellipsis; /* 超出部分显示省略号 */
-  max-width: 150px; /* 设置最大宽度，根据需要调整 */
+  white-space: nowrap;
+  /* 不换行 */
+  text-overflow: ellipsis;
+  /* 超出部分显示省略号 */
+  max-width: 150px;
+  /* 设置最大宽度，根据需要调整 */
 }
 </style>
