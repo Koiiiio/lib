@@ -143,7 +143,13 @@ onMounted(() => {
           placeholder="Please enter description"
         ></el-input>
       </el-form-item>
-      <el-form-item label="Cover" prop="cover">
+      <el-form-item prop="location" label="Location">
+        <el-input
+          v-model="formModel.location"
+          placeholder="Please enter location"
+        ></el-input>
+      </el-form-item>
+      <el-form-item prop="cover" label="Cover">
         <el-upload
           class="avatar-uploader"
           :show-file-list="false"
