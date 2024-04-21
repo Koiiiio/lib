@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { PieChart, Check } from '@element-plus/icons-vue'
+import { Check } from '@element-plus/icons-vue'
 import { GetBorrowRecord, Return } from '../../api/book.js'
 import LateReturn from '../book/components/LateReturn.vue'
 const ReturnBook = async (row) => {
@@ -11,25 +11,33 @@ const ReturnBook = async (row) => {
     type: 'warning'
   })
   await Return(row.instanceId)
-  ElMessage.success('Successful return！')
+  ElMessage.success('Successful return!')
   getBorrowList(state.value)
 }
 const dialog = ref()
-const LateReturnBook = async (row) => {
-  dialog.value.open(row)
-  getBorrowList(state.value)
-}
-const state = ref('4')
-const option = ref('4')
+// const LateReturnBook = async (row) => {
+//   dialog.value.open(row)
+//   getBorrowList(state.value)
+// }
+const state = ref('3')
+const option = ref('3')
 const borrowList = ref([])
 const loading = ref(false)
 const getBorrowList = async (state) => {
   loading.value = true //true
   // console.log(state)
   // console.log(option.value)
-  const res = await GetBorrowRecord(state)
-  console.log(res.data)
-  borrowList.value = res.data.data
+  console.log(state)
+  if (state === '3') {
+    const res3 = await GetBorrowRecord(3)
+    const res4 = await GetBorrowRecord(4)
+    borrowList.value = res3.data.data.concat(res4.data.data)
+  } else {
+    const res = await GetBorrowRecord(state)
+    borrowList.value = res.data.data
+  }
+  console.log(borrowList.value)
+
   //console.log(bookList.value)
   loading.value = false
 }
@@ -52,12 +60,16 @@ const options = ref([
   },
   {
     value: '3',
-    label: 'No Late Returns'
-  },
-  {
-    value: '4',
-    label: 'Late Returns Allowed'
+    label: 'Not Returned'
   }
+  // {
+  //   value: '3',
+  //   label: 'No Late Returns'
+  // },
+  // {
+  //   value: '4',
+  //   label: 'Late Returns Allowed'
+  // }
 ])
 watch(option, (newValue) => {
   // 监听 option 的变化，并在变化时重新获取列表
@@ -69,7 +81,7 @@ watch(option, (newValue) => {
   <page-container title="My Borrowing">
     <template #extra>
       <div class="form-row">
-        Borrowing Status
+        Status:
         <el-select
           v-model="option"
           placeholder="Please Select"
@@ -105,6 +117,12 @@ watch(option, (newValue) => {
           >
           <span
             v-if="
+              scope.row.returnDate === null && scope.row.borrowAprvStatus === 1
+            "
+            >Not Returned</span
+          >
+          <!-- <span
+            v-if="
               scope.row.lateRetAprvStatus !== null &&
               scope.row.returnDate === null &&
               scope.row.borrowAprvStatus === 1
@@ -118,7 +136,7 @@ watch(option, (newValue) => {
               scope.row.borrowAprvStatus === 1
             "
             >Late Returns Allowed</span
-          >
+          > -->
         </template></el-table-column
       >
 
@@ -133,7 +151,7 @@ watch(option, (newValue) => {
               v-if="row.returnDate === null && row.borrowAprvStatus === 1"
               >Return</el-button
             >
-            <el-button
+            <!-- <el-button
               plain
               type="warning"
               :icon="PieChart"
@@ -144,7 +162,7 @@ watch(option, (newValue) => {
                 row.borrowAprvStatus == 1
               "
               >Late Return</el-button
-            >
+            > -->
           </div>
         </template>
       </el-table-column>

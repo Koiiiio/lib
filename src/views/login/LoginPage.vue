@@ -90,10 +90,10 @@ const oprole = ref('Librarian')
 const changeRole = () => {
   if (role.value === 'Reader') {
     role.value = 'Librarian'
-    oprole.value === 'Reader'
+    oprole.value = 'Reader'
   } else {
     role.value = 'Reader'
-    oprole.value === 'Librarian'
+    oprole.value = 'Librarian'
   }
   formModel.value = {
     username: '',
@@ -123,7 +123,7 @@ watch(role, () => {
         v-if="isRegister"
       >
         <el-form-item>
-          <h1>-{{ role }}Register</h1>
+          <h1>-{{ role }} Register</h1>
         </el-form-item>
         <el-form-item prop="username">
           <el-input
@@ -166,7 +166,7 @@ watch(role, () => {
           </el-button>
         </el-form-item>
         <el-button plain size="small" @click="changeRole"
-          >Switch to{{ oprole }}Registration</el-button
+          >Switch to {{ oprole }} Registration</el-button
         >
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = false">
