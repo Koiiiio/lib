@@ -69,7 +69,7 @@ const onSubmit = async () => {
   const location = res.data.data.location
   dialogVisible.value = false
   await ElMessageBox.alert(
-    'Application submitted<br>Book ID: ' +
+    'Request submitted<br>Book ID: ' +
       instanceId +
       '<br>Book Location:' +
       location,

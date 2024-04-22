@@ -89,7 +89,7 @@ watch(option, (newValue) => {
     <el-table :data="borrowList">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column label="Book ID" prop="instanceId"> </el-table-column>
-      <el-table-column label="Borrowing ID" prop="userId"> </el-table-column>
+      <el-table-column label="Reader ID" prop="userId"> </el-table-column>
       <el-table-column label="Borrow Date" prop="borrowDate"></el-table-column>
       <el-table-column label="Due Date" prop="dueDate"></el-table-column>
       <el-table-column label="Return Date" prop="returnDate"></el-table-column>

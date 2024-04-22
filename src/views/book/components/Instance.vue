@@ -86,11 +86,7 @@ defineExpose({
           :disabled="!!formModel.isbn"
         ></el-input>
       </el-form-item>
-      <el-form-item
-        prop="number"
-        label="Add Quantity:"
-        v-if="formModel.add > 0"
-      >
+      <el-form-item prop="number" label="Quantity:" v-if="formModel.add > 0">
         <el-input
           v-model="formModel.number"
           placeholder="Please enter the quantity to be added"
