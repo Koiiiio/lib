@@ -107,7 +107,7 @@ onMounted(() => {
 
 <template>
   <el-dialog
-    :title="formModel.id ? 'Editing books' : 'Add books'"
+    :title="formModel.id ? 'Editing books' : 'Add book info'"
     v-model="dialogVisible"
     width="30%"
   >
