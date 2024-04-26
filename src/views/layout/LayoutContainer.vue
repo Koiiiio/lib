@@ -125,6 +125,10 @@ const handleCommand = async (key) => {
             <el-icon><EditPen /></el-icon>
             <span>Personal Info</span>
           </el-menu-item>
+          <el-menu-item index="/user/bill">
+            <el-icon><EditPen /></el-icon>
+            <span>Bill</span>
+          </el-menu-item>
         </el-sub-menu>
       </el-menu>
     </el-aside>
