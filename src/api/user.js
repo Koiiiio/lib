@@ -41,3 +41,5 @@ export const userUpdatePasswordService = ({ password }) =>
 
 export const GetBorrowingService = () =>
   request.get('/admin/borrowing/overdue-readers')
+
+export const GetBillService = () => request.get('/bill')
