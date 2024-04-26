@@ -118,23 +118,9 @@ const penalty = (row) => {
       </template>
     </el-table>
     <UserPenalty ref="dialog" @success="onSuccess"></UserPenalty>
-    <div class="pagination">
-      <el-pagination
-        v-model:current-page="currentPage"
-        v-model:page-size="pageSize"
-        layout="total,prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div>
   </page-container>
 </template>
 <style scoped>
-.pagination {
-  float: right;
-  margin-top: 12px;
-}
 .ellipsis {
   overflow: hidden;
   white-space: nowrap; /* 不换行 */

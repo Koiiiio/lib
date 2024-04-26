@@ -1,18 +1,3 @@
-<template>
-  <page-container title="Bill">
-    用户余额: {{ money }}
-
-    <el-form label-width="100px">
-      <el-form-item label="Amount">
-        <el-input v-model="amount"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="payBill">Pay</el-button>
-      </el-form-item>
-    </el-form>
-  </page-container>
-</template>
-
 <script lang="ts" setup>
 import PageContainer from '@/components/PageContainer.vue'
 import { ref } from 'vue'
@@ -39,5 +24,19 @@ const payBill = () => {
   )
 }
 </script>
+<template>
+  <page-container title="Bill">
+    用户余额: {{ money }}
+
+    <el-form label-width="100px">
+      <el-form-item label="Amount">
+        <el-input v-model="amount"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="payBill">Pay</el-button>
+      </el-form-item>
+    </el-form>
+  </page-container>
+</template>
 
 <style scoped></style>

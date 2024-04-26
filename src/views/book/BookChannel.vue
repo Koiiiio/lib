@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { GetBookService, Reserve } from '../../api/book.js'
+import { GetBookService, Reserve, SearchBookService } from '../../api/book.js'
 import {} from '@element-plus/icons-vue'
 import BookBorrow from '../book/components/BookBorrow.vue'
 import { ElMessage } from 'element-plus'
@@ -19,6 +19,14 @@ const getBookList = async () => {
   total.value = bookList.value.length
   loading.value = false
 }
+const getSearchList = async ({ method, keyword }) => {
+  loading.value = true //true
+  const res = await SearchBookService({ method: method, keyword: keyword })
+  bookList.value = res.data.data
+  console.log(bookList.value)
+  total.value = bookList.value.length
+  loading.value = false
+}
 //分页展示
 const displayedBooks = computed(() => {
   const startIndex = (currentPage.value - 1) * pageSize.value
@@ -32,20 +40,21 @@ const onSuccess = () => {
 const search1 = ref('')
 
 const onSearch = () => {
-  const filteredList = bookList.value.filter((book) => {
-    if (option.value === 'title') {
-      return book.title.includes(search1.value)
-    } else if (option.value === 'author') {
-      return book.author.includes(search1.value)
-    } else if (option.value === 'isbn') {
-      return book.isbn.includes(search1.value)
-    }
-  })
-  bookList.value.splice(0, bookList.value.length, ...filteredList)
+  currentPage.value = 1
+  if (option.value === 'title') {
+    getSearchList({ method: 'title', keyword: search1.value })
+  } else if (option.value === 'author') {
+    //return book.author.includes(search1.value)
+    getSearchList({ method: 'author', keyword: search1.value })
+  } else if (option.value === 'isbn') {
+    //return book.isbn.includes(search1.value)
+    getSearchList({ method: 'isbn', keyword: search1.value })
+  }
 }
 
 const onReset = () => {
   search1.value = ''
+  currentPage.value = 1
   getBookList()
 }
 
@@ -100,20 +109,17 @@ import defaultCover from '@/assets/defaultcover.jpg'
 const getCoverImage = (cover) => {
   return cover ? `url(data:image/jpeg;base64,${cover})` : `url(${defaultCover})`
 }
-// const isOpen = ref(false) // Default collapsed state
 
-// const toggleOpen = () => {
-//   isOpen.value = !isOpen.value
-// }
-// const word = computed(() => {
-//   if (isOpen.value === false) {
-//     return '展开'
-//   } else if (isOpen.value === true) {
-//     return '收起'
-//   } else {
-//     return null
-//   }
-// })
+const handleSizeChange = (val) => {
+  pageSize.value = val
+  currentPage.value = 1
+  getBookList()
+}
+const handleCurrentChange = (val) => {
+  currentPage.value = val
+  if (search1.value === '') getBookList()
+  else getSearchList({ method: option.value, keyword: search1.value })
+}
 </script>
 
 <template>
@@ -204,6 +210,7 @@ const getCoverImage = (cover) => {
         prop="available"
         label="Number of existing"
       ></el-table-column>
+      <el-table-column prop="location" label="Location"></el-table-column>
       <el-table-column label="Operation" width="300">
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">

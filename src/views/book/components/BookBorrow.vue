@@ -1,32 +1,20 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Borrow } from '@/api/book.js'
 //import { ElMessage } from 'element-plus'
-
+const num = ref(14)
 const formModel = ref({
   id: '',
   title: '',
   isbn: '',
   author: '',
-  description: '',
-  date: 0
+  description: ''
 })
 const formRef = ref()
-const rules = {
-  date: [
-    { required: true, message: 'Please enter the date', trigger: 'blur' },
-    {
-      pattern: /^(?:[1-9]|[1-9]\d|100)$/,
-      message: 'Must be a number between 1 and 100',
-      trigger: 'blur'
-    }
-  ]
-}
 const dialogVisible = ref(false)
 const currentDate = ref() //当前日期
 const dueDate = ref() //应归还日期
 //借阅天数
-
 const getCurrentDate = () => {
   const date = new Date()
   const year = date.getFullYear()
@@ -45,9 +33,9 @@ const getDueDate = (days) => {
 
 const BorrowDate = (days) => {
   getCurrentDate()
-  console.log(currentDate.value)
+  //console.log(currentDate.value)
   getDueDate(days)
-  console.log(dueDate.value)
+  //console.log(dueDate.value)
 } //当前时间currentDate+借阅时间days=dueDate应归还日期
 
 const open = (row) => {
@@ -58,9 +46,7 @@ const open = (row) => {
 const emit = defineEmits(['refresh-list'])
 const onSubmit = async () => {
   await formRef.value.validate()
-  BorrowDate(formModel.value.date)
-  // console.log(formModel.value.isbn)
-  // console.log(dueDate.value)
+  BorrowDate(num.value)
   const res = await Borrow({
     isbn: formModel.value.isbn,
     dueDate: dueDate.value
@@ -85,6 +71,15 @@ const onSubmit = async () => {
 defineExpose({
   open
 })
+const Cancel = () => {
+  dialogVisible.value = false
+  num.value = 14
+}
+
+const handleChange = (value) => {
+  console.log(value)
+  console.log(num.value)
+}
 </script>
 <template>
   <el-dialog
@@ -95,7 +90,6 @@ defineExpose({
     <el-form
       ref="formRef"
       :model="formModel"
-      :rules="rules"
       label-width="100px"
       style="padding-right: 30px"
     >
@@ -108,16 +102,25 @@ defineExpose({
       <el-form-item prop="" label="Author">
         <el-input :placeholder="formModel.author" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item prop="date" label="Duration">
-        <el-input
-          v-model="formModel.date"
-          placeholder="Please enter the number of days of borrowing"
-        ></el-input>
+      <el-form-item prop="" label="Duration" :autofocus="true">
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="Enter the days of borrowing,which ranges from 1 to 100"
+          placement="bottom"
+        >
+          <el-input-number
+            v-model="num"
+            :min="1"
+            :max="100"
+            @change="handleChange"
+          />
+        </el-tooltip>
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button @click="Cancel">Cancel</el-button>
         <el-button type="primary" @click="onSubmit">OK</el-button>
       </span>
     </template>

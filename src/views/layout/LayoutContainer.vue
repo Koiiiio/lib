@@ -60,7 +60,6 @@ const handleCommand = async (key) => {
         :default-active="$route.path"
         text-color="#fff"
         router
-        :key="mode"
       >
         <el-menu-item index="/book/channel">
           <el-icon><Management /></el-icon>

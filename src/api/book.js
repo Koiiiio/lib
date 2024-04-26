@@ -1,6 +1,12 @@
 import request from '@/utils/request'
 
 export const GetBookService = () => request.get('/user/books/info')
+//检索
+export const SearchBookService = ({ method, keyword }) => {
+  // 使用模板字符串简化替换过程
+  const requestPath = `/user/books/search?method=${method}&keyword=${encodeURIComponent(keyword)}`
+  return request.get(requestPath)
+}
 
 export const AddBookService = (data) => request.post('/admin/books/info', data)
 
@@ -20,8 +26,6 @@ export const DelInstanceService = (id) => {
   return request.delete(requestPath)
 }
 
-//export const DelBookService = (isbn) =>
-//request.delete('/admin/books/info/{{isbn}}', isbn)
 export const DelBookService = (isbn) => {
   const path = '/admin/books/info/{{isbn}}'
   const requestPath = path.replace('{{isbn}}', isbn)

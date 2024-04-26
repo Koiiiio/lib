@@ -6,7 +6,8 @@ import {
   DelBookService,
   //AddInstanceService,
   //DelInstanceService
-  GetInstanceService
+  GetInstanceService,
+  SearchBookService
 } from '../../api/book.js'
 import BookEdit from '../book/components/BookEdit.vue'
 import Instance from '../book/components/Instance.vue'
@@ -21,24 +22,19 @@ const pageSize = ref(10)
 const getBookList = async () => {
   loading.value = true
   const res = await GetBookService()
-  // const res = await GetBookService({
-  //   page: currentPage.value,
-  //   pageSize: pageSize.value
-  // })
-  //bookList.value = res.data.data
   const tempBookList = res.data.data
-
-  // for (let i = 0; i < tempBookList.length; i++) {
-  //   const book = tempBookList[i]
-  //   const family = await getInstanceList(book.isbn)
-  //   book.family = family
-  // }
-
   bookList.value = tempBookList
   total.value = bookList.value.length
   loading.value = false
 }
-
+const getSearchList = async ({ method, keyword }) => {
+  loading.value = true //true
+  const res = await SearchBookService({ method: method, keyword: keyword })
+  bookList.value = res.data.data
+  console.log(bookList.value)
+  total.value = bookList.value.length
+  loading.value = false
+}
 getBookList()
 
 //分页展示
@@ -97,23 +93,23 @@ const setPlaceholder = (option) => {
 const search1 = ref('')
 
 const onSearch = () => {
-  const filteredList = bookList.value.filter((book) => {
-    if (option.value === 'title') {
-      return book.title.includes(search1.value)
-    } else if (option.value === 'author') {
-      return book.author.includes(search1.value)
-    } else if (option.value === 'isbn') {
-      return book.isbn.includes(search1.value)
-    }
-  })
-  bookList.value.splice(0, bookList.value.length, ...filteredList)
+  currentPage.value = 1
+  if (option.value === 'title') {
+    getSearchList({ method: 'title', keyword: search1.value })
+  } else if (option.value === 'author') {
+    //return book.author.includes(search1.value)
+    getSearchList({ method: 'author', keyword: search1.value })
+  } else if (option.value === 'isbn') {
+    //return book.isbn.includes(search1.value)
+    getSearchList({ method: 'isbn', keyword: search1.value })
+  }
 }
 
 const onReset = () => {
   search1.value = ''
+  currentPage.value = 1
   getBookList()
 }
-
 const onAddInstance = (isbn) => {
   dialog2.value.openIns(isbn, -1)
 }
@@ -139,7 +135,8 @@ const handleSizeChange = (val) => {
 }
 const handleCurrentChange = (val) => {
   currentPage.value = val
-  getBookList()
+  if (search1.value === '') getBookList()
+  else getSearchList({ method: option.value, keyword: search1.value })
 }
 watch(option, (newValue) => {
   console.log(newValue)
@@ -260,6 +257,7 @@ const getInstanceList = async (isbn) => {
         prop="borrowed"
         label="Number of borrowed"
       ></el-table-column>
+      <el-table-column prop="location" label="Location"></el-table-column>
       <el-table-column label="operation" width="250px">
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">
