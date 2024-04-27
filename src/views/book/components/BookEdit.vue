@@ -1,6 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { EditBookService, AddBookService,ISBNSearchService } from '@/api/book.js'
+import {
+  EditBookService,
+  AddBookService,
+  ISBNSearchService
+} from '@/api/book.js'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 const dialogVisible = ref(false)
@@ -104,15 +108,17 @@ onMounted(() => {
   imgUrl.value = defaultCover
 })
 const search = async (isbn) => {
-  const res = await ISBNSearchService(isbn); // 确保传入ISBN
-  if (res && res.items && res.items.length > 0) {
-    const volumeInfo = res.items[0].volumeInfo; // 访问第一个item的volumeInfo
-    formModel.value.title = volumeInfo.title;
-    formModel.value.description = volumeInfo.description;
+  console.log(isbn)
+  const res = await ISBNSearchService({ isbn: isbn }) // 确保传入ISBN
+  console.log(res.data)
+  if (res.data && res.data.items && res.data.items.length > 0) {
+    const volumeInfo = res.data.items[0].volumeInfo // 访问第一个item的volumeInfo
+    formModel.value.title = volumeInfo.title
+    formModel.value.description = volumeInfo.description
     // 处理可能的多个作者
-    formModel.value.author = volumeInfo.authors.join(", "); // 将所有作者以逗号分隔
+    formModel.value.author = volumeInfo.authors.join(', ') // 将所有作者以逗号分隔
   } else {
-    console.error('No data found for this ISBN');
+    console.error('No data found for this ISBN')
   }
 }
 </script>
@@ -130,17 +136,22 @@ const search = async (isbn) => {
       label-width="100px"
       style="padding-right: 30px"
     >
-    <el-form-item prop="isbn" label="ISBN">
-        <div style="display: flex;">
-    <el-input
-          v-model="formModel.isbn"
-          placeholder="Please enter the ISBN"
-          :disabled="!!formModel.id"
-        ></el-input>
-        <el-button type="primary" @click="search(formModel.isbn)" v-if="!formModel.id">
-         search
-        </el-button>
-      </div>
+      <el-form-item prop="isbn" label="ISBN">
+        <div style="display: flex">
+          <el-input
+            v-model="formModel.isbn"
+            placeholder="Please enter the ISBN"
+            :disabled="!!formModel.id"
+            style="margin-right: 10px"
+          ></el-input>
+          <el-button
+            type="primary"
+            @click="search(formModel.isbn)"
+            v-if="!formModel.id"
+          >
+            autocomplete
+          </el-button>
+        </div>
       </el-form-item>
       <el-form-item prop="title" label="Title">
         <el-input
@@ -178,7 +189,9 @@ const search = async (isbn) => {
             :src="imgUrl"
             style="max-width: 100%; max-height: 200px"
           />
-          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+          <el-icon v-else class="avatar-uploader-icon">
+            <Plus />
+          </el-icon>
         </el-upload>
       </el-form-item>
     </el-form>
