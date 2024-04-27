@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import { PieChart, Check } from '@element-plus/icons-vue'
 import { GetBorrowRecord, Return } from '../../api/book.js'
 import LateReturn from '../book/components/LateReturn.vue'
+import Camera from '../book/components/Camera.vue'
 const ReturnBook = async (row) => {
   console.log(row.instanceId)
   await ElMessageBox.confirm('Are you sure you want to return it?', 'Tip', {
@@ -15,9 +16,13 @@ const ReturnBook = async (row) => {
   getBorrowList(state.value)
 }
 const dialog = ref()
+const dialog1 = ref()
 const LateReturnBook = async (row) => {
   dialog.value.open(row)
   getBorrowList(state.value)
+}
+const QRReturn = async () => {
+  dialog1.value.show(1)
 }
 const state = ref('4')
 const option = ref('4')
@@ -67,6 +72,7 @@ watch(option, (newValue) => {
 </script>
 <template>
   <page-container title="My Borrowing">
+    <el-button type="primary" @click="QRReturn">camera</el-button>
     <template #extra>
       <div class="form-row">
         Borrowing Status
@@ -150,6 +156,7 @@ watch(option, (newValue) => {
       </el-table-column>
     </el-table>
     <LateReturn ref="dialog" @success="onSuccess"></LateReturn>
+    <Camera ref="dialog1" @success="onSuccess"></Camera>
   </page-container>
 </template>
 <style>

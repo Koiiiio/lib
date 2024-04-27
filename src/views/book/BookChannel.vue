@@ -15,7 +15,6 @@ const getBookList = async () => {
   loading.value = true //true
   const res = await GetBookService()
   bookList.value = res.data.data
-  //console.log(bookList.value)
   total.value = bookList.value.length
   loading.value = false
 }
@@ -23,7 +22,6 @@ const getSearchList = async ({ method, keyword }) => {
   loading.value = true //true
   const res = await SearchBookService({ method: method, keyword: keyword })
   bookList.value = res.data.data
-  console.log(bookList.value)
   total.value = bookList.value.length
   loading.value = false
 }

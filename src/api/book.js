@@ -111,3 +111,8 @@ export const HandleLateReturn = ({ borrowingId, agree }) => {
   const requestPath = path.replace('{borrowingId}', borrowingId.toString())
   return request.put(requestPath, { agree: agree })
 }
+//isbn搜索
+export const ISBNSearchService = ({ isbn }) => {
+  const requestPath = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=AIzaSyBDEqgCzTeIRqvZV573XzsVA3yQn_FQUCU&projection=full`
+  return request.get(requestPath)
+}

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { EditBookService, AddBookService } from '@/api/book.js'
+import { EditBookService, AddBookService,ISBNSearchService } from '@/api/book.js'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 const dialogVisible = ref(false)
@@ -103,6 +103,18 @@ import defaultCover from '@/assets/defaultcover.jpg'
 onMounted(() => {
   imgUrl.value = defaultCover
 })
+const search = async (isbn) => {
+  const res = await ISBNSearchService(isbn); // 确保传入ISBN
+  if (res && res.items && res.items.length > 0) {
+    const volumeInfo = res.items[0].volumeInfo; // 访问第一个item的volumeInfo
+    formModel.value.title = volumeInfo.title;
+    formModel.value.description = volumeInfo.description;
+    // 处理可能的多个作者
+    formModel.value.author = volumeInfo.authors.join(", "); // 将所有作者以逗号分隔
+  } else {
+    console.error('No data found for this ISBN');
+  }
+}
 </script>
 
 <template>
@@ -118,17 +130,22 @@ onMounted(() => {
       label-width="100px"
       style="padding-right: 30px"
     >
+    <el-form-item prop="isbn" label="ISBN">
+        <div style="display: flex;">
+    <el-input
+          v-model="formModel.isbn"
+          placeholder="Please enter the ISBN"
+          :disabled="!!formModel.id"
+        ></el-input>
+        <el-button type="primary" @click="search(formModel.isbn)" v-if="!formModel.id">
+         search
+        </el-button>
+      </div>
+      </el-form-item>
       <el-form-item prop="title" label="Title">
         <el-input
           v-model="formModel.title"
           placeholder="Please enter the book title"
-        ></el-input>
-      </el-form-item>
-      <el-form-item prop="isbn" label="ISBN">
-        <el-input
-          v-model="formModel.isbn"
-          placeholder="Please enter the ISBN"
-          :disabled="!!formModel.id"
         ></el-input>
       </el-form-item>
       <el-form-item prop="author" label="Author">
