@@ -75,8 +75,14 @@ export const HandleRequest = (id, agree) => {
   const requestPath = path.replace('{borrowingId}', id.toString())
   return request.put(requestPath, { agree: agree })
 }
-//还书
-export const Return = (id) => {
+// //还书
+// export const Return = (id) => {
+//   const path = '/user/borrowing/return/{instanceId}'
+//   const requestPath = path.replace('{instanceId}', id.toString())
+//   return request.put(requestPath)
+// }
+//还书确认
+export const admitReturn = (id) => {
   const path = '/user/borrowing/return/{instanceId}'
   const requestPath = path.replace('{instanceId}', id.toString())
   return request.put(requestPath)
@@ -105,6 +111,9 @@ export const LateReturn = ({ borrowId, lateRetDate }) =>
     borrowId,
     lateRetDate
   })
+//迟还2.0
+export const LateReturn2 = ({ borrowId }) =>
+  request.post('/user/borrowing/lateretBorrow', {borrowId})
 //处理迟还
 export const HandleLateReturn = ({ borrowingId, agree }) => {
   const path = '/admin/borrowing/late-returns/{borrowingId}'

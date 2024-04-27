@@ -1,252 +1,118 @@
-<<<<<<< HEAD
-=======
-<script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
-import jsQR from 'jsqr'
-import { ElDialog, ElInput, ElButton } from 'element-plus'
-
-const dialogVisible = ref(false)
-const result = ref('')
-const isAnimation = ref(true)
-const audio = ref()
-const video = ref(document.createElement('video'))
-const cvsele = ref()
-const canvas = ref()
-const timer = ref()
-
-const show = (val) => {
-  dialogVisible.value = true
-  result.value = val
-  audio.value = new Audio('../assets/tone.mp3')
-  cvsele.value = document.querySelector('canvas')
-  canvas.value = cvsele.value.getContext('2d')
-  canvas.value.clearRect(0, 0, cvsele.value.width, cvsele.value.height)
-  cvsele.value.style.display = 'none'
-}
-const draw = (begin, end) => {
-  this.canvas.beginPath()
-  this.canvas.moveTo(begin.x, begin.y)
-  this.canvas.lineTo(end.x, end.y)
-  this.canvas.lineWidth = 3
-  this.canvas.strokeStyle = 'red'
-  this.canvas.stroke()
-}
-
-const sweep = () => {
-  if (this.video.readyState === this.video.HAVE_ENOUGH_DATA) {
-    const { videoWidth, videoHeight } = this.video
-    this.cvsele.width = videoWidth
-    this.cvsele.height = videoHeight
-    this.canvas.drawImage(this.video, 0, 0, videoWidth, videoHeight)
-    try {
-      const img = this.canvas.getImageData(0, 0, videoWidth, videoHeight)
-      this.imgurl = img
-      const obj = jsQR(img.data, img.width, img.height, {
-        inversionAttempts: 'dontInvert'
-      })
-      if (obj) {
-        const loc = obj.location
-        this.draw(loc.topLeftCorner, loc.topRightCorner)
-        this.draw(loc.topRightCorner, loc.bottomRightCorner)
-        this.draw(loc.bottomRightCorner, loc.bottomLeftCorner)
-        this.draw(loc.bottomLeftCorner, loc.topLeftCorner)
-        if (this.result !== obj.data) {
-          this.audio.play()
-          this.result = obj.data
-          this.isAnimation = false
-          cancelAnimationFrame(this.timer)
-          setTimeout(() => {
-            this.cvsele.style.display = 'none'
-          }, 1000)
-        } else {
-          console.log(this.result !== obj.data)
-          alert('重复的二维码，请检查后重新扫描！')
+<template>
+  <div class="scan-page">
+    <!-- 返回导航栏 -->
+    <van-nav-bar title="扫描二维码/条形码" left-text="取消" left-arrow 
+      fixed class="scan-index-bar" @click-left="clickIndexLeft()"
+    ></van-nav-bar>
+    <!-- 扫码区域 -->
+    <video ref="video" id="video" class="scan-video" autoplay></video>
+    <!-- 提示语 -->
+    <div v-show="tipShow" class="scan-tip">{{ tipMsg }}</div>
+  </div>
+</template>
+ 
+<script>
+import { BrowserMultiFormatReader } from '@zxing/library';
+import { Toast, Dialog, Notify } from 'vant';
+ 
+  export default {
+    name: 'ScanCodePage',  // 扫码页面
+    data() {
+      return {
+        codeReader: null,
+        tipShow: false,  // 是否展示提示
+        tipMsg: '',  // 提示文本内容
+        scanText: '',  // 扫码结果文本内容
+      }
+    },
+    created() {
+      this.openScan();
+    },
+    watch: {
+      '$route'(to, from) {
+        if(to.path == '/ScanCodePage'){  // 当处于该页面时
+          this.openScan();
         }
       }
-      /*  else {
-              console.error('识别失败，请检查二维码是否正确！0000')
-            }*/
-    } catch (err) {
-      console.error('识别失败，请检查二维码是否正确！', err)
-    }
-  }
-  if (this.isAnimation) {
-    this.timer = requestAnimationFrame(() => {
-      this.sweep()
-    })
-  }
-}
-const media = () => {
-  this.isAnimation = true
-  this.cvsele.style.display = 'block'
-  navigator.getUserMedia =
-    navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia ||
-    navigator.msGetUserMedia
-  if (navigator.mediaDevices) {
-    navigator.mediaDevices
-      .getUserMedia({
-        video: { facingMode: 'environment' }
-      })
-      .then((stream) => {
-        this.video.srcObject = stream
-        this.video.setAttribute('playsinline', true)
-        this.video.setAttribute('webkit-playsinline', true)
-        this.video.addEventListener('loadedmetadata', () => {
-          this.video.play()
-          this.sweep()
-        })
-      })
-      .catch((error) => {
-        console.error(
-          error.name + '：' + error.message + '，' + error.constraint
-        )
-      })
-  } else if (navigator.getUserMedia) {
-    navigator.getUserMedia(
-      {
-        video: { facingMode: 'environment' }
+    },
+    destroyed(){
+      this.codeReader.reset();
+      this.codeReader = null;
+    },
+    methods: {
+      async openScan() {  // 初始化摄像头
+        this.codeReader = await new BrowserMultiFormatReader();
+        this.codeReader.getVideoInputDevices().then(videoDevices => {
+          this.tipMsg = '正在调用摄像头...';
+          this.tipShow = true;
+          console.log('get-videoDevices', videoDevices);
+ 
+          // 默认获取摄像头列表里的最后一个设备id，通过几部测试机发现一般前置摄像头位于列表里的前面几位，所以一般获取最后一个的是后置摄像头
+          let firstDeviceId = videoDevices[videoDevices.length - 1].deviceId; 
+          // 一般获取了手机的摄像头列表里不止一个，有的手机摄像头高级多层，会有变焦摄像头等情况，需要做处理
+          if (videoDevices.length > 1) {
+            // 一般通过判断摄像头列表项里的 label 字段，'camera2 0, facing back' 字符串含有 'back' 和 '0'，大部分机型是这样，如果有些机型没有，那就还是默认获取最后一个
+            firstDeviceId = videoDevices.find(el => { return el.label.indexOf('back') > -1 && el.label.indexOf('0') > -1 }) ? 
+              videoDevices.find(el => { return el.label.indexOf('back') > -1 && el.label.indexOf('0') > -1 }).deviceId : 
+              videoDevices[videoDevices.length - 1].deviceId;
+          }
+          console.log('get-firstDeviceId', firstDeviceId);
+ 
+          this.decodeFromInputVideoFunc(firstDeviceId);
+        }).catch(err => {
+          this.tipShow = false;
+          console.error(err);
+        });
       },
-      (stream) => {
-        this.video.srcObject = stream
-        this.video.setAttribute('playsinline', true)
-        this.video.setAttribute('webkit-playsinline', true)
-        this.video.addEventListener('loadedmetadata', () => {
-          this.video.play()
-          this.sweep()
-        })
+      decodeFromInputVideoFunc(firstDeviceId) {  // 使用摄像头扫描
+        this.codeReader.reset(); // 重置
+        this.codeReader.decodeFromInputVideoDeviceContinuously(firstDeviceId, 'video', (result, err) => {
+          this.tipMsg = '正在尝试识别...';
+          if (result) {
+            console.log('扫码结果', result);
+            this.scanText = result.text;
+            if (this.scanText) {
+              this.tipShow = false;
+              Dialog.confirm({  // 获取到扫码结果进行弹窗提示，这部分接下去的代码根据需要，读者自行编写了
+                title: '扫码结果',
+                message: this.scanText,
+              }).then(() => {  // 点击确认
+ 
+              }).catch(() => {  // 点击取消
+ 
+              });
+            }
+          }
+        });
       },
-      (error) => {
-        console.error(
-          error.name + '：' + error.message + '，' + error.constraint
-        )
+      clickIndexLeft(){  // 返回上一页
+        this.$destroy();
+        this.$router.go(-1);
+        // window.location.href = document.referrer;
       }
-    )
-  } else {
-    if (
-      navigator.userAgent.toLowerCase().match(/chrome/) &&
-      location.origin.indexOf('https://') < 0
-    ) {
-      /* console.error(
-              '获取浏览器录音功能，因安全性问题，需要在localhost 或 127.0.0.1 或 https 下才能获取权限！'
-            )*/
-      alert(
-        '获取浏览器拍照/录音功能，因安全性问题，需要在https 下才能获取权限！'
-      )
-    } else {
-      alert('对不起：未识别到扫描设备!')
     }
   }
-}
-const onConfirm = () => {
-  if (this.result) {
-    this.dialogVisible = false
-    this.$emit('fromChild', this.result)
-    this.closeCamera()
-  } else {
-    alert('请扫描二维码')
-  }
-}
-// 关闭摄像头
-const closeCamera = () => {
-  const stream = this.video.srcObject
-  if (stream) {
-    console.log(stream, 'ppppppppppp')
-    const tracks = stream.getTracks()
-    tracks.forEach((track) => {
-      track.stop()
-    })
-    this.video.srcObject = null
-  }
-}
-onMounted(() => {
-  // 可能需要处理的挂载逻辑
-})
-
-onUnmounted(() => {
-  closeCamera()
-})
-
-watch(dialogVisible, (newValue) => {
-  if (!newValue) closeCamera()
-})
-defineExpose({
-  show
-})
 </script>
-<template>
-  <el-dialog
-    title="扫描设备二维码"
-    :visible="dialogVisible"
-    width="40%"
-    @close="closeCamera"
-  >
-    <main class="reader">
-      <el-input
-        v-model="result"
-        style="width: 80%"
-        type="textarea"
-        :rows="2"
-        placeholder="二维码识别结果"
-      />
-      <button class="sweep" @click="media()">扫一扫</button>
-    </main>
-    <canvas ref="canvas" class="canvas" />
-    <span class="dialog-footer">
-      <el-button size="small" @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" size="small" @click="onConfirm"
-        >确 定</el-button
-      >
-    </span>
-  </el-dialog>
-</template>
-<style lang="less">
-.reader {
-  font-size: 16px;
-  margin-bottom: 20px;
-  .imgurl {
-    margin: 20px;
-    text-align: center;
-    img {
-      margin: 20px;
-      padding: 10px;
-      border: 1px solid gray;
-      border-radius: 8px;
-      width: 280px;
-      height: 260px;
-    }
-  }
-  .result {
-    box-sizing: border-box;
-    padding: 10px;
-    border: 1px solid gray;
-    border-radius: 8px;
-    font-size: 16px;
+ 
+<style lang="scss">
+.scan-index-bar{
+  background-image: linear-gradient( -45deg, #42a5ff ,#59cfff);
+  .van-nav-bar__title, .van-nav-bar__arrow, .van-nav-bar__text{
+    color: #fff !important;
   }
 }
-.sweep {
-  position: relative;
-  padding: 12px;
-  font-size: 18px;
-  cursor: pointer;
-  color: white;
-  background: #42b983;
-  border: 1px solid #42b983;
-  overflow: hidden;
-  input {
-    position: absolute;
-    font-size: 100px;
-    opacity: 0;
+.scan-page{
+  min-height: 100vh;
+  background-color: #363636;
+  overflow-y: hidden;
+  .scan-video{
+    height: 85vh;
   }
-  .canvas {
-    display: none;
-    box-sizing: border-box;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 20px;
+  .scan-tip{
+    width: 100vw;
+    text-align: center;
+    color: white;
+    font-size: 5vw;
   }
 }
 </style>
->>>>>>> 68305bbf70e60f52cf95294c10bfd3df656d6fb4

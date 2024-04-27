@@ -45,19 +45,22 @@ const open = (row) => {
 }
 const emit = defineEmits(['refresh-list'])
 const onSubmit = async () => {
-  BorrowDate(num.value)
+  //BorrowDate(num.value)
   const res = await Borrow({
-    isbn: formModel.value.isbn,
-    dueDate: dueDate.value
+    isbn: formModel.value.isbn
+    // ,dueDate: dueDate.value
   })
   const instanceId = res.data.data.instanceId
   const location = res.data.data.location
+  const duedate = res.data.data.duedate
   dialogVisible.value = false
   await ElMessageBox.alert(
     'Request submitted<br>Book ID: ' +
       instanceId +
       '<br>Book Location:' +
-      location,
+      location +
+      '<br>Book duedate:' +
+      duedate,
     'Borrowing tips:',
     {
       confirmButtonText: 'OK',

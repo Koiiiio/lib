@@ -27,7 +27,7 @@ const router = useRouter()
 
 onMounted(() => {
   userStore.getUser()
-})
+})   
 
 const handleCommand = async (key) => {
   if (key === 'logout') {

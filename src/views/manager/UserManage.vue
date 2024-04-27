@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { CloseBold } from '@element-plus/icons-vue'
 import { GetBorrowingService } from '../../api/user.js'
+import { admitReturn } from '../../api/book.js'
 import UserPenalty from '../book/components/UserPenalty.vue'
 const userList = ref([])
 const loading = ref(false)
@@ -49,6 +50,11 @@ const onSuccess = () => {
 const dialog = ref()
 const penalty = (row) => {
   dialog.value.open(row)
+}
+const admit=async (row) => {
+  await admitReturn(row.instanceId)
+  ElMessage.success('Successful return!')
+  loadUserList()
 }
 </script>
 <template>
@@ -105,12 +111,20 @@ const penalty = (row) => {
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">
           <el-button
+            :icon="Check"
+            type="primary"
+            plain
+            @click="admitReturn(row)"
+            >Penalty</el-button
+          >
+          <el-button
             :icon="CloseBold"
             type="danger"
             plain
             @click="penalty(row, $index)"
             >Penalty</el-button
           >
+
         </template>
       </el-table-column>
       <template #empty>

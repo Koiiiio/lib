@@ -2,25 +2,27 @@
 //import PageContainer from '@/components/PageContainer.vue'
 import { ref } from 'vue'
 import { GetBillService } from '../../api/user.js'
-
-//import { onMounted } from 'vue'
-
-// onMounted(() => {
-//   userStore.getUser()
-//   console.log('value', userStore.user.userId)
-// })
-
+import { userGetStatusService } from '../../api/user.js'
+import { onMounted } from 'vue'
+ onMounted(() => {
+  getUser()
+ })
 let money = ref(9.9)
-//let amount = ref(20)
-
+let amount = ref(20)
+const subject=ref('')
+const user = ref({userId:''})
+const getUser = async () => {
+      const res = await userGetStatusService()
+      user.value = res.data.data
+    }
 const payBill = (row) => {
   window.open(
     'http://localhost:8080/api/alipay/pay?totalAmount=' +
-      row.amount +
+      amount +
       '&subject=' +
-      row.subject +
+      subject +
       '&userId=' +
-      row.userId
+      user.value.userId
   )
 }
 const BillList = ref([])

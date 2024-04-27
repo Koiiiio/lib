@@ -2,28 +2,45 @@
 import { ref, watch } from 'vue'
 import { PieChart, Check } from '@element-plus/icons-vue'
 import { GetBorrowRecord, Return } from '../../api/book.js'
+import { userGetStatusService } from '../../api/user.js'
 import LateReturn from '../book/components/LateReturn.vue'
 //import Camera from '../book/components/Camera.vue'
-const ReturnBook = async (row) => {
-  console.log(row.instanceId)
-  await ElMessageBox.confirm('Are you sure you want to return it?', 'Tip', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    type: 'warning'
-  })
-  await Return(row.instanceId)
-  ElMessage.success('Successful return!')
-  getBorrowList(state.value)
-}
-const dialog = ref()
-const dialog1 = ref()
-const LateReturnBook = async (row) => {
-  dialog.value.open(row)
-  getBorrowList(state.value)
-}
+// const ReturnBook = async (row) => {
+//   console.log(row.instanceId)
+//   await ElMessageBox.confirm('Are you sure you want to return it?', 'Tip', {
+//     confirmButtonText: 'OK',
+//     cancelButtonText: 'Cancel',
+//     type: 'warning'
+//   })
+//   await Return(row.instanceId)
+//   ElMessage.success('Successful return!')
+//   getBorrowList(state.value)
+// }
+// const dialog = ref()
+// const dialog1 = ref()
+// const LateReturnBook = async (row) => {
+//   dialog.value.open(row)
+//   getBorrowList(state.value)
+// }
 // const QRReturn = async () => {
 //   dialog1.value.show(1)
 // }
+const user = ref({})
+const getUser = async () => {
+      const res = await userGetStatusService()
+      user.value = res.data.data
+    }
+const LateReturn2 = async (row) => {
+  await Return(row.instanceId)
+  getUser()
+  if(user.value.money<=1){
+    ElMessage.error('No enough money!')
+  }
+  else{
+    ElMessage.success('Successful return!')
+  }
+  getBorrowList(state.value)
+}
 const state = ref('4')
 const option = ref('4')
 const borrowList = ref([])
@@ -151,6 +168,18 @@ watch(option, (newValue) => {
               "
               >Late Return</el-button
             > -->
+            <el-button
+              plain
+              type="warning"
+              :icon="PieChart"
+              @click="LateReturn2(row)"
+              v-if="
+                row.lateRetAprvStatus == null &&
+                row.returnDate == null &&
+                row.borrowAprvStatus == 1
+              "
+              >Late Return</el-button
+            >
           </div>
         </template>
       </el-table-column>
