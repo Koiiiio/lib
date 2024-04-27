@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import { PieChart, Check } from '@element-plus/icons-vue'
 import { GetBorrowRecord, Return } from '../../api/book.js'
 import LateReturn from '../book/components/LateReturn.vue'
-import Camera from '../book/components/Camera.vue'
+//import Camera from '../book/components/Camera.vue'
 const ReturnBook = async (row) => {
   console.log(row.instanceId)
   await ElMessageBox.confirm('Are you sure you want to return it?', 'Tip', {
@@ -21,9 +21,9 @@ const LateReturnBook = async (row) => {
   dialog.value.open(row)
   getBorrowList(state.value)
 }
-const QRReturn = async () => {
-  dialog1.value.show(1)
-}
+// const QRReturn = async () => {
+//   dialog1.value.show(1)
+// }
 const state = ref('4')
 const option = ref('4')
 const borrowList = ref([])
@@ -43,22 +43,22 @@ const onSuccess = () => {
   getBorrowList(state.value)
 }
 const options = ref([
-  {
-    value: '0',
-    label: 'Pending'
-  },
-  {
-    value: '1',
-    label: 'Rejected'
-  },
+//   {
+//     value: '0',
+//     label: 'Pending'
+//   },
+//   {
+//     value: '1',
+//     label: 'Rejected'
+//   },
   {
     value: '2',
     label: 'Returned'
   },
-  {
-    value: '3',
-    label: 'No Late Returns'
-  },
+//   {
+//     value: '3',
+//     label: 'No Late Returns'
+//   },
   {
     value: '4',
     label: 'Late Returns Allowed'
@@ -131,15 +131,15 @@ watch(option, (newValue) => {
       <el-table-column label="操作" width="250">
         <template #default="{ row }">
           <div style="display: flex">
-            <el-button
+            <!-- <el-button
               plain
               type="primary"
               :icon="Check"
               @click="ReturnBook(row)"
               v-if="row.returnDate === null && row.borrowAprvStatus === 1"
               >Return</el-button
-            >
-            <el-button
+            > -->
+            <!-- <el-button
               plain
               type="warning"
               :icon="PieChart"
@@ -150,13 +150,13 @@ watch(option, (newValue) => {
                 row.borrowAprvStatus == 1
               "
               >Late Return</el-button
-            >
+            > -->
           </div>
         </template>
       </el-table-column>
     </el-table>
     <LateReturn ref="dialog" @success="onSuccess"></LateReturn>
-    <Camera ref="dialog1" @success="onSuccess"></Camera>
+    <!-- <Camera ref="dialog1" @success="onSuccess"></Camera> -->
   </page-container>
 </template>
 <style>

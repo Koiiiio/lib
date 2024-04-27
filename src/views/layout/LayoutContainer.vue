@@ -97,15 +97,14 @@ const handleCommand = async (key) => {
             <el-icon><MessageBox /></el-icon>
             <span>Book Management</span>
           </el-menu-item>
-          <el-menu-item index="/manager/request">
+          <!-- <el-menu-item index="/manager/request">
             <el-icon><Promotion /></el-icon>
             <span>Borrowing Requests</span>
-          </el-menu-item>
-          <!-- <el-menu-item index="/manager/latereturn" v-if="mode"> -->
-          <el-menu-item index="/manager/latereturn">
+          </el-menu-item> -->
+          <!-- <el-menu-item index="/manager/latereturn">
             <el-icon><Timer /></el-icon>
             <span>Late Return Requests</span>
-          </el-menu-item>
+          </el-menu-item> -->
         </el-sub-menu>
         <el-sub-menu index="/user">
           <template #title>

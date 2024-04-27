@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { Borrow } from '@/api/book.js'
 //import { ElMessage } from 'element-plus'
-const num = ref(14)
+const num = ref(5)
 const formModel = ref({
   id: '',
   title: '',
@@ -45,7 +45,6 @@ const open = (row) => {
 }
 const emit = defineEmits(['refresh-list'])
 const onSubmit = async () => {
-  await formRef.value.validate()
   BorrowDate(num.value)
   const res = await Borrow({
     isbn: formModel.value.isbn,
@@ -73,12 +72,7 @@ defineExpose({
 })
 const Cancel = () => {
   dialogVisible.value = false
-  num.value = 14
-}
-
-const handleChange = (value) => {
-  console.log(value)
-  console.log(num.value)
+  num.value = 5
 }
 </script>
 <template>
@@ -106,15 +100,10 @@ const handleChange = (value) => {
         <el-tooltip
           class="box-item"
           effect="dark"
-          content="Enter the days of borrowing,which ranges from 1 to 100"
-          placement="bottom"
+          content="Default 5 days"
+          placement="bottom-start"
         >
-          <el-input-number
-            v-model="num"
-            :min="1"
-            :max="100"
-            @change="handleChange"
-          />
+        <el-input :placeholder="num" :disabled="true"></el-input>
         </el-tooltip>
       </el-form-item>
     </el-form>
