@@ -34,7 +34,7 @@ const getBillList = async () => {
 getBillList()
 const dialogFormVisible = ref(false)
 const form = ref({
-  amount:''
+  amount: ''
 })
 const formLabelWidth = '140px'
 const dialog = ref()

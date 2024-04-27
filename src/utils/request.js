@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useUserStore } from '@/stores'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
+// const baseURL = 'http://10.11.12.1:8080/api'
 const baseURL = 'http://localhost:8080/api'
 // const baseURL = 'http://qbjjw3.natappfree.cc/api'
 

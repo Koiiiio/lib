@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import axios from 'axios'
 export const GetBookService = () => request.get('/user/books/info')
 //检索
 export const SearchBookService = ({ method, keyword }) => {
@@ -114,5 +114,6 @@ export const HandleLateReturn = ({ borrowingId, agree }) => {
 //isbn搜索
 export const ISBNSearchService = ({ isbn }) => {
   const requestPath = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=AIzaSyBDEqgCzTeIRqvZV573XzsVA3yQn_FQUCU&projection=full`
-  return request.get(requestPath)
+  console.log(requestPath)
+  return axios.get(requestPath)
 }
