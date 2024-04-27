@@ -121,8 +121,11 @@ export const HandleLateReturn = ({ borrowingId, agree }) => {
   return request.put(requestPath, { agree: agree })
 }
 //isbn搜索
+
+const apiKey = import.meta.env.VITE_API_KEY;
+
 export const ISBNSearchService = ({ isbn }) => {
-  const requestPath = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=AIzaSyBDEqgCzTeIRqvZV573XzsVA3yQn_FQUCU&projection=full`
-  console.log(requestPath)
-  return axios.get(requestPath)
+  const requestPath = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${apiKey}&projection=full`;
+  console.log(requestPath);
+  return axios.get(requestPath);
 }

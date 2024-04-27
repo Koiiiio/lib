@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { PieChart, Check } from '@element-plus/icons-vue'
-import { GetBorrowRecord, Return } from '../../api/book.js'
+import { GetBorrowRecord} from '../../api/book.js'
 import { userGetStatusService } from '../../api/user.js'
 import LateReturn from '../book/components/LateReturn.vue'
 //import Camera from '../book/components/Camera.vue'
