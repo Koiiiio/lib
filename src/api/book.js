@@ -68,7 +68,8 @@ export const GetPenaltyService = () => request.get('/user/penalty')
 //借阅图书
 export const Borrow = ({ isbn, dueDate }) =>
   request.post('/user/borrowing', { isbn, dueDate })
-
+//借阅图书2.0
+export const Borrow2 = ({ isbn }) => request.post('/user/borrowing', { isbn })
 //处理借阅
 export const HandleRequest = (id, agree) => {
   const path = '/admin/borrowing/applications/{borrowingId}'
@@ -83,7 +84,7 @@ export const HandleRequest = (id, agree) => {
 // }
 //还书确认
 export const admitReturn = (id) => {
-  const path = '/user/borrowing/return/{instanceId}'
+  const path = '/admin/borrowing/return/{instanceId}'
   const requestPath = path.replace('{instanceId}', id.toString())
   return request.put(requestPath)
 }
@@ -113,7 +114,7 @@ export const LateReturn = ({ borrowId, lateRetDate }) =>
   })
 //迟还2.0
 export const LateReturn2 = ({ borrowId }) =>
-  request.post('/user/borrowing/lateretBorrow', {borrowId})
+  request.post('/user/borrowing/lateretBorrow', { borrowId })
 //处理迟还
 export const HandleLateReturn = ({ borrowingId, agree }) => {
   const path = '/admin/borrowing/late-returns/{borrowingId}'
@@ -122,10 +123,10 @@ export const HandleLateReturn = ({ borrowingId, agree }) => {
 }
 //isbn搜索
 
-const apiKey = import.meta.env.VITE_API_KEY;
+const apiKey = import.meta.env.VITE_API_KEY
 
 export const ISBNSearchService = ({ isbn }) => {
-  const requestPath = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${apiKey}&projection=full`;
-  console.log(requestPath);
-  return axios.get(requestPath);
+  const requestPath = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${apiKey}&projection=full`
+  console.log(requestPath)
+  return axios.get(requestPath)
 }

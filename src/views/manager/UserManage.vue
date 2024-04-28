@@ -51,7 +51,7 @@ const dialog = ref()
 const penalty = (row) => {
   dialog.value.open(row)
 }
-const admit=async (row) => {
+const admit = async (row) => {
   await admitReturn(row.instanceId)
   ElMessage.success('Successful return!')
   loadUserList()
@@ -73,10 +73,14 @@ const admit=async (row) => {
       </el-form-item>
     </el-form>
     <el-table v-loading="loading" :data="displayedUsers" style="width: 100%">
-      <el-table-column type="index" label="No" width="100"></el-table-column>
-      <el-table-column prop="userId" label="ID"></el-table-column>
-      <el-table-column prop="username" label="Username"></el-table-column>
-      <el-table-column prop="email" label="Email"
+      <el-table-column type="index" label="No" width="50"></el-table-column>
+      <el-table-column prop="userId" label="ID" width="100"></el-table-column>
+      <el-table-column
+        prop="username"
+        label="Username"
+        width="100"
+      ></el-table-column>
+      <el-table-column prop="email" label="Email" width="200"
         ><template #default="{ row }">
           <el-tooltip
             class="item"
@@ -90,9 +94,17 @@ const admit=async (row) => {
           </el-tooltip>
         </template></el-table-column
       >
-      <el-table-column prop="borrowDate" label="Borrow Date"></el-table-column>
-      <el-table-column prop="dueDate" label="Due Date"></el-table-column>
-      <el-table-column prop="isbn" label="ISBN"
+      <el-table-column
+        prop="borrowDate"
+        label="Borrow Date"
+        width="150"
+      ></el-table-column>
+      <el-table-column
+        prop="dueDate"
+        label="Due Date"
+        width="150"
+      ></el-table-column>
+      <el-table-column prop="isbn" label="ISBN" width="150"
         ><template #default="{ row }">
           <el-tooltip
             class="item"
@@ -106,25 +118,26 @@ const admit=async (row) => {
           </el-tooltip>
         </template></el-table-column
       >
-      <el-table-column prop="instanceId" label="instanceId"></el-table-column>
-      <el-table-column label="Operations" width="150">
+      <el-table-column
+        prop="instanceId"
+        label="instanceId"
+        width="150"
+      ></el-table-column>
+      <el-table-column label="Operations" width="350">
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">
-          <el-button
-            :icon="Check"
-            type="primary"
-            plain
-            @click="admitReturn(row)"
-            >admitReturn</el-button
-          >
-          <el-button
-            :icon="CloseBold"
-            type="danger"
-            plain
-            @click="penalty(row, $index)"
-            >Penalty</el-button
-          >
-
+          <div style="display: flex">
+            <el-button :icon="Check" type="primary" plain @click="admit(row)"
+              >admitReturn</el-button
+            >
+            <el-button
+              :icon="CloseBold"
+              type="danger"
+              plain
+              @click="penalty(row, $index)"
+              >Penalty</el-button
+            >
+          </div>
         </template>
       </el-table-column>
       <template #empty>

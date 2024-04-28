@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import { LateReturn2 } from '@/api/book.js'
-import { userGetStatusService } from '@/api/user.js'
 //import { ElMessage } from 'element-plus'
 
 const formModel = ref({
@@ -19,8 +18,6 @@ const open = (row) => {
   //console.log(row)
   dialogVisible.value = true
   formModel.value = { ...row }
-  console.log(1)
-  console.log(formModel.value)
 }
 // const LateReturn2 = async (row) => {
 //   await Return(row.instanceId)
@@ -33,32 +30,39 @@ const open = (row) => {
 //   }
 //   getBorrowList(state.value)
 // }
+const emit = defineEmits(['success'])
 const onSubmit = async () => {
-  getUser()
-  if(user.value.money<=1){
-    ElMessage.error('No enough money!')
-  }
-  else{
-    await LateReturn2(row.instanceId)
-    getUser()
-    ElMessageBox.alert('Request submitted<br>Account balance: ' +
-    user.value.money ,
+  const res = await LateReturn2({ borrowId: formModel.value.borrowingId })
+  ElMessageBox.alert(
+    '<strong>Tips</strong><br>Account balance: ' + res.data.data.money,
     {
       confirmButtonText: 'OK',
-      dangerouslyUseHTMLString: true 
-    })
-    ElMessage.success('Successful return!')
-  }
+      dangerouslyUseHTMLString: true
+    }
+  )
   dialogVisible.value = false
+  // await ElMessageBox.alert(
+  //   'Borrow Success<br>Book ID: ' +
+  //     instanceId +
+  //     '<br>Book Location:' +
+  //     location +
+  //     '<br>Book duedate:' +
+  //     duedate,
+  //   'Borrowing tips:',
+  //   {
+  //     confirmButtonText: 'OK',
+  //     dangerouslyUseHTMLString: true
+  //   }
+  // )
+  emit('success') // 发射事件
+  ElMessage.success('Successful!')
 }
+dialogVisible.value = false
 defineExpose({
   open
 })
-const user = ref({})
-const getUser = async () => {
-      const res = await userGetStatusService()
-      user.value = res.data.data
-    }
+
+const num = ref('2 days / 1 $')
 </script>
 <template>
   <el-dialog
@@ -82,26 +86,37 @@ const getUser = async () => {
           :disabled="true"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="" label="borrowDate">
+      <el-form-item prop="" label="BorrowDate">
         <el-input
           :placeholder="formModel.borrowDate"
           :disabled="true"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="date" label="Deferred Return to">
-        <el-date-picker
+      <el-form-item prop="date" label="Extended">
+        <!-- <el-date-picker
           v-model="formModel.date"
           type="date"
           placeholder="Pick a day"
           format="YYYY/MM/DD"
           value-format="YYYY-MM-DD"
         />
+       -->
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="Default 2 days"
+          placement="bottom-start"
+        >
+          <el-input :placeholder="num" :disabled="true"></el-input>
+        </el-tooltip>
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="onSubmit">OK</el-button>
+        <el-button type="primary" @click="onSubmit(formModel.instanceId)"
+          >OK</el-button
+        >
       </span>
     </template>
   </el-dialog>

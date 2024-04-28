@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { PieChart, Check } from '@element-plus/icons-vue'
-import { GetBorrowRecord} from '../../api/book.js'
+import { PieChart } from '@element-plus/icons-vue'
+import { GetBorrowRecord } from '../../api/book.js'
 
 import LateReturn from '../book/components/LateReturn.vue'
 
@@ -17,15 +17,14 @@ import LateReturn from '../book/components/LateReturn.vue'
 //   getBorrowList(state.value)
 // }
 const dialog = ref()
-const dialog1 = ref()
+//const dialog1 = ref()
 const LateReturnBook = async (row) => {
   dialog.value.open(row)
   getBorrowList(state.value)
 }
 
-
-const state = ref('4')
-const option = ref('4')
+const state = ref('1')
+const option = ref('1')
 const borrowList = ref([])
 const loading = ref(false)
 const getBorrowList = async (state) => {
@@ -39,7 +38,7 @@ getBorrowList(state.value)
 const onSuccess = () => {
   getBorrowList(state.value)
 }
-const options = ref([
+//const options = ref([
 //   {
 //     value: '0',
 //     label: 'Pending'
@@ -48,17 +47,27 @@ const options = ref([
 //     value: '1',
 //     label: 'Rejected'
 //   },
-  {
-    value: '2',
-    label: 'Returned'
-  },
+// {
+//   value: '2',
+//   label: 'Returned'
+// },
 //   {
 //     value: '3',
 //     label: 'No Late Returns'
 //   },
+//   {
+//     value: '3',
+//     label: 'Late Returns Allowed'
+//   }
+// ])
+const options = ref([
   {
-    value: '4',
-    label: 'Late Returns Allowed'
+    value: '1',
+    label: 'Borrowing'
+  },
+  {
+    value: '0',
+    label: 'Returned'
   }
 ])
 watch(option, (newValue) => {
@@ -69,7 +78,7 @@ watch(option, (newValue) => {
 </script>
 <template>
   <page-container title="My Borrowing">
-    <el-button type="primary" @click="QRReturn">camera</el-button>
+    <!-- <el-button type="primary" @click="QRReturn">camera</el-button> -->
     <template #extra>
       <div class="form-row">
         Borrowing Status
@@ -91,14 +100,20 @@ watch(option, (newValue) => {
 
     <el-table :data="borrowList">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
+      <el-table-column label="BorrowingId" prop="borrowingId">
+      </el-table-column>
       <el-table-column label="Book ID" prop="instanceId"> </el-table-column>
       <el-table-column label="Reader ID" prop="userId"> </el-table-column>
       <el-table-column label="Borrow Date" prop="borrowDate"></el-table-column>
       <el-table-column label="Due Date" prop="dueDate"></el-table-column>
-      <el-table-column label="Return Date" prop="returnDate"></el-table-column>
-      <el-table-column label="Request Status" prop="borrowAprvStatus">
+      <el-table-column
+        label="Return Date"
+        prop="returnDate"
+        v-if="option == '0'"
+      ></el-table-column>
+      <!-- <el-table-column label="Request Status" prop="borrowAprvStatus">
         <template v-slot="scope">
-          <span v-if="scope.row.borrowAprvStatus === 0">Pending</span>
+           <span v-if="scope.row.borrowAprvStatus === 0">Pending</span>
           <span v-if="scope.row.borrowAprvStatus === 2">Rejected</span>
           <span
             v-if="
@@ -121,11 +136,13 @@ watch(option, (newValue) => {
               scope.row.borrowAprvStatus === 1
             "
             >Late Returns Allowed</span
-          >
+          > 
+          <span v-if="scope.row.borrowAprvStatus === 0">Returned</span>
+          <span v-if="scope.row.borrowAprvStatus === 1">Borrowing</span>
         </template></el-table-column
-      >
+      > -->
 
-      <el-table-column label="操作" width="250">
+      <el-table-column label="操作" width="250" v-if="option == '1'">
         <template #default="{ row }">
           <div style="display: flex">
             <!-- <el-button
@@ -141,11 +158,7 @@ watch(option, (newValue) => {
               type="warning"
               :icon="PieChart"
               @click="LateReturnBook(row)"
-              v-if="
-                // row.lateRetAprvStatus == null &&
-                row.returnDate == null &&
-                row.borrowAprvStatus == 1
-              "
+              v-if="option == '1'"
               >Late Return</el-button
             >
             <!-- <el-button
@@ -165,7 +178,6 @@ watch(option, (newValue) => {
       </el-table-column>
     </el-table>
     <LateReturn ref="dialog" @success="onSuccess"></LateReturn>
-
   </page-container>
 </template>
 <style>
