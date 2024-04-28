@@ -2,9 +2,9 @@
 import { ref, watch } from 'vue'
 import { PieChart, Check } from '@element-plus/icons-vue'
 import { GetBorrowRecord} from '../../api/book.js'
-import { userGetStatusService } from '../../api/user.js'
+
 import LateReturn from '../book/components/LateReturn.vue'
-//import Camera from '../book/components/Camera.vue'
+
 // const ReturnBook = async (row) => {
 //   console.log(row.instanceId)
 //   await ElMessageBox.confirm('Are you sure you want to return it?', 'Tip', {
@@ -16,43 +16,23 @@ import LateReturn from '../book/components/LateReturn.vue'
 //   ElMessage.success('Successful return!')
 //   getBorrowList(state.value)
 // }
-// const dialog = ref()
-// const dialog1 = ref()
-// const LateReturnBook = async (row) => {
-//   dialog.value.open(row)
-//   getBorrowList(state.value)
-// }
-// const QRReturn = async () => {
-//   dialog1.value.show(1)
-// }
-const user = ref({})
-const getUser = async () => {
-      const res = await userGetStatusService()
-      user.value = res.data.data
-    }
-const LateReturn2 = async (row) => {
-  await Return(row.instanceId)
-  getUser()
-  if(user.value.money<=1){
-    ElMessage.error('No enough money!')
-  }
-  else{
-    ElMessage.success('Successful return!')
-  }
+const dialog = ref()
+const dialog1 = ref()
+const LateReturnBook = async (row) => {
+  dialog.value.open(row)
   getBorrowList(state.value)
 }
+
+
 const state = ref('4')
 const option = ref('4')
 const borrowList = ref([])
 const loading = ref(false)
 const getBorrowList = async (state) => {
   loading.value = true //true
-  // console.log(state)
-  // console.log(option.value)
   const res = await GetBorrowRecord(state)
   console.log(res.data)
   borrowList.value = res.data.data
-  //console.log(bookList.value)
   loading.value = false
 }
 getBorrowList(state.value)
@@ -156,19 +136,19 @@ watch(option, (newValue) => {
               v-if="row.returnDate === null && row.borrowAprvStatus === 1"
               >Return</el-button
             > -->
-            <!-- <el-button
+            <el-button
               plain
               type="warning"
               :icon="PieChart"
               @click="LateReturnBook(row)"
               v-if="
-                row.lateRetAprvStatus == null &&
+                // row.lateRetAprvStatus == null &&
                 row.returnDate == null &&
                 row.borrowAprvStatus == 1
               "
               >Late Return</el-button
-            > -->
-            <el-button
+            >
+            <!-- <el-button
               plain
               type="warning"
               :icon="PieChart"
@@ -179,13 +159,13 @@ watch(option, (newValue) => {
                 row.borrowAprvStatus == 1
               "
               >Late Return</el-button
-            >
+            > -->
           </div>
         </template>
       </el-table-column>
     </el-table>
     <LateReturn ref="dialog" @success="onSuccess"></LateReturn>
-    <!-- <Camera ref="dialog1" @success="onSuccess"></Camera> -->
+
   </page-container>
 </template>
 <style>

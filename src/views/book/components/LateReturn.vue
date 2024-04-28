@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import { LateReturn } from '@/api/book.js'
+import { LateReturn2 } from '@/api/book.js'
+import { userGetStatusService } from '@/api/user.js'
 //import { ElMessage } from 'element-plus'
 
 const formModel = ref({
@@ -21,29 +22,43 @@ const open = (row) => {
   console.log(1)
   console.log(formModel.value)
 }
-
+// const LateReturn2 = async (row) => {
+//   await Return(row.instanceId)
+//   getUser()
+//   if(user.value.money<=1){
+//     ElMessage.error('No enough money!')
+//   }
+//   else{
+//     ElMessage.success('Successful return!')
+//   }
+//   getBorrowList(state.value)
+// }
 const onSubmit = async () => {
-  await formRef.value.validate()
-  //console.log(formModel.value.isbn)
-  //console.log(formModel.value.date)
-  await LateReturn({
-    borrowId: formModel.value.borrowingId,
-    lateRetDate: formModel.value.date
-  })
-  //   ElMessageBox.alert(
-  //     '已提交申请：<br>书实体ID: ' + instanceId + '<br>借阅图书位置: ' + location,
-  //     '借阅提示:',
-  //     {
-  //       confirmButtonText: 'OK',
-  //       dangerouslyUseHTMLString: true // 允许使用 HTML 标签
-  //     }
-  //   )
+  getUser()
+  if(user.value.money<=1){
+    ElMessage.error('No enough money!')
+  }
+  else{
+    await LateReturn2(row.instanceId)
+    getUser()
+    ElMessageBox.alert('Request submitted<br>Account balance: ' +
+    user.value.money ,
+    {
+      confirmButtonText: 'OK',
+      dangerouslyUseHTMLString: true 
+    })
+    ElMessage.success('Successful return!')
+  }
   dialogVisible.value = false
-  ElMessage.success('Successful Late Return Request!')
 }
 defineExpose({
   open
 })
+const user = ref({})
+const getUser = async () => {
+      const res = await userGetStatusService()
+      user.value = res.data.data
+    }
 </script>
 <template>
   <el-dialog

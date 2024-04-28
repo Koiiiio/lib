@@ -115,7 +115,7 @@ const admit=async (row) => {
             type="primary"
             plain
             @click="admitReturn(row)"
-            >Penalty</el-button
+            >admitReturn</el-button
           >
           <el-button
             :icon="CloseBold"

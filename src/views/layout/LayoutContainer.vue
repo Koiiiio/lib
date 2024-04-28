@@ -128,6 +128,10 @@ const handleCommand = async (key) => {
             <span>Bill</span>
           </el-menu-item>
         </el-sub-menu>
+        <el-menu-item index="/scancode">
+            <el-icon><EditPen /></el-icon>
+            <span>camera</span>
+          </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>

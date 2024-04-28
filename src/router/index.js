@@ -59,7 +59,8 @@ const router = createRouter({
           component: () => import('@/views/user/UserBill.vue')
         }
       ]
-    }
+    },
+    { path: '/scancode', component: () => import('@/views/Camera.vue') }
   ]
 })
 

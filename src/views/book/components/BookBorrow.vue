@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Borrow } from '@/api/book.js'
+import { userGetStatusService } from '@/api/user.js'
 //import { ElMessage } from 'element-plus'
 const num = ref(5)
 const formModel = ref({
@@ -44,13 +45,16 @@ const open = (row) => {
   formModel.value = { ...row }
 }
 const emit = defineEmits(['refresh-list'])
+const user = ref({})
+const getUser = async () => {
+      const res = await userGetStatusService()
+      user.value = res.data.data
+    }
 const onSubmit = async () => {
   //BorrowDate(num.value)
-  const res = await Borrow({
-    isbn: formModel.value.isbn
-    // ,dueDate: dueDate.value
-  })
-  const instanceId = res.data.data.instanceId
+  getUser()
+  if(user.value.borrowPerms>=1){
+    const instanceId = res.data.data.instanceId
   const location = res.data.data.location
   const duedate = res.data.data.duedate
   dialogVisible.value = false
@@ -64,10 +68,13 @@ const onSubmit = async () => {
     'Borrowing tips:',
     {
       confirmButtonText: 'OK',
-      dangerouslyUseHTMLString: true // 允许使用 HTML 标签
+      dangerouslyUseHTMLString: true 
     }
   )
-
+  }
+  else{
+    ElMessage.error('No borrowPerms!')
+  }
   emit('refresh-list') // 发射事件
 }
 defineExpose({
