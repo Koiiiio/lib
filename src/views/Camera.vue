@@ -1,36 +1,23 @@
-<template>
-  <div class="scan-page">
-    <!-- 返回导航栏 -->
-    <van-nav-bar
-      title="扫描二维码/条形码"
-      left-text="取消"
-      left-arrow
-      fixed
-      class="scan-index-bar"
-      @click-left="clickIndexLeft()"
-    ></van-nav-bar>
-    <!-- 扫码区域 -->
-    <video ref="video" id="video" class="scan-video" autoplay></video>
-    <!-- 提示语 -->
-    <div v-show="tipShow" class="scan-tip">{{ tipMsg }}</div>
-  </div>
-</template>
-
 <script>
 import { BrowserMultiFormatReader } from '@zxing/library'
-import { Toast, Dialog, Notify, NavBar } from 'vant'
-
+//import { Toast, Dialog, Notify, NavBar } from 'vant'
+import BookEdit from './book/components/BookEdit.vue'
+import Instance from './book/components/Instance.vue'
 export default {
   name: 'ScanCodePage', // 扫码页面
   components: {
-    'van-nav-bar': NavBar
+    BookEdit,
+    Instance
   },
   data() {
     return {
       codeReader: null,
       tipShow: false, // 是否展示提示
       tipMsg: '', // 提示文本内容
-      scanText: '' // 扫码结果文本内容
+      scanText: '', // 扫码结果文本内容
+      addInfo: 0, // 0 入库实体  1 添加信息
+      dialog1: null,
+      dialog2: null
     }
   },
   created() {
@@ -94,22 +81,31 @@ export default {
           if (result) {
             console.log('扫码结果', result)
             this.scanText = result.text
-            console.log('scanText', this.scanText)
             if (this.scanText) {
+              this.codeReader.reset() // 关闭摄像头并停止扫码
+              console.log(this.addInfo)
               this.tipShow = false
-              Dialog.confirm({
-                // 获取到扫码结果进行弹窗提示，这部分接下去的代码根据需要，读者自行编写了
-                title: '扫码结果',
-                message: this.scanText
-              })
-                .then(() => {
-                  // 点击确认
-                  Toast.success('扫码确认成功')
-                })
-                .catch(() => {
-                  // 点击取消
-                  this.clickIndexLeft()
-                })
+              if (this.addInfo === false) {
+                console.log('addInfo')
+                this.onAddBook(this.scanText)
+              } else if (this.addInfo === true) {
+                console.log('addInstance')
+                this.onAddInstance(this.scanText)
+              }
+
+              // Dialog.confirm({
+              //   // 获取到扫码结果进行弹窗提示，这部分接下去的代码根据需要，读者自行编写了
+              //   title: '扫码结果',
+              //   message: this.scanText
+              // })
+              //   .then(() => {
+              //     // 点击确认
+              //     Toast.success('扫码确认成功')
+              //   })
+              //   .catch(() => {
+              //     // 点击取消
+              //     this.clickIndexLeft()
+              //   })
             }
           }
         }
@@ -119,34 +115,91 @@ export default {
       // 返回上一页
       this.$router.go(-1)
       // window.location.href = document.referrer;
+    },
+    onSuccess() {
+      console.log('success')
+      this.openScan()
+    },
+    onAddBook(scanText) {
+      console.log('Ref to dialog1:', this.$refs.dialog1)
+      if (this.$refs.dialog1) {
+        this.$refs.dialog1.open({ text: scanText })
+      }
+      this.scanText = ''
+    },
+    onAddInstance(scanText) {
+      console.log('Ref to dialog2:', this.$refs.dialog2)
+      if (this.$refs.dialog2) {
+        this.$refs.dialog2.openIns(scanText, -1)
+        this.scanText = ''
+      }
     }
   }
 }
 </script>
 
+<template>
+  <page-container title="Scan Camera">
+    <template #extra>
+      <div class="form-row">
+        Scan Mode
+        <el-switch
+          v-model="addInfo"
+          class="mb-2"
+          active-text="Add Instance"
+          inactive-text="Add Info"
+          style="margin-left: 10px"
+        />
+      </div>
+    </template>
+    <el-button type="primary" @click="openScan">Restart Camera</el-button>
+    <div class="scan-page">
+      <!-- 扫码区域 -->
+      <video ref="video" id="video" class="scan-video" autoplay></video>
+      <!-- 提示语 -->
+      <div v-show="tipShow" class="scan-tip">{{ tipMsg }}</div>
+    </div>
+    <BookEdit ref="dialog1" @success="onSuccess"></BookEdit>
+    <Instance ref="dialog2" @success="onSuccess"></Instance>
+  </page-container>
+</template>
+
 <style lang="scss">
 .scan-index-bar {
-  background-image: linear-gradient(-45deg, #42a5ff, #59cfff);
+  background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
   .van-nav-bar__title,
   .van-nav-bar__arrow,
   .van-nav-bar__text {
-    color: #fff !important;
+    color: #ffffff !important; // 确保文本颜色为白色以突出显示
+    font-weight: bold; // 加粗字体
+    font-size: 16px; // 增大按钮文字字体
+  }
+
+  padding: 10px 15px; // 增加内边距
+
+  .van-nav-bar__title {
+    font-size: 25px; // 增大标题字体
+    flex: 1 1 100%; // 让标题尽可能填充剩余空间
+    text-align: center; // 标题文本居中
+    margin-bottom: 25px;
+  }
+  .van-nav-bar__left {
+    display: flex; // 使用flex布局以便容易居中
+    font-size: 25px; // 增大字体大小
+    margin-left: 20px;
   }
 }
 .scan-page {
   display: flex;
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 */
-  min-height: 100vh; /* 让容器至少与视口一样高 */
-  background-color: #363636; /* 背景颜色，可按需修改 */
-  overflow-y: hidden;
   .scan-video {
-    height: 85vh;
+    height: 55vh;
   }
   .scan-tip {
     width: 100vw;
     text-align: center;
-    color: white;
+    color: rgb(116, 21, 95);
     font-size: 5vw;
   }
 }

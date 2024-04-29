@@ -57,10 +57,10 @@ const router = createRouter({
         {
           path: '/user/bill',
           component: () => import('@/views/user/UserBill.vue')
-        }
+        },
+        { path: '/scancode', component: () => import('@/views/Camera.vue') }
       ]
-    },
-    { path: '/scancode', component: () => import('@/views/Camera.vue') }
+    }
   ]
 })
 

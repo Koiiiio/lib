@@ -48,6 +48,7 @@ const isEdit = ref(true)
 //open({}) 添加
 //open({id,name...}) 编辑
 const open = (row) => {
+  console.log(open)
   dialogVisible.value = true
   formModel.value = { ...row } // Spread existing row data or start fresh for add
   if (row && row.isbn) {
@@ -68,6 +69,10 @@ const open = (row) => {
       description: '',
       cover: ''
     } // Reset the form model
+    if (row.text) {
+      formModel.value.isbn = row.text
+      search(row.text)
+    }
     imgUrl.value = defaultCover // Use default cover image for new entries
   }
 }
@@ -76,10 +81,10 @@ const onSubmit = async () => {
   await formRef.value.validate()
   if (isEdit.value) {
     await EditBookService(formModel.value)
-    ElMessage.success('Successful Addition')
+    ElMessage.success('Successful Edition')
   } else {
     await AddBookService(formModel.value)
-    ElMessage.success('Successful Deletion')
+    ElMessage.success('Successful Addition')
   }
   dialogVisible.value = false
   imgUrl.value = ''
