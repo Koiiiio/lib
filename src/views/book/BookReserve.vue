@@ -87,7 +87,7 @@ const word = computed(() => {
         prop="borrowed"
         label="Number of borrowed"
       ></el-table-column>
-      <el-table-column label="操作" width="300">
+      <el-table-column label="Operations" width="300">
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">
           <div style="display: flex">

@@ -91,7 +91,7 @@ const handleCommand = async (key) => {
           <!-- <el-menu-item index="/manager/usermanage" v-if="mode"> -->
           <el-menu-item index="/manager/usermanage">
             <el-icon><Edit /></el-icon>
-            <span>Unreturned Readers</span>
+            <span>Unreturned Borrowings</span>
           </el-menu-item>
           <el-menu-item index="/manager/bookmanage">
             <el-icon><MessageBox /></el-icon>
@@ -105,6 +105,10 @@ const handleCommand = async (key) => {
             <el-icon><Timer /></el-icon>
             <span>Late Return Requests</span>
           </el-menu-item> -->
+          <el-menu-item index="/scancode">
+            <el-icon><EditPen /></el-icon>
+            <span>Scan</span>
+          </el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="/user">
           <template #title>
@@ -128,10 +132,6 @@ const handleCommand = async (key) => {
             <span>Bill</span>
           </el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="/scancode">
-            <el-icon><EditPen /></el-icon>
-            <span>camera</span>
-          </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>

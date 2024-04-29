@@ -313,7 +313,7 @@ const getInstanceList = async (isbn) => {
             </template>
           </el-table-column>
           <el-table-column label="addTime" prop="addTime" />
-          <el-table-column label="操作">
+          <el-table-column label="Operations">
             <template #default="{ row }">
               <div class="button-container" style="display: flex">
                 <el-button

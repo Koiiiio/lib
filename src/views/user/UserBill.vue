@@ -67,10 +67,10 @@ const formRef = ref(null)
 <template>
   <page-container title="Bill">
     <div>
-      <el-text tag="b" size="large">Balance:</el-text
+      <el-text tag="b" size="large">Balance: </el-text
       ><el-text type="primary" size="large"> {{ money }}</el-text>
       <el-text tag="b" size="large" style="margin-left: 50px">
-        BorrowPerms:</el-text
+        Available Books for Borrowing: </el-text
       ><el-text type="primary" size="large"> {{ borrowPerms }}</el-text>
 
       <el-button

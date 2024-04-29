@@ -42,12 +42,14 @@ export default {
       this.codeReader
         .getVideoInputDevices()
         .then((videoDevices) => {
-          this.tipMsg = '正在调用摄像头...'
+          this.tipMsg = 'Accessing camera...'
           this.tipShow = true
           console.log('get-videoDevices', videoDevices)
 
           // 默认获取摄像头列表里的最后一个设备id，通过几部测试机发现一般前置摄像头位于列表里的前面几位，所以一般获取最后一个的是后置摄像头
-          let firstDeviceId = videoDevices[videoDevices.length - 1].deviceId
+          // let firstDeviceId = videoDevices[videoDevices.length - 1].deviceId
+          //用第一个摄像头
+          let firstDeviceId = videoDevices[0].deviceId
           // 一般获取了手机的摄像头列表里不止一个，有的手机摄像头高级多层，会有变焦摄像头等情况，需要做处理
           if (videoDevices.length > 1) {
             // 一般通过判断摄像头列表项里的 label 字段，'camera2 0, facing back' 字符串含有 'back' 和 '0'，大部分机型是这样，如果有些机型没有，那就还是默认获取最后一个
@@ -77,7 +79,7 @@ export default {
         firstDeviceId,
         'video',
         (result, err) => {
-          this.tipMsg = '正在尝试识别...'
+          this.tipMsg = 'Recognizing...'
           if (result) {
             console.log('扫码结果', result)
             this.scanText = result.text
@@ -139,7 +141,7 @@ export default {
 </script>
 
 <template>
-  <page-container title="Scan Camera">
+  <page-container title="Scan">
     <template #extra>
       <div class="form-row">
         Scan Mode
@@ -152,7 +154,7 @@ export default {
         />
       </div>
     </template>
-    <el-button type="primary" @click="openScan">Restart Camera</el-button>
+    <el-button type="primary" @click="openScan">Open camera</el-button>
     <div class="scan-page">
       <!-- 扫码区域 -->
       <video ref="video" id="video" class="scan-video" autoplay></video>

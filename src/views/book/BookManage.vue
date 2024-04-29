@@ -142,7 +142,7 @@ watch(option, (newValue) => {
         </template></el-table-column
       > -->
 
-      <el-table-column label="操作" width="250" v-if="option == '1'">
+      <el-table-column label="Operations" width="250" v-if="option == '1'">
         <template #default="{ row }">
           <div style="display: flex">
             <!-- <el-button

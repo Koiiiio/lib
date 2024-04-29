@@ -62,7 +62,7 @@ defineExpose({
   open
 })
 
-const num = ref('2 days / 1 $')
+const num = ref(' 1 $ for 5 days')
 </script>
 <template>
   <el-dialog
@@ -92,7 +92,7 @@ const num = ref('2 days / 1 $')
           :disabled="true"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="date" label="Extended">
+      <el-form-item prop="date" label="Price">
         <!-- <el-date-picker
           v-model="formModel.date"
           type="date"
@@ -104,7 +104,7 @@ const num = ref('2 days / 1 $')
         <el-tooltip
           class="box-item"
           effect="dark"
-          content="Default 2 days"
+          content="Default 5 days"
           placement="bottom-start"
         >
           <el-input :placeholder="num" :disabled="true"></el-input>
