@@ -24,7 +24,7 @@ const LateReturnBook = async (row) => {
 }
 
 const state = ref('1')
-const option = ref('1')
+const option = ref(true)
 const borrowList = ref([])
 const loading = ref(false)
 const getBorrowList = async (state) => {
@@ -60,20 +60,21 @@ const onSuccess = () => {
 //     label: 'Late Returns Allowed'
 //   }
 // ])
-const options = ref([
-  {
-    value: '1',
-    label: 'Borrowing'
-  },
-  {
-    value: '0',
-    label: 'Returned'
-  }
-])
+// const options = ref([
+//   {
+//     value: '1',
+//     label: 'Borrowing'
+//   },
+//   {
+//     value: '0',
+//     label: 'Returned'
+//   }
+// ])
 watch(option, (newValue) => {
   // 监听 option 的变化，并在变化时重新获取列表
-  getBorrowList(newValue)
-  //console.log(newValue)
+  if (newValue) getBorrowList(1)
+  else getBorrowList(0)
+  console.log(newValue)
 })
 </script>
 <template>
@@ -82,7 +83,7 @@ watch(option, (newValue) => {
     <template #extra>
       <div class="form-row">
         Borrowing Status
-        <el-select
+        <!-- <el-select
           v-model="option"
           placeholder="Please Select"
           class="select-box"
@@ -94,12 +95,18 @@ watch(option, (newValue) => {
             :value="item.value"
           >
           </el-option>
-        </el-select>
+        </el-select> -->
+        <el-switch
+          v-model="option"
+          active-text="Borrowing"
+          inactive-text="Returned"
+          style="margin-left: 10px; --el-switch-on-color: #13ce66"
+        />
       </div>
     </template>
 
     <el-table :data="borrowList">
-      <el-table-column type="index" label="序号" width="100"></el-table-column>
+      <el-table-column type="index" label="No" width="100"></el-table-column>
       <el-table-column label="BorrowingId" prop="borrowingId">
       </el-table-column>
       <el-table-column label="Book ID" prop="instanceId"> </el-table-column>

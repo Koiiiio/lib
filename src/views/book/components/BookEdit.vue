@@ -139,7 +139,7 @@ const search = async (isbn) => {
       :model="formModel"
       :rules="rules"
       label-width="100px"
-      style="padding-right: 30px"
+      style="padding-right: 30px; display: flex; flex-direction: column"
     >
       <el-form-item prop="isbn" label="ISBN">
         <div style="display: flex">
@@ -147,14 +147,14 @@ const search = async (isbn) => {
             v-model="formModel.isbn"
             placeholder="Please enter the ISBN"
             :disabled="!!formModel.id"
-            style="margin-right: 10px"
           ></el-input>
           <el-button
             type="primary"
             @click="search(formModel.isbn)"
             v-if="!formModel.id"
+            clsss="el-button"
           >
-            autocomplete
+            auto
           </el-button>
         </div>
       </el-form-item>
@@ -171,10 +171,17 @@ const search = async (isbn) => {
         ></el-input>
       </el-form-item>
       <el-form-item prop="description" label="Description">
-        <el-input
+        <!-- <el-input
           v-model="formModel.description"
           placeholder="Please enter description"
-        ></el-input>
+        ></el-input> -->
+        <el-input
+          v-model="formModel.description"
+          style="width: 350px"
+          :autosize="{ minRows: 1, maxRows: 5 }"
+          type="textarea"
+          placeholder="Please enter description"
+        />
       </el-form-item>
       <el-form-item prop="location" label="Location">
         <el-input
@@ -202,9 +209,31 @@ const search = async (isbn) => {
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button @click="dialogVisible = false" style="margin-right: 10px"
+          >Cancel</el-button
+        >
         <el-button type="primary" @click="onSubmit">OK</el-button>
       </span>
     </template>
   </el-dialog>
 </template>
+<style scoped>
+.dialog-footer {
+  justify-content: flex-end;
+  /* padding: 10px; */
+}
+
+.avatar-uploader-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* 确保按钮不会因为对话框宽度变化而移动位置 */
+.el-button {
+  margin-left: 5px; /* 自动向左对齐，确保按钮总是在最右侧 */
+  margin-right: 10px;
+}
+</style>

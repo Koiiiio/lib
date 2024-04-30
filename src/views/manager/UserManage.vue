@@ -73,13 +73,9 @@ const admit = async (row) => {
       </el-form-item>
     </el-form>
     <el-table v-loading="loading" :data="displayedUsers" style="width: 100%">
-      <el-table-column type="index" label="No" width="50"></el-table-column>
-      <el-table-column prop="userId" label="ID" width="100"></el-table-column>
-      <el-table-column
-        prop="username"
-        label="Username"
-        width="100"
-      ></el-table-column>
+      <el-table-column type="index" label="No"></el-table-column>
+      <el-table-column prop="userId" label="ID"></el-table-column>
+      <el-table-column prop="username" label="Username"></el-table-column>
       <el-table-column prop="email" label="Email" width="200"
         ><template #default="{ row }">
           <el-tooltip
@@ -104,7 +100,7 @@ const admit = async (row) => {
         label="Due Date"
         width="150"
       ></el-table-column>
-      <el-table-column prop="isbn" label="ISBN" width="150"
+      <el-table-column prop="isbn" label="ISBN" width="200"
         ><template #default="{ row }">
           <el-tooltip
             class="item"

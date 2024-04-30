@@ -1,6 +1,6 @@
 <script setup>
 import { userRegisterService, userLoginService } from '@/api/user.js'
-import { User, Lock } from '@element-plus/icons-vue'
+import { User, Lock, Message } from '@element-plus/icons-vue'
 import { ref, watch } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
@@ -135,7 +135,7 @@ watch(role, () => {
         <el-form-item prop="email">
           <el-input
             v-model="formModel.email"
-            :prefix-icon="User"
+            :prefix-icon="Message"
             placeholder="Please enter your email"
           ></el-input>
         </el-form-item>

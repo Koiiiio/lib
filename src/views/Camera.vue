@@ -3,6 +3,7 @@ import { BrowserMultiFormatReader } from '@zxing/library'
 //import { Toast, Dialog, Notify, NavBar } from 'vant'
 import BookEdit from './book/components/BookEdit.vue'
 import Instance from './book/components/Instance.vue'
+import { admitReturn } from './../api/book.js'
 export default {
   name: 'ScanCodePage', // 扫码页面
   components: {
@@ -17,14 +18,15 @@ export default {
       scanText: '', // 扫码结果文本内容
       addInfo: 0, // 0 入库实体  1 添加信息
       dialog1: null,
-      dialog2: null
+      dialog2: null,
+      currentDeviceIndex: 0 // 当前摄像头的索引
     }
   },
   created() {
     this.openScan()
   },
   watch: {
-    $route(to, from) {
+    $route(to) {
       if (to.path == '/ScanCodePage') {
         // 当处于该页面时
         this.openScan()
@@ -45,32 +47,37 @@ export default {
           this.tipMsg = 'Accessing camera...'
           this.tipShow = true
           console.log('get-videoDevices', videoDevices)
-
+          let deviceId =
+            videoDevices[this.currentDeviceIndex % videoDevices.length].deviceId
           // 默认获取摄像头列表里的最后一个设备id，通过几部测试机发现一般前置摄像头位于列表里的前面几位，所以一般获取最后一个的是后置摄像头
-          // let firstDeviceId = videoDevices[videoDevices.length - 1].deviceId
           //用第一个摄像头
-          let firstDeviceId = videoDevices[0].deviceId
-          // 一般获取了手机的摄像头列表里不止一个，有的手机摄像头高级多层，会有变焦摄像头等情况，需要做处理
-          if (videoDevices.length > 1) {
-            // 一般通过判断摄像头列表项里的 label 字段，'camera2 0, facing back' 字符串含有 'back' 和 '0'，大部分机型是这样，如果有些机型没有，那就还是默认获取最后一个
-            firstDeviceId = videoDevices.find((el) => {
-              return el.label.indexOf('back') > -1 && el.label.indexOf('0') > -1
-            })
-              ? videoDevices.find((el) => {
-                  return (
-                    el.label.indexOf('back') > -1 && el.label.indexOf('0') > -1
-                  )
-                }).deviceId
-              : videoDevices[videoDevices.length - 1].deviceId
-          }
-          console.log('get-firstDeviceId', firstDeviceId)
-
-          this.decodeFromInputVideoFunc(firstDeviceId)
+          // let firstDeviceId = videoDevices[0].deviceId
+          // // 一般获取了手机的摄像头列表里不止一个，有的手机摄像头高级多层，会有变焦摄像头等情况，需要做处理
+          // if (videoDevices.length > 1) {
+          //   // 一般通过判断摄像头列表项里的 label 字段，'camera2 0, facing back' 字符串含有 'back' 和 '0'，大部分机型是这样，如果有些机型没有，那就还是默认获取最后一个
+          //   firstDeviceId = videoDevices.find((el) => {
+          //     return el.label.indexOf('back') > -1 && el.label.indexOf('0') > -1
+          //   })
+          //     ? videoDevices.find((el) => {
+          //         return (
+          //           el.label.indexOf('back') > -1 && el.label.indexOf('0') > -1
+          //         )
+          //       }).deviceId
+          //     : videoDevices[videoDevices.length - 1].deviceId
+          // }
+          // console.log('get-firstDeviceId', firstDeviceId)
+          //  this.decodeFromInputVideoFunc(firstDeviceId)
+          console.log('get-firstDeviceId', deviceId)
+          this.decodeFromInputVideoFunc(deviceId)
         })
         .catch((err) => {
           this.tipShow = false
           console.error(err)
         })
+    },
+    switchCamera() {
+      this.currentDeviceIndex++ // 切换到下一个摄像头
+      this.openScan() // 重新初始化摄像头
     },
     decodeFromInputVideoFunc(firstDeviceId) {
       // 使用摄像头扫描
@@ -78,7 +85,7 @@ export default {
       this.codeReader.decodeFromInputVideoDeviceContinuously(
         firstDeviceId,
         'video',
-        (result, err) => {
+        (result) => {
           this.tipMsg = 'Recognizing...'
           if (result) {
             console.log('扫码结果', result)
@@ -91,8 +98,8 @@ export default {
                 console.log('addInfo')
                 this.onAddBook(this.scanText)
               } else if (this.addInfo === true) {
-                console.log('addInstance')
-                this.onAddInstance(this.scanText)
+                console.log('return')
+                this.admit(this.scanText)
               }
 
               // Dialog.confirm({
@@ -135,6 +142,10 @@ export default {
         this.$refs.dialog2.openIns(scanText, -1)
         this.scanText = ''
       }
+    },
+    async admit(scanText) {
+      await admitReturn(scanText)
+      ElMessage.success('Successful return!')
     }
   }
 }
@@ -147,14 +158,14 @@ export default {
         Scan Mode
         <el-switch
           v-model="addInfo"
-          class="mb-2"
-          active-text="Add Instance"
+          active-text="Return Book"
           inactive-text="Add Info"
           style="margin-left: 10px"
         />
       </div>
     </template>
     <el-button type="primary" @click="openScan">Open camera</el-button>
+    <el-button type="primary" @click="switchCamera">Switch camera</el-button>
     <div class="scan-page">
       <!-- 扫码区域 -->
       <video ref="video" id="video" class="scan-video" autoplay></video>

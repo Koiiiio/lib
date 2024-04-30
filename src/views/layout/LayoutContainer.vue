@@ -1,7 +1,6 @@
 <script setup>
 import {
   Management,
-  Promotion,
   UserFilled,
   User,
   Crop,
@@ -12,7 +11,7 @@ import {
   MessageBox,
   Finished,
   Edit,
-  Timer,
+  Camera,
   Stamp,
   ChatDotRound
 } from '@element-plus/icons-vue'
@@ -106,7 +105,7 @@ const handleCommand = async (key) => {
             <span>Late Return Requests</span>
           </el-menu-item> -->
           <el-menu-item index="/scancode">
-            <el-icon><EditPen /></el-icon>
+            <el-icon><Camera /></el-icon>
             <span>Scan</span>
           </el-menu-item>
         </el-sub-menu>
@@ -151,6 +150,7 @@ const handleCommand = async (key) => {
             <!-- <el-avatar :src="userStore.user.avatar || avatar" /> -->
             <el-avatar
               :src="'data:image/jpeg;base64,' + userStore.user.avatar || avatar"
+              class="avatar-max-size"
             />
             <el-icon><CaretBottom /></el-icon>
           </span>
@@ -220,5 +220,9 @@ const handleCommand = async (key) => {
     font-size: 14px;
     color: #666;
   }
+}
+
+.avatar-max-size {
+  display: block;
 }
 </style>
