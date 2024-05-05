@@ -123,7 +123,7 @@ export const HandleLateReturn = ({ borrowingId, agree }) => {
 }
 //isbn搜索
 
-const apiKey = import.meta.env.VITE_API_KEY
+const apiKey = import.meta.env.VITE_GOOGLE_API_KEY
 
 export const ISBNSearchService = ({ isbn }) => {
   const requestPath = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${apiKey}&projection=full`

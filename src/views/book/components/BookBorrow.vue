@@ -59,7 +59,7 @@ const onSubmit = async () => {
       instanceId +
       '<br>Book Location:' +
       location +
-      '<br>Book duedate:' +
+      '<br>Book Due Date:' +
       duedate,
     'Borrowing tips:',
     {

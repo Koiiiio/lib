@@ -11,13 +11,13 @@ onMounted(() => {
 })
 const userStore = useUserStore()
 const money = ref(9.9)
-const subject = ref('')
 const borrowPerms = ref('')
 const getUser = async () => {
   const res = await userGetStatusService()
   money.value = res.data.data.money
   borrowPerms.value = res.data.data.borrowPerms
 }
+const alipayUrl=import.meta.env.VITE_ALIPAY_URL
 const payBill = async () => {
   if (!formRef.value) {
     console.warn('Form reference not found')
@@ -26,10 +26,11 @@ const payBill = async () => {
   const valid = await formRef.value.validate()
   if (!valid) return // 如果验证失败，停止执行
   window.open(
-    'http://localhost:8080/api/alipay/pay?totalAmount=' +
+    //FIXME alipay
+    alipayUrl +
       form.value.amount +
       '&subject=' +
-      subject.value +
+      'recharge' +
       '&userId=' +
       userStore.user.userId
   )
@@ -69,18 +70,18 @@ const formRef = ref(null)
     <div>
       <el-text tag="b" size="large">Balance: </el-text
       ><el-text type="primary" size="large"> {{ money }}</el-text>
-      <el-text tag="b" size="large" style="margin-left: 50px">
-        Available Books for Borrowing: </el-text
-      ><el-text type="primary" size="large"> {{ borrowPerms }}</el-text>
-
       <el-button
         type="primary"
         plain
         @click="dialogFormVisible = true"
         style="margin-left: 30px"
       >
-        charge
+        Charge
       </el-button>
+
+      <el-text tag="b" size="large" style="margin-left: 50px">
+        Available Books for Borrowing: </el-text
+      ><el-text type="primary" size="large"> {{ borrowPerms }}</el-text>
     </div>
     <el-table v-loading="loading" :data="BillList" style="width: 100%">
       <el-table-column
@@ -120,7 +121,7 @@ const formRef = ref(null)
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="cancel">Cancel</el-button>
-        <el-button type="primary" @click="payBill"> Confirm Charge </el-button>
+        <el-button type="primary" @click="payBill">Confirm</el-button>
       </div>
     </template>
   </el-dialog>
