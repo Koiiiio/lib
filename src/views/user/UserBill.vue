@@ -17,7 +17,7 @@ const getUser = async () => {
   money.value = res.data.data.money
   borrowPerms.value = res.data.data.borrowPerms
 }
-const alipayUrl=import.meta.env.VITE_ALIPAY_URL
+const alipayUrl = import.meta.env.VITE_ALIPAY_URL
 const payBill = async () => {
   if (!formRef.value) {
     console.warn('Form reference not found')
@@ -34,6 +34,8 @@ const payBill = async () => {
       '&userId=' +
       userStore.user.userId
   )
+  dialogFormVisible.value = false
+  refreshDialogVisible.value = true
 }
 const BillList = ref([])
 const loading = ref(false)
@@ -45,6 +47,7 @@ const getBillList = async () => {
 }
 getBillList()
 const dialogFormVisible = ref(false)
+const refreshDialogVisible = ref(false)
 const form = ref({
   amount: ''
 })
@@ -64,6 +67,11 @@ const cancel = () => {
   form.value.amount = ''
 }
 const formRef = ref(null)
+const refresh = () => {
+  refreshDialogVisible.value = false
+  getUser()
+  getBillList()
+}
 </script>
 <template>
   <page-container title="Bill">
@@ -83,21 +91,26 @@ const formRef = ref(null)
         Available Books for Borrowing: </el-text
       ><el-text type="primary" size="large"> {{ borrowPerms }}</el-text>
     </div>
-    <el-table v-loading="loading" :data="BillList" style="width: 100%">
-      <el-table-column
-        prop="billId"
-        label="Bill Record ID"
-        width="100"
-      ></el-table-column>
-      <el-table-column prop="adminId" label="Librarian ID"></el-table-column>
+    <el-table
+      v-loading="loading"
+      :data="BillList"
+      style="width: 100%"
+      :default-sort="{ prop: 'billDate', order: 'descending' }"
+    >
+      <el-table-column prop="billId" label="Bill Record ID"></el-table-column>
       <el-table-column prop="userId" label="Reader Id"></el-table-column>
       <el-table-column
         prop="billSubject"
         label="bill Subject"
       ></el-table-column>
-      <el-table-column prop="billAmount" label="billAmount"> </el-table-column>
-      <el-table-column prop="billDate" label="billDate"></el-table-column>
-      <el-table-column prop="billStatus" label="billStatus"></el-table-column>
+      <el-table-column prop="billAmount" label="bill Amount"> </el-table-column>
+      <el-table-column prop="billDate" label="bill Date"></el-table-column>
+      <el-table-column prop="billStatus" label="bill Status">
+        <template v-slot="scope">
+          <span v-if="scope.row.billStatus === 0">non-payment</span>
+          <span v-if="scope.row.billStatus === 1">paid</span>
+        </template></el-table-column
+      >
       <template #empty>
         <el-empty description="No data"></el-empty>
       </template>
@@ -122,6 +135,19 @@ const formRef = ref(null)
       <div class="dialog-footer">
         <el-button @click="cancel">Cancel</el-button>
         <el-button type="primary" @click="payBill">Confirm</el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <el-dialog
+    v-model="refreshDialogVisible"
+    title="Having paid?"
+    width="500"
+    align-center
+    ><span>If the payment has been made, it will arrive in 1-3min</span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="refreshDialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="refresh"> Confirm </el-button>
       </div>
     </template>
   </el-dialog>

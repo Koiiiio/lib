@@ -88,10 +88,12 @@ export default {
         (result) => {
           this.tipMsg = 'Recognizing...'
           if (result) {
+            this.codeReader.reset()
+            this.codeReader = null
             console.log('扫码结果', result)
             this.scanText = result.text
             if (this.scanText) {
-              this.codeReader.reset() // 关闭摄像头并停止扫码
+              //this.codeReader.reset() // 关闭摄像头并停止扫码
               console.log(this.addInfo)
               this.tipShow = false
               if (this.addInfo === false) {
@@ -129,17 +131,17 @@ export default {
       console.log('success')
       this.openScan()
     },
-    onAddBook(scanText) {
+    async onAddBook(scanText) {
       console.log('Ref to dialog1:', this.$refs.dialog1)
       if (this.$refs.dialog1) {
-        this.$refs.dialog1.open({ text: scanText })
+        await this.$refs.dialog1.open({ text: scanText })
+        this.scanText = ''
       }
-      this.scanText = ''
     },
-    onAddInstance(scanText) {
+    async onAddInstance(scanText) {
       console.log('Ref to dialog2:', this.$refs.dialog2)
       if (this.$refs.dialog2) {
-        this.$refs.dialog2.openIns(scanText, -1)
+        await this.$refs.dialog2.openIns(scanText, -1)
         this.scanText = ''
       }
     },
