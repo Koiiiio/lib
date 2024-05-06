@@ -50,7 +50,7 @@ defineExpose({
           :disabled="!!formModel.name"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="name" label="Username">
+      <el-form-item prop="name" label="User">
         <el-input
           v-model="formModel.name"
           :disabled="!!formModel.name"

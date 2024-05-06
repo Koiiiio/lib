@@ -54,8 +54,7 @@ watch(switchValue, (newValue) => {
         prop="borrowingId"
       ></el-table-column>
       <el-table-column label="Reader ID" prop="userId"> </el-table-column>
-      <el-table-column label="Reader Username" prop="username">
-      </el-table-column>
+      <el-table-column label="Reader User" prop="username"> </el-table-column>
       <el-table-column label="Book ID" prop="instanceId"> </el-table-column>
       <el-table-column label="ISBN" prop="isbn"
         ><template #default="{ row }">

@@ -81,11 +81,11 @@ const word = computed(() => {
       ></el-table-column>
       <el-table-column
         prop="available"
-        label="Number of existing"
+        label="Number of Existing"
       ></el-table-column>
       <el-table-column
         prop="borrowed"
-        label="Number of borrowed"
+        label="Number of Borrowed"
       ></el-table-column>
       <el-table-column label="Operations" width="300">
         <!--row 项 index 下标-->

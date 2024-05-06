@@ -101,11 +101,11 @@ const refresh = () => {
       <el-table-column prop="userId" label="Reader Id"></el-table-column>
       <el-table-column
         prop="billSubject"
-        label="bill Subject"
+        label="Bill Subject"
       ></el-table-column>
-      <el-table-column prop="billAmount" label="bill Amount"> </el-table-column>
-      <el-table-column prop="billDate" label="bill Date"></el-table-column>
-      <el-table-column prop="billStatus" label="bill Status">
+      <el-table-column prop="billAmount" label="Bill Amount"> </el-table-column>
+      <el-table-column prop="billDate" label="Bill Date"></el-table-column>
+      <el-table-column prop="billStatus" label="Bill Status">
         <template v-slot="scope">
           <span v-if="scope.row.billStatus === 0">non-payment</span>
           <span v-if="scope.row.billStatus === 1">paid</span>

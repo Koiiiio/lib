@@ -206,7 +206,7 @@ const handleCurrentChange = (val) => {
       <el-table-column prop="author" label="Author"></el-table-column>
       <el-table-column
         prop="available"
-        label="Number of existing"
+        label="Number of Existing"
       ></el-table-column>
       <el-table-column prop="location" label="Location"></el-table-column>
       <el-table-column label="Operation" width="300">

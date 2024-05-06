@@ -75,7 +75,7 @@ const admit = async (row) => {
     <el-table v-loading="loading" :data="displayedUsers" style="width: 100%">
       <el-table-column type="index" label="No"></el-table-column>
       <el-table-column prop="userId" label="ID"></el-table-column>
-      <el-table-column prop="username" label="Username"></el-table-column>
+      <el-table-column prop="username" label="User"></el-table-column>
       <el-table-column prop="email" label="Email"
         ><template #default="{ row }">
           <el-tooltip
