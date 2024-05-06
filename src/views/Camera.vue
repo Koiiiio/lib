@@ -34,6 +34,7 @@ export default {
     }
   },
   unmounted() {
+    console.log('camera unmounted')
     this.codeReader.reset()
     this.codeReader = null
   },

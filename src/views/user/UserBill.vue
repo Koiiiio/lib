@@ -107,8 +107,8 @@ const refresh = () => {
       <el-table-column prop="billDate" label="Bill Date"></el-table-column>
       <el-table-column prop="billStatus" label="Bill Status">
         <template v-slot="scope">
-          <span v-if="scope.row.billStatus === 0">non-payment</span>
-          <span v-if="scope.row.billStatus === 1">paid</span>
+          <span v-if="scope.row.billStatus === 0">unsettled</span>
+          <span v-if="scope.row.billStatus === 1">settled</span>
         </template></el-table-column
       >
       <template #empty>
