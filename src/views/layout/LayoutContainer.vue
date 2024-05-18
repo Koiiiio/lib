@@ -69,15 +69,15 @@ const handleCommand = async (key) => {
           <span>Borrowings</span>
         </el-menu-item>
         <!-- <el-menu-item index="/book/reserve" v-if="mode"> -->
-        <el-menu-item index="/book/reserve">
+        <!-- <el-menu-item index="/book/reserve">
           <el-icon><ChatDotRound /></el-icon>
           <span>Reservations</span>
-        </el-menu-item>
+        </el-menu-item> -->
         <!-- <el-menu-item index="/book/penalty" v-if="mode"> -->
-        <el-menu-item index="/book/penalty">
+        <!-- <el-menu-item index="/book/penalty">
           <el-icon><Stamp /></el-icon>
           <span>Penalties</span>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-sub-menu
           index="/manager"
           v-if="userStore.user.userRole === 'admin'"

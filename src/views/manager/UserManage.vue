@@ -126,13 +126,13 @@ const admit = async (row) => {
             <el-button :icon="Check" type="primary" plain @click="admit(row)"
               >Confirm Return</el-button
             >
-            <el-button
+            <!-- <el-button
               :icon="CloseBold"
               type="danger"
               plain
               @click="penalty(row, $index)"
               >Penalty</el-button
-            >
+            > -->
           </div>
         </template>
       </el-table-column>
