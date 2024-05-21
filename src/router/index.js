@@ -11,51 +11,51 @@ const router = createRouter({
       redirect: '/login',
       children: [
         {
-          path: '/book/manage',
+          path: '/bookmanage',
           component: () => import('@/views/book/BookManage.vue')
         },
         {
-          path: '/book/reserve',
+          path: '/bookreserve',
           component: () => import('@/views/book/BookReserve.vue')
         },
         {
-          path: '/book/channel',
+          path: '/bookchannel',
           component: () => import('@/views/book/BookChannel.vue')
         },
         {
-          path: '/book/penalty',
+          path: '/bookpenalty',
           component: () => import('@/views/book/Penalty.vue')
         },
         {
-          path: '/manager/request',
+          path: '/managerrequest',
           component: () => import('@/views/manager/RequestHandle.vue')
         },
         {
-          path: '/manager/usermanage',
+          path: '/managerusermanage',
           component: () => import('@/views/manager/UserManage.vue')
         },
         {
-          path: '/manager/bookmanage',
+          path: '/managerbookmanage',
           component: () => import('@/views/manager/BookManage.vue')
         },
         {
-          path: '/manager/latereturn',
+          path: '/managerlatereturn',
           component: () => import('@/views/manager/LateReturn.vue')
         },
         {
-          path: '/user/profile',
+          path: '/userprofile',
           component: () => import('@/views/user/UserProfile.vue')
         },
         {
-          path: '/user/avatar',
+          path: '/useravatar',
           component: () => import('@/views/user/UserAvatar.vue')
         },
         {
-          path: '/user/password',
+          path: '/userpassword',
           component: () => import('@/views/user/UserPassword.vue')
         },
         {
-          path: '/user/bill',
+          path: '/userbill',
           component: () => import('@/views/user/UserBill.vue')
         },
         { path: '/scancode', component: () => import('@/views/Camera.vue') }

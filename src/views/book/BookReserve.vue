@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { GetReserveList, CancelReserve } from '../../api/book.js'
+import BookBorrow from '../book/components/BookBorrow.vue'
 const loading = ref(false)
 const reserveList = ref([])
 const getreserveList = async () => {
@@ -9,6 +10,7 @@ const getreserveList = async () => {
   reserveList.value = res.data.data
   loading.value = false
 }
+const dialog = ref()
 getreserveList()
 const Cancel = async (row) => {
   await ElMessageBox.confirm('Are you sure?', 'Tip', {
@@ -38,6 +40,9 @@ const word = computed(() => {
     return null
   }
 })
+const borrowBook = (row) => {
+  dialog.value.open(row)
+}
 </script>
 <template>
   <page-container title="My Reservation">
@@ -92,7 +97,13 @@ const word = computed(() => {
         <template #default="{ row, $index }">
           <div style="display: flex">
             <el-button type="primary" @click="Cancel(row, $index)"
-              >Cancel Reservation</el-button
+              >Cancel
+            </el-button>
+            <el-button
+              type="success"
+              @click="borrowBook(row, $index)"
+              :disabled="row.available === 0"
+              >Borrow</el-button
             >
           </div>
         </template>
@@ -101,6 +112,11 @@ const word = computed(() => {
         <el-empty description="No data"></el-empty>
       </template>
     </el-table>
+    <BookBorrow
+      ref="dialog"
+      @success="onSuccess"
+      @refresh-list="handleRefresh"
+    ></BookBorrow>
   </page-container>
 </template>
 

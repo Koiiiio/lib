@@ -219,9 +219,9 @@ const handleCurrentChange = (val) => {
               :disabled="row.available === 0"
               >Borrow</el-button
             >
-            <!-- <el-button type="primary" @click="reserveBook(row, $index)"
-              >Reserve</el-button
-            > -->
+            <el-button type="primary" @click="reserveBook(row, $index)"
+              >Star</el-button
+            >
           </div>
         </template>
       </el-table-column>

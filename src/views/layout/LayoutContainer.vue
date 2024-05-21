@@ -60,24 +60,24 @@ const handleCommand = async (key) => {
         text-color="#fff"
         router
       >
-        <el-menu-item index="/book/channel">
+        <el-menu-item index="/bookchannel">
           <el-icon><Management /></el-icon>
           <span>Book Catalog</span>
         </el-menu-item>
-        <el-menu-item index="/book/manage">
+        <el-menu-item index="/bookmanage">
           <el-icon><Finished /></el-icon>
           <span>Borrowings</span>
         </el-menu-item>
-        <!-- <el-menu-item index="/book/reserve" v-if="mode"> -->
-        <!-- <el-menu-item index="/book/reserve">
+
+        <el-menu-item index="/bookreserve">
           <el-icon><ChatDotRound /></el-icon>
-          <span>Reservations</span>
-        </el-menu-item> -->
-        <!-- <el-menu-item index="/book/penalty" v-if="mode"> -->
-        <!-- <el-menu-item index="/book/penalty">
+          <span>Favorite</span>
+        </el-menu-item>
+
+        <el-menu-item index="/bookpenalty">
           <el-icon><Stamp /></el-icon>
           <span>Penalties</span>
-        </el-menu-item> -->
+        </el-menu-item>
         <el-sub-menu
           index="/manager"
           v-if="userStore.user.userRole === 'admin'"
@@ -88,11 +88,11 @@ const handleCommand = async (key) => {
           </template>
 
           <!-- <el-menu-item index="/manager/usermanage" v-if="mode"> -->
-          <el-menu-item index="/manager/usermanage">
+          <el-menu-item index="/managerusermanage">
             <el-icon><Edit /></el-icon>
             <span>Unreturned Borrowings</span>
           </el-menu-item>
-          <el-menu-item index="/manager/bookmanage">
+          <el-menu-item index="/managerbookmanage">
             <el-icon><MessageBox /></el-icon>
             <span>Book Management</span>
           </el-menu-item>
@@ -114,19 +114,19 @@ const handleCommand = async (key) => {
             <el-icon><UserFilled /></el-icon>
             <span>Profile</span>
           </template>
-          <el-menu-item index="/user/avatar">
+          <el-menu-item index="/useravatar">
             <el-icon><User /></el-icon>
             <span>Change Avatar</span>
           </el-menu-item>
-          <el-menu-item index="/user/password">
+          <el-menu-item index="/userpassword">
             <el-icon><Crop /></el-icon>
             <span>Change Password</span>
           </el-menu-item>
-          <el-menu-item index="/user/profile">
+          <el-menu-item index="/userprofile">
             <el-icon><EditPen /></el-icon>
             <span>Personal Info</span>
           </el-menu-item>
-          <el-menu-item index="/user/bill">
+          <el-menu-item index="/userbill">
             <el-icon><EditPen /></el-icon>
             <span>Bill</span>
           </el-menu-item>
