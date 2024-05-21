@@ -181,6 +181,35 @@ const showcode = (id) => {
   console.log(typeof qrCode.value)
   dialog3.value = true
 }
+// const qrCodeDataUrl = ref('')
+// const generateQRCode = async () => {
+//   try {
+//     qrCodeDataUrl.value = await QrcodeVue(qrCode.value)
+//     console.log(qrCodeDataUrl.value)
+//   } catch (error) {
+//     console.error('生成二维码失败:', error)
+//   }
+// }
+
+const saveQRCode = () => {
+  //generateQRCode()
+  // const downloadLink = document.createElement('a')
+  // downloadLink.href = qrCodeDataUrl.value
+  // downloadLink.download = 'qrCode.png'
+  // document.body.appendChild(downloadLink)
+  // downloadLink.click()
+  // document.body.removeChild(downloadLink)
+  //获取canvas标签
+  let canvas = document.getElementById('app').getElementsByTagName('canvas')
+  //创建a标签
+  let a = document.createElement('a')
+  //获取二维码的url并赋值为a.href
+  a.href = canvas[0].toDataURL('img/png')
+  //设置下载文件的名字
+  a.download = 'QRcode'
+  //点击事件，下载
+  a.click()
+}
 </script>
 <template>
   <page-container title="Book Catalog">
@@ -354,8 +383,10 @@ const showcode = (id) => {
       <div style="display: flex; justify-content: center">
         <QrcodeVue :value="qrCode" size:800></QrcodeVue>
       </div>
+
       <template #footer>
         <div class="dialog-footer">
+          <el-button type="success" plain @click="saveQRCode">Save</el-button>
           <el-button type="primary" @click="dialog3 = false">
             Confirm
           </el-button>

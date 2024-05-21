@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { GetBookService, Reserve, SearchBookService } from '../../api/book.js'
-import {} from '@element-plus/icons-vue'
+import { Star } from '@element-plus/icons-vue'
 import BookBorrow from '../book/components/BookBorrow.vue'
 import { ElMessage } from 'element-plus'
 const bookList = ref([])
@@ -180,6 +180,7 @@ const handleCurrentChange = (val) => {
           </el-tooltip>
         </template></el-table-column
       >
+      <el-table-column prop="author" label="Author"></el-table-column>
       <el-table-column prop="description" label="Description "
         ><template #default="{ row }">
           <el-tooltip
@@ -204,7 +205,7 @@ const handleCurrentChange = (val) => {
             }}<i :class="isOpen ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i
           ></el-button> </template
       ></el-table-column> -->
-      <el-table-column prop="author" label="Author"></el-table-column>
+
       <el-table-column
         prop="available"
         label="Number of Existing"
@@ -220,7 +221,10 @@ const handleCurrentChange = (val) => {
               :disabled="row.available === 0"
               >Borrow</el-button
             >
-            <el-button type="primary" @click="reserveBook(row, $index)"
+            <el-button
+              type="warning"
+              :icon="Star"
+              @click="reserveBook(row, $index)"
               >Star</el-button
             >
           </div>

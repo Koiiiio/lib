@@ -56,6 +56,16 @@ const handleRefresh = async () => {
   <page-container title="My Reservation">
     <el-table v-loading="loading" :data="reserveList" style="width: 100%">
       <el-table-column type="index" label="No" width="100"></el-table-column>
+      <el-table-column prop="cover" label="Cover">
+        <template #default="{ row }">
+          <div
+            class="thumbnail"
+            :style="{
+              'background-image': getCoverImage(row.cover)
+            }"
+          ></div>
+        </template>
+      </el-table-column>
       <el-table-column prop="title" label="Title"></el-table-column>
       <el-table-column prop="isbn" label="ISBN"
         ><template #default="{ row }">
@@ -72,16 +82,6 @@ const handleRefresh = async () => {
         </template></el-table-column
       >
       <el-table-column prop="author" label="Author"></el-table-column>
-      <el-table-column prop="cover" label="Cover">
-        <template #default="{ row }">
-          <div
-            class="thumbnail"
-            :style="{
-              'background-image': getCoverImage(row.cover)
-            }"
-          ></div>
-        </template>
-      </el-table-column>
       <el-table-column prop="description" label="Description"
         ><template #default="{ row }">
           <div :class="isOpen ? 'new_detail' : 'default'">
@@ -96,6 +96,7 @@ const handleRefresh = async () => {
         prop="available"
         label="Number of Existing"
       ></el-table-column>
+      <el-table-column prop="location" label="Location"></el-table-column>
       <el-table-column
         prop="borrowed"
         label="Number of Borrowed"
