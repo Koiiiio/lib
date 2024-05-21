@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { GetReserveList, CancelReserve } from '../../api/book.js'
+import { GetReserveList, CancelReserve, Reserve } from '../../api/book.js'
 import BookBorrow from '../book/components/BookBorrow.vue'
 const loading = ref(false)
 const reserveList = ref([])
@@ -10,7 +10,7 @@ const getreserveList = async () => {
   reserveList.value = res.data.data
   loading.value = false
 }
-const dialog = ref()
+
 getreserveList()
 const Cancel = async (row) => {
   await ElMessageBox.confirm('Are you sure?', 'Tip', {
@@ -40,8 +40,16 @@ const word = computed(() => {
     return null
   }
 })
+const dialog = ref()
+const isbn = ref()
 const borrowBook = (row) => {
   dialog.value.open(row)
+  isbn.value = row.isbn
+}
+const handleRefresh = async () => {
+  console.log('11')
+  await Reserve(isbn.value)
+  getreserveList()
 }
 </script>
 <template>
@@ -112,11 +120,7 @@ const borrowBook = (row) => {
         <el-empty description="No data"></el-empty>
       </template>
     </el-table>
-    <BookBorrow
-      ref="dialog"
-      @success="onSuccess"
-      @refresh-list="handleRefresh"
-    ></BookBorrow>
+    <BookBorrow ref="dialog" @refresh-list="handleRefresh(isbn)"></BookBorrow>
   </page-container>
 </template>
 

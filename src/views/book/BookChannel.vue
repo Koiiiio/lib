@@ -95,8 +95,9 @@ const reserveBook = async (row) => {
     type: 'Warning'
   })
   //console.log(row.isbn)
-  Reserve(row.isbn)
-  ElMessage.success('Successful Reservation!')
+  const res = await Reserve(row.isbn)
+  //console.log(res)
+  if (res.data.code == 200) ElMessage.success('Successful Star!')
 }
 watch(option, (newValue) => {
   console.log(newValue)

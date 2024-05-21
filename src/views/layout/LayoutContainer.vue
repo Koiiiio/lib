@@ -39,7 +39,7 @@ const handleCommand = async (key) => {
     userStore.setUser({})
     router.push('/login')
   } else {
-    router.push(`/user/${key}`)
+    router.push(`/user${key}`)
   }
 }
 // const mode = ref(false)
