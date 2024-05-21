@@ -82,7 +82,7 @@ const login = async () => {
   console.log(res.data.data)
 
   ElMessage.success('Successful login')
-  router.push('/book/channel')
+  router.push('/bookchannel')
 }
 
 const role = ref('Reader')
