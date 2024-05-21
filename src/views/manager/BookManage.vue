@@ -11,10 +11,14 @@ import {
 } from '../../api/book.js'
 import BookEdit from '../book/components/BookEdit.vue'
 import Instance from '../book/components/Instance.vue'
+import QrcodeVue from 'qrcode.vue'
+
+const qrCode = ref('123')
 const bookList = ref([])
 const loading = ref(false)
 const dialog1 = ref()
 const dialog2 = ref()
+const dialog3 = ref(false)
 const total = ref(0)
 const currentPage = ref(1)
 const pageSize = ref(10)
@@ -172,6 +176,11 @@ const getInstanceList = async (isbn) => {
 //     return null
 //   }
 // })
+const showcode = (id) => {
+  qrCode.value = String(id)
+  console.log(typeof qrCode.value)
+  dialog3.value = true
+}
 </script>
 <template>
   <page-container title="Book Catalog">
@@ -325,6 +334,13 @@ const getInstanceList = async (isbn) => {
                   "
                   >Book Withdrawal</el-button
                 >
+                <el-button
+                  type="success"
+                  size="small"
+                  plain
+                  @click="showcode(row.instanceId)"
+                  >Code</el-button
+                >
               </div>
             </template>
           </el-table-column>
@@ -333,6 +349,19 @@ const getInstanceList = async (isbn) => {
     </el-drawer>
     <BookEdit ref="dialog1" @success="onSuccess"></BookEdit>
     <Instance ref="dialog2" @success="onSuccess(Isbn)"></Instance>
+    <el-dialog v-model="dialog3" title="Code" width="500">
+      <span>InstanceId:{{ qrCode }}</span>
+      <div style="display: flex; justify-content: center">
+        <QrcodeVue :value="qrCode" size:800></QrcodeVue>
+      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="dialog3 = false">
+            Confirm
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
     <div class="pagination">
       <el-pagination
         v-model:current-page="currentPage"
