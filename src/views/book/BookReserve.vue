@@ -53,7 +53,7 @@ const handleRefresh = async () => {
 }
 </script>
 <template>
-  <page-container title="My Reservation">
+  <page-container title="My Favorite">
     <el-table v-loading="loading" :data="reserveList" style="width: 100%">
       <el-table-column type="index" label="No" width="100"></el-table-column>
       <el-table-column prop="cover" label="Cover">
