@@ -309,7 +309,7 @@ const showcode = (id) => {
           size="small"
           @click="onAddInstance(Isbn)"
           style="margin-left: 30px"
-          >Book Acquisition</el-button
+          >Acquisition</el-button
         >
       </div>
       <div>
@@ -332,7 +332,7 @@ const showcode = (id) => {
                   @click="
                     onDelInstance(row.isbn, row.instanceId, row.borrowStatus)
                   "
-                  >Book Withdrawal</el-button
+                  >Withdrawal</el-button
                 >
                 <el-button
                   type="success"
