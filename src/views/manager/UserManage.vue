@@ -123,7 +123,7 @@ const admit = async (row) => {
         <!--row 项 index 下标-->
         <template #default="{ row, $index }">
           <div style="display: flex">
-            <el-button :icon="Check" type="primary" plain @click="admit(row)"
+            <el-button type="primary" plain @click="admit(row)"
               >Confirm Return</el-button
             >
             <el-button

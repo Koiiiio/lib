@@ -101,10 +101,10 @@ export const CancelReserve = (isbn) => {
   return request.put(requestPath)
 }
 //处罚
-export const Penalty = ({ reason, endDate, userId }) => {
+export const Penalty = ({ reason, money, userId }) => {
   const path = '/admin/penalty/{userId}'
   const requestPath = path.replace('{userId}', userId.toString())
-  return request.put(requestPath, { reason, endDate })
+  return request.put(requestPath, { reason, money })
 }
 //迟还
 export const LateReturn = ({ borrowId, lateRetDate }) =>

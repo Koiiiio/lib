@@ -38,14 +38,15 @@ getPenaltyList()
         label="Reader Username"
       ></el-table-column>
       <el-table-column prop="reason" label="Penalty Reason"></el-table-column>
-      <el-table-column
+      <el-table-column prop="money" label="Penalty Money"></el-table-column>
+      <!-- <el-table-column
         prop="penaltyDate"
         label="Penalty Date"
       ></el-table-column>
       <el-table-column
         prop="endDate"
         label="Penalty End Date"
-      ></el-table-column>
+      ></el-table-column> -->
 
       <template #empty>
         <el-empty description="No data"></el-empty>
