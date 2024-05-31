@@ -82,7 +82,7 @@ const handleRefresh = async () => {
         </template></el-table-column
       >
       <el-table-column prop="author" label="Author"></el-table-column>
-      <el-table-column prop="description" label="Description"
+      <!-- <el-table-column prop="description" label="Description"
         ><template #default="{ row }">
           <div :class="isOpen ? 'new_detail' : 'default'">
             <span class="font999">{{ row.description }}</span>
@@ -91,7 +91,21 @@ const handleRefresh = async () => {
             >{{ word
             }}<i :class="isOpen ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i
           ></el-button> </template
-      ></el-table-column>
+      ></el-table-column> -->
+      <el-table-column prop="description" label="Description "
+        ><template #default="{ row }">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="bottom"
+            :content="row.description"
+          >
+            <div class="ellipsis">
+              {{ row.description }}
+            </div>
+          </el-tooltip>
+        </template></el-table-column
+      >
       <el-table-column
         prop="available"
         label="Number of Existing"
