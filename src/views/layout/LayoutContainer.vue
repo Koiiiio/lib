@@ -70,7 +70,7 @@ const handleCommand = async (key) => {
         </el-menu-item>
 
         <el-menu-item index="/bookreserve">
-          <el-icon><ChatDotRound /></el-icon>
+          <el-icon><StarFilled /></el-icon>
           <span>Favorite</span>
         </el-menu-item>
 
@@ -131,6 +131,10 @@ const handleCommand = async (key) => {
             <span>Bill</span>
           </el-menu-item>
         </el-sub-menu>
+        <el-menu-item index="/chat">
+          <el-icon><ChatDotRound /></el-icon>
+          <span>Chat</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>

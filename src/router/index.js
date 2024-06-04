@@ -58,7 +58,14 @@ const router = createRouter({
           path: '/userbill',
           component: () => import('@/views/user/UserBill.vue')
         },
-        { path: '/scancode', component: () => import('@/views/Camera.vue') }
+        {
+          path: '/scancode',
+          component: () => import('@/views/Camera.vue')
+        },
+        {
+          path: '/chat',
+          component: () => import('@/views/Chat.vue')
+        }
       ]
     }
   ]
