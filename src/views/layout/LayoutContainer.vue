@@ -13,7 +13,8 @@ import {
   Edit,
   Camera,
   Stamp,
-  ChatDotRound
+  ChatDotRound,
+  StarFilled
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 import { useUserStore } from '@/stores'
